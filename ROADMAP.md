@@ -22,7 +22,7 @@ Las etapas se ejecutan secuencialmente. Una etapa documental no equivale a valid
 
 | Pendientes | En desarrollo | Revisión | Bloqueadas | Completadas |
 |---|---|---|---|---|
-| Etapa 2 (pruebas locales), 3, 7, 8, 9, 11, 12 | Ninguna | **Etapa 2: propuesta de versión, loader y mods — revisión documental, pendiente de aprobación** | Etapa 4: manifiesto/JARs no disponibles; etapa 10: pack/manifiesto ausentes | Etapa 1: inventario informado; etapa 5: comparativa documental inicial; etapa 6: candidatos y riesgos documentados; etapa 13: documentación inicial (sin cierre final) |
+| Etapa 2 (pruebas locales), 3, 7, 8, 9, 11, 12, 13 | Ninguna | Etapa 5 (comparativa documental; aprobación pendiente); **Etapa 6 (identidad RPG: tres propuestas narrativas y pilares técnicos; pendientes de elección, revisión y verificación)** | Etapa 4 (manifiesto/JARs no disponibles); etapa 10 (pack/manifiesto ausentes) | Etapa 1 (inventario informado); Etapa 2 (perfil declarado, verificación técnica pendiente) |
 
 ## Criterios de avance
 
@@ -30,7 +30,7 @@ Las etapas se ejecutan secuencialmente. Una etapa documental no equivale a valid
 - Registrar `NO DATA` junto a la fuente que no aportó el dato.
 - Conservar logs y métodos reproducibles cuando haya pruebas autorizadas.
 - Obtener autorización antes de cambiar mods o aprobar decisiones técnicas finales.
-- No subir JARs/binarios de terceros.
+- No subir JARs/binarios de mods de terceros.
 - Mantener ramas aisladas; no modificar `main` ni `mision-1-investigacion` desde la rama de etapa dos.
 - Orden de dependencias: manifiesto/requisitos/builds/licencias → pruebas funcionales → benchmark. No medir un pack hipotético.
 
@@ -38,6 +38,16 @@ Las etapas se ejecutan secuencialmente. Una etapa documental no equivale a valid
 
 Propuesta documental pendiente de aprobación: Minecraft 1.20.1 + Fabric como candidata provisional, tomando la ficha de Prominence II como referencia; alternativa 1.21.1 + Fabric **[SIN VERIFICAR como conservación de contenido]**; mods candidatos, límites, dependencias y licencias pendientes de confirmar con manifiesto/JARs y hardware local. No se instalaron mods, no se editó configuración y no se ejecutaron pruebas. Resultados: **NO DATA**.
 
-Siguiente paso de revisión: recibir manifiesto/JARs y comprobar driver/OpenGL/Java/launcher/sistema local; después validar artefactos exactos y permisos. No crear configuraciones de mods: no hay ajustes nuevos verificados.
+Siguiente paso de revisión: recibir manifiesto/JARs y comprobar driver/OpenGL/Java/launcher/sistema local; después validar artefactos exactos y permisos. No crear configuraciones de mods sin ajustes nuevos verificados.
 
-Referencias de detalle: `TECH_DECISIONS.md`, `MOD_AUDIT.md`, `MOD_COMPATIBILITY.md` y `MODS_MANIFEST.md`.
+Referencias detalladas: `TECH_DECISIONS.md`, `MOD_AUDIT.md`, `MOD_COMPATIBILITY.md` y `MODS_MANIFEST.md`.
+
+## Etapa 6: Identidad RPG — en revisión
+
+Tres candidatas documentadas, todas pendientes de elección: **La Cartografía de la Ceniza**, **La Marea de los Mil Soles** y **El Invierno que Recuerda**. La sección narrativa está en `STORY_BIBLE.md`; los pilares RPG y candidatos técnicos, con sus brechas, están en `GAME_DESIGN.md`.
+
+- Originalidad frente a Prominence II: **[SIN VERIFICAR]**; no se aportó descripción, fuente ni comparación externa.
+- Mods/versiones, dependencias, licencias, compatibilidad y plataforma Minecraft 1.20.1 + Fabric: **[SIN VERIFICAR]**, candidatos de investigación, no recomendaciones de instalación.
+- Regiones, jefes, rutas, mareas, recuerdos, facciones y consecuencias son objetivos narrativos/de diseño, no funciones técnicas verificadas.
+- Rendimiento en Athlon 5150/Radeon R3 con HDD y compatibilidad con Sodium: **NO DATA**; sin pruebas ni mediciones locales. No aprobado hasta verificar artefactos/dependencias y ejecutar pruebas reproducibles.
+- No se añade ningún archivo de mod de terceros.
