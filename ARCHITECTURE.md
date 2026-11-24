@@ -1,14 +1,11 @@
 # Arquitectura
 
-> **Pendiente: etapas futuras.** No se define arquitectura de sistema, módulos ni integración hasta que existan requisitos, pack/manifiesto y decisiones aprobadas.
+> **Pendiente: etapas futuras.** No se define arquitectura de sistemas, módulos ni integración hasta disponer de requisitos RPG, manifiesto, decisiones aprobadas y evidencia de compatibilidad.
 
-## Alcance
-
-- Estado: pendiente de etapas futuras.
 - Requisitos funcionales: pendientes.
 - Componentes y límites: pendientes.
 - Loader e integración: pendientes de aprobación.
 - Dependencias y diagramas: pendientes.
 - Restricciones de despliegue: pendientes.
 
-No inferir arquitectura desde la lista de mods candidatos de la misión 1.
+No inferir arquitectura a partir de candidatos de mods de la misión de investigación.
