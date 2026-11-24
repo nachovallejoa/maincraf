@@ -1,7 +1,7 @@
 @echo off
 setlocal
 
-set "AVISO=El instalador no funciona suelto ni desde la carpeta tlauncher del repositorio. Descarga de Releases el archivo que termina en -tlauncher.zip, extraelo COMPLETO (clic derecho, Extraer todo) y haz doble clic en INSTALAR.bat dentro de esa carpeta extraida. Nunca lo bajes solo desde el repositorio ni lo ejecutes desde dentro del .zip sin extraer."
+set "AVISO=Este instalador no funciona suelto. Descarga de Releases el archivo que termina en -tlauncher.zip, descomprimelo COMPLETO (clic derecho, Extraer todo) y haz doble clic en INSTALAR.bat dentro de esa carpeta extraida. Nunca lo bajes solo desde el repositorio ni lo ejecutes desde dentro del .zip sin extraer."
 
 if not exist "%~dp0instalar.ps1" (
     echo %AVISO%
