@@ -1,36 +1,50 @@
 # Diseño de juego
 
-> **Pendiente: etapas futuras.** Esta misión registra la identidad RPG elegida y preferencias de diseño; no diseña mecánicas técnicas ni contenido RPG completo. El modpack y sus requisitos siguen sin verificarse.
+> **Estado: propuesta de diseño pendiente de aprobación e implementación.** No certifica contenido de Minecraft, disponibilidad o compatibilidad de mods, ni rendimiento.
 
-- Objetivos de diseño: identidad elegida; concretar en etapas posteriores.
-- Bucle de juego y progresión detallada: pendientes.
-- Sistemas/reglas: pendientes.
-- Misiones, dificultad y balance: preferencias registradas, especificación pendiente.
-- Criterios de aceptación: pendientes de acordar.
+## Identidad RPG elegida
 
-## Identidad RPG elegida: base B trasladada al cielo + elementos candidatos de A
+Se conserva como base **La Marea de los Mil Soles**, fantasía oscura y misterio en un archipiélago celeste, combinada con la preferencia del usuario por progresión RPG. La Cartografía de la Ceniza queda en reserva. La identidad y las preferencias no son una selección técnica de mods.
 
-El usuario eligió una mezcla: mantener como base la aventura fantástica de **La Marea de los Mil Soles**, sustituir el escenario oceánico por el cielo y combinar los mods candidatos considerados para B con los de A. Es una preferencia de dirección; ningún mod/versionado o combinación queda técnicamente aprobado.
+### Pilares y preferencias
 
-### Pilares RPG y preferencias registradas
-
-| Pilar | Preferencia del usuario / aplicación de diseño | Estado técnico |
+| Pilar | Dirección de diseño | Estado |
 |---|---|---|
-| Enfoque | **Combate y exploración** como focos principales (3A y 3B). | Preferencia registrada; balance y sistemas pendientes. |
-| Progresión | **Árbol de habilidades/builds**, **niveles y estadísticas**, y **clases definidas** (4B, 4C, 4D). Se registra el híbrido de las tres opciones sin inventar jerarquía entre ellas. | Mecánicas y mods candidatos sin verificar. |
-| Dificultad | **Equilibrada**, reto moderado en combate y supervivencia (5B). | Calibración y pruebas pendientes. |
-| Mundo/exploración | El océano pasa a cielo/islas flotantes según la preferencia explícita. | Generación y sistemas de entorno pendientes; sin afirmaciones de implementación. |
-| Mods | Combinar candidatos de B con candidatos de A, según solicitud del usuario. | Candidatos por investigar, no instalación ni compatibilidad confirmadas. |
+| Combate y exploración | Ambos importantes; explorar rutas, testimonios y reflejos y combatir guardianes con dificultad equilibrada. | Preferencia; balance pendiente de pruebas. |
+| Progresión | Clases definidas y opcionales, niveles/estadísticas y árboles/builds como objetivos. | Sistemas y cifras pendientes. |
+| Supervivencia | Riesgo moderado; sin convertir cada desplazamiento en castigo. | Calibración pendiente. |
+| Mundo | Islas flotantes y regiones compactas conectadas por rutas controladas. | Propuesta; no se confirma generación o implementación. |
+| Consecuencias | Decisiones alteran confianza, rutas, refugios, suministros y condiciones de desenlace. | Estados persistentes y lógica pendientes. |
 
-### Candidatos y brechas
+Perfiles narrativos opcionales: Guardacorrientes (resistencia/protección), Vigía del Prisma (observación/rutas) y Rompeanclas (combate/mecanismos). Ninguna clase debería bloquear misiones principales.
 
-Los candidatos mencionados previamente para A/B (Skill Tree/RPG Series, Tierify, RPG Inventory, Bosses of Mass Destruction, BetterEnd, When Dungeons Arise, Questlog y FTB Quests, entre otros reflejados en sus fichas) no constituyen una lista de instalación comprobada. No se confirma que implementen builds, clases, niveles/estadísticas, contenido celeste, jefes o campaña ni que sean compatibles entre sí. Verificar archivos, versiones, dependencias, licencias, compatibilidad, Sodium y rendimiento en el equipo local sigue pendiente.
+## Impacto de la historia en el juego
 
-Las mecánicas de ciclos celestes, rutas, refugios y suministros son objetivos de diseño no verificados. Esta actualización no desarrolla la historia completa ni inicia otra etapa.
+Todo lo siguiente describe el efecto jugable que se busca si la historia se implementa; no afirma que esté disponible. Las zonas se plantean acotadas, sin multitudes, generación procedural pesada, movimiento automático de islas ni cambios masivos de bloques. Jefes con arena controlada y pocos enemigos simultáneos. Son precauciones para el Athlon 5150, Radeon R3 integrada, 12 GB instalados (aprox. 9,9 GB utilizables según datos recibidos) y HDD, no garantías: no hay benchmarks locales.
 
-## Riesgos y verificaciones comunes
+| Elemento narrativo | Impacto deseado en el juego | Dependencias / implementación pendiente |
+|---|---|---|
+| Archipiélago, venas y Mar de Nubes | Zonas compactas, rutas desbloqueables y transiciones; riesgo moderado de navegación. | Minecraft 1.20.1 + Fabric es perfil provisional **[SIN VERIFICAR]**. BetterEnd y When Dungeons Arise **[SIN VERIFICAR]**; no se presupone que provean estas regiones. Posible construcción/configuración propia. |
+| Trama de Anclas y ciclos de Marea | Estados narrativos abren/cierran rutas y presentan hitos; no hace falta clima dinámico o movimiento físico de islas. | Questlog y FTB Quests **[SIN VERIFICAR]** como candidatos de misiones. Flags, transiciones y lógica podrían requerir contenido propio. |
+| Facciones (Liga, Cartógrafos, Hermandad, Flota) | Confianza/apoyo desbloquea suministros, refugios, contactos y alternativas; no exige alineamiento único para terminar. | Reputación y estados persistentes no confirmados. Candidatos de quests no equivalen a reputación; posible sistema propio. |
+| Evacuación de Cabo | Decisión de prioridad determina grupo que recibe suministros y contacto para viajar a Oria. | Flags de campaña y consecuencias: implementación propia o sistema compatible por verificar. Evitar simular multitudes. |
+| Ancla de Oria | Conservar mantiene ruta/suministro de Liga pero riesgo local; modificar equilibra; abandonar implica traslado y menos suministro. Semillas pueden abrir ayuda posterior. | Misiones/flags de Questlog o FTB Quests **[SIN VERIFICAR]**; lógica de dependencias entre encargos posiblemente propia. |
+| Dársena y pruebas | Publicar registros mejora confianza comunitaria; negociar primero conserva canal con Tavia y demora difusión. Planos habilitan opciones de nodos/Fosa. | Estados de campaña y servicios requieren implementación; no se confirma mod candidato que cubra todos los efectos. |
+| Fosa y Ballena | Refugios y testimonios abren recursos y diálogo con tripulaciones; dejar criatura conduce a ruta más larga, vencerla despeja paso. | Regiones/encuentros son contenido propuesto. Bosses of Mass Destruction **[SIN VERIFICAR]**, sin atribuirle la Ballena. Si no existe solución compatible, jefe y lógica propios. |
+| Nimbo y reflejos | Registros revelan futuros posibles, nunca certezas; divulgar da transparencia y también información a Veyr. | Mapas, decisiones y estados narrativos son contenido propio pendiente; ningún candidato está confirmado para ello. |
+| Jefes | Mastín, Madre de los Zarcillos, Custodio, Ballena, Corista y Veyr protegen lugares/decisiones; patrones legibles, encuentros acotados. | Bosses of Mass Destruction **[SIN VERIFICAR]** para este proyecto y no se afirma que contenga ninguno. Posibles jefes propios, sin archivos de mods terceros. |
+| Eventos de Marea | Hitos narrativos pueden alterar acceso o presentar decisiones; no implican clima dinámico ni cambios físicos automáticos. | Script/flags/eventos propios potenciales; compatibilidad y carga sin probar. |
+| Perfiles, niveles y builds | Opciones RPG con rutas distintas pero campaña completables por cualquier perfil. | Skill Tree/RPG Series, Tierify y RPG Inventory **[SIN VERIFICAR]**; no se confirma que implementen clases, niveles o estadísticas requeridas. Sistema propio solo tras decisión y verificación. |
+| Misiones y objetivos | Principales y secundarias desbloquean rutas, refugios, recursos, testimonios o condiciones finales, evitando recompensas repetitivas. | Questlog y FTB Quests **[SIN VERIFICAR]**; no se confirma que soporten estados y bifurcaciones necesarias. Puede requerir configuración/contenido propio. |
+| Desenlaces | Cielo inmóvil, medido, libre o pactado cambian rutas, servicios, refugios y relaciones; final pactado exige testimonios y participación. | Requisitos de desenlace y persistencia son propuesta narrativa; implementación propia o sistema validado pendiente. |
 
-- Todos los mods/versiones son candidatos **[SIN VERIFICAR]**; no hay fuentes citadas para archivos, dependencias, licencias o compatibilidad.
-- Minecraft 1.20.1 + Fabric y su aprobación siguen pendientes; ningún archivo de mod se incorpora aquí.
-- No hay pruebas en Athlon 5150/Radeon R3 ni mediciones con HDD; no se afirma rendimiento ni compatibilidad con Sodium.
-- Originalidad frente a Prominence II: **[SIN VERIFICAR]**, sin descripción ni comparación aportada.
+### Desenlaces: consecuencias previstas
+
+- **Cielo inmóvil:** rutas principales más estables y servicios de Liga; comunidades fuera de red aisladas, pérdida de recuerdos y menos rutas secundarias.
+- **Cielo medido:** rutas principales previsibles y servicios de Cartógrafos; control compartido solo si hubo pruebas y acuerdos.
+- **Cielo libre:** se rompen nodos; menos accesos bajo control y más rutas/refugios móviles; algunas comunidades pierden hogares.
+- **Marea pactada:** testimonios y participación permiten separar nodos que trasladan peligro, dejando mecanismos locales voluntarios; conserva rutas/refugios diversos sin eliminar el riesgo.
+
+## Candidatos, verificación y límites
+
+Skill Tree/RPG Series, Tierify, RPG Inventory, Bosses of Mass Destruction, BetterEnd, When Dungeons Arise, Questlog y FTB Quests están **[SIN VERIFICAR]** para este proyecto. No se dispone de manifiesto ni archivos exactos; no se afirma versión, función, licencia, compatibilidad entre sí, con loader o con el equipo. Minecraft 1.20.1 + Fabric sigue pendiente de verificación. La propuesta no sube ni incorpora archivos de mods de terceros. No hay benchmarks locales. La ambientación y mecánicas descritas son diseño pendiente, no características técnicas confirmadas.
