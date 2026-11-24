@@ -2,23 +2,25 @@
 
 ## Decisiones del director y motivos
 
-| Decisión | Motivo | Límite/estado |
+| Decisión | Motivo | Límite / estado |
 |---|---|---|
-| Mantener La Marea de los Mil Soles en Minecraft 1.20.1 y Fabric Loader `0.20.1` | La revisión recibida confirma que `0.20.1` es la entrada estable más reciente de Fabric Meta para Minecraft 1.20.1. | Valor exacto conservado como texto. No se afirma que el paquete haya sido instalado o probado. |
-| Limitar el manifiesto a Sodium y BadOptimizations | Los hallazgos identifican sus IDs Modrinth (`OihdIimA`, `DIugITgU`), versiones, compatibilidad 1.20.1/Fabric y lado cliente. | No añadir candidatos restantes sin la verificación suficiente de metadatos, dependencias y compatibilidad. |
-| Mantener ambos mods como solo cliente | Las fuentes consultadas los describen como mods de cliente; no constituyen una selección de servidor. | `env: client` en el manifiesto. |
-| No incluir Indium ni Iris | Sodium declara dependencias condicionales para esos mods y no están incluidos aquí; la revisión no afirma que sean requisitos obligatorios para esta selección. | No agregar dependencias supuestas. |
-| No subir archivos JAR de terceros | El paquete debe obtener esos artefactos de sus fuentes autorizadas en la instalación/build. | No almacenar ni redistribuir binarios de terceros en el repositorio. |
-| Añadir `options.txt` con valores orientados a rendimiento | Las claves corresponden al formato de Minecraft 1.20.1 y son una propuesta razonada. | No es benchmark ni garantiza mejora; el usuario puede ajustar valores. |
-| No añadir configuración de mods | Sodium recomienda no editar manualmente `sodium-options.json`; la configuración de BadOptimizations no se verificó para la versión exacta. | No inventar contenido por defecto ni archivos parciales. |
-| Dejar argumentos JVM avanzados sin cambios; considerar `-Xmx5G` solo como referencia condicional | Hardware declarado: 12 GB instalados, unos 10 GB disponibles y Windows usando unos 500 MB; no hay medición independiente ni prueba del perfil. | No añadir `-Xms` ni banderas de GC. No presentar el heap como resultado medido. |
-| No implementar mods propios en esta entrega | No se recibieron archivos de código; la entrada indica que la implementación no está autorizada/establecida y no fija Fabric API. | No inventar código, proyecto Gradle ni APIs. No se afirma compilación. |
-| Documentar pruebas como pendientes | No se ha confirmado ejecución del workflow, compilación, inicio del juego ni mediciones. | La build en GitHub y la prueba real de juego siguen pendientes. |
+| Mantener Minecraft `1.20.1` y Fabric Loader `0.20.1` | Los hallazgos recibidos señalan esa versión documental y la entrada más reciente consultada con `stable: true`. | No prueba que el paquete completo sea compatible o instalable. |
+| Usar el nombre provisional `La Marea de los Mil Soles` | Nombre aportado como provisional en el paquete recibido. | Provisional; no altera la selección de mods. |
+| Mantener el inventario provisional y hacer visibles los huecos | La selección incluye información declarada, pero varias fuentes no devolvieron IDs y datos suficientes; las dependencias obligatorias siguen pendientes. | No se afirma compatibilidad integral ni completitud. |
+| No inferir los datos de dependencias faltantes | Para Better Combat y Bosses of Mass Destruction no se aportaron versiones/IDs exactos verificados de todas las dependencias. | Registrar los nombres de dependencias y la verificación pendiente. |
+| Descartar ImmediatelyFast `1.2.21+1.20.1` | La evidencia citada solo mostró variantes `1.2.21+1.20.4` y `1.2.21+1.21.1`, sin respaldar la variante exacta para 1.20.1. | No trasladar versiones de Minecraft distintas. |
+| No presentar el paquete como listo para publicar o instalar | La fuente explícitamente advierte que hay metadatos y dependencias sin verificar y que falta validación del conjunto. | La automatización debe fallar de forma segura ante metadatos incompletos, sin rellenarlos. |
+| No subir JARs de mods de terceros | Los artefactos deben obtenerse desde sus fuentes autorizadas; el repositorio no redistribuye binarios de terceros. | Los JAR tampoco se crean ni se adjuntan manualmente. |
+| No agregar configuraciones de mods especulativas | No se verificaron todas las claves/valores predeterminados de las versiones exactas. | No entregar archivos vacíos ni opciones afirmadas como verificadas. |
+| No fijar memoria ni argumentos JVM como óptimos | Hay datos de hardware declarados por el usuario (12 GB instalados, unos 10 GB disponibles y Windows usa unos 500 MB), pero no hay pruebas de ejecución/benchmark ni configuración completa verificada. | No recomendar un heap ni flags específicos como resultado medido. |
+| Registrar la implementación propia con cautela | El texto entregado usa `mods-propios/mareas-core`; el árbol del branch existente organiza un módulo `venas-core` y solo contiene parte de la estructura. | No sustituir nombres ni inventar archivos Java para forzar una coincidencia. Compilación pendiente. |
+| Mantener las discrepancias de fuentes como pendientes | Se reportó una discrepancia de ID traducido/clase y un directorio de ejecución no confirmado. | No elegir una alternativa sin una fuente aprobada. |
+| Dejar las pruebas en estado pendiente | La compilación del proyecto descrito no se ejecutó y no hay prueba de juego. | Esperar la compilación de GitHub y la prueba real del usuario; no declarar resultados anticipados. |
 
-## Pendientes de verificación
+## Selección explícitamente descartada en la revisión recibida
 
-- La consulta no aportó metadatos y dependencias obligatorias suficientes para Lithium, FerriteCore, ModernFix, Sodium Extra, ImmediatelyFast, Simply Skills y Better Combat.
-- La identificación/verificación de FTB Quests y del Remnants propuesto no quedó resuelta en los resultados disponibles.
-- Los demás candidatos descartados no tienen en esta revisión metadatos completos; su exclusión no significa incompatibilidad.
-- No se proporcionaron licencias confirmadas para los dos mods incluidos; consultar las páginas/proyectos oficiales antes de redistribución cuando corresponda.
-- No hay resultado de compilación GitHub ni prueba de inicio, juego o rendimiento.
+Sodium Extra `0.5.9`, Dynamic FPS `3.9.5`, Skill Tree `1.6.1+1.20.1-fabric`, Pufferfish’s Skills `0.16.7+1.20`, Simply Skills `1.3.2+1.20.1`, PlayerEX: Directors Cut `4.0.5+1.20.1`, RPG Inventory `1.8.0`, Questlog `3.3.2-1.20.1-fabric`, Reforged `1.20.1-1.0.9-Fabric` e ImmediatelyFast `1.2.21+1.20.1`. La exclusión no demuestra incompatibilidad general; respeta los hallazgos y límites de verificación aportados.
+
+## Pendientes de verificación de fuentes
+
+Las consultas recibidas no aportaron verificación suficiente de IDs, artefactos, licencias o compatibilidad para Sodium, Remnants, Village Diplomacy y FTB Quests; tampoco cerraron las dependencias obligatorias citadas. Para Better Combat, el dato INCOMPLETE identifica el proyecto `gedNE4y2`, pero slug, versión compatible, artefacto y licencia no fueron verificados. Hardware en ejecución, rendimiento y estructura de TLauncher permanecen sin verificar.
