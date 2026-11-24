@@ -1,8 +1,18 @@
 plugins {
-    id 'fabric-loom' version '1.6.4' apply false
+    id "base"
 }
 
-allprojects {
-    group = 'es.marea'
-    version = '0.1.0'
+gradle.projectsEvaluated {
+    tasks.named("build") {
+        dependsOn subprojects.collect { project ->
+            project.tasks.named("build")
+        }
+    }
+}
+
+subprojects {
+    tasks.withType(JavaCompile).configureEach {
+        options.encoding = "UTF-8"
+        options.release = 17
+    }
 }
