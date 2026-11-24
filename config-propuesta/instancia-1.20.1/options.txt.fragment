@@ -1,5 +1,4 @@
-# Fragmento propuesto para options.txt de Minecraft 1.20.1.
-# NO ES UN ARCHIVO COMPLETO NI PRESET VALIDADO; no sustituir el options.txt del juego.
-# En esta revisión no se verificaron las claves, rangos y serialización exactos ni su impacto.
-# Mantener como referencia no precargable; validar cada ajuste en instancia aislada y con autorización.
-# Valores de la propuesta anterior omitidos para evitar presentarlos como configuración recomendada.
+# Fragmento de referencia asociado a options.txt de Minecraft 1.20.1.
+# NO ES ARCHIVO COMPLETO NI PRESET VALIDADO; no sustituir el options.txt del juego.
+# En esta revisión no se verificaron claves, rangos, serialización ni efectos.
+# Mantener como nota no precargable; ajustar dentro del juego en instancia aislada y autorizada.
