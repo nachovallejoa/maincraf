@@ -1,11 +1,17 @@
 pluginManagement {
     repositories {
-        maven { url = 'https://maven.fabricmc.net/' }
+        maven {
+            url = "https://maven.fabricmc.net/"
+        }
         gradlePluginPortal()
-        mavenCentral()
+    }
+
+    plugins {
+        id "fabric-loom" version "1.10.5"
     }
 }
 
-rootProject.name = 'marea-mods-propios'
-include 'marea-core'
-include 'marea-campana'
+rootProject.name = "deriva-mods"
+
+include("deriva-core")
+include("deriva-progression")
