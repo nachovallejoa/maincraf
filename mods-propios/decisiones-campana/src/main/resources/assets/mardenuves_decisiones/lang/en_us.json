@@ -1,17 +1,6 @@
 {
-  "mardenuves_decisiones.faction.liga_del_lastre": "Ballast League",
-  "mardenuves_decisiones.faction.cartografos_del_prisma": "Prism Cartographers",
-  "mardenuves_decisiones.faction.hermandad_del_vaiven": "Tideway Brotherhood",
-  "mardenuves_decisiones.faction.flota_sumergida": "Sunken Fleet",
-  "mardenuves_decisiones.decision.route": "Route decision",
-  "mardenuves_decisiones.decision.protect": "What to protect",
-  "mardenuves_decisiones.decision.reflections": "Compare the reflections",
-  "mardenuves_decisiones.dialogue.maela": "I am looking for my sister Lena.",
-  "mardenuves_decisiones.dialogue.saira": "Let us listen to the communities before deciding.",
-  "mardenuves_decisiones.dialogue.tavia": "Opening or closing a route also leaves consequences.",
-  "mardenuves_decisiones.dialogue.veyr": "The Anchor Weave is tied to the Trench.",
-  "mardenuves_decisiones.outcome.sky_still": "Still Sky",
-  "mardenuves_decisiones.outcome.sky_measured": "Measured Sky",
-  "mardenuves_decisiones.outcome.sky_free": "Free Sky",
-  "mardenuves_decisiones.outcome.tide_pact": "Tide Pact"
+  "campaign.mardenuves_decisiones.prologue.title": "The Lighthouse and the Evacuation",
+  "campaign.mardenuves_decisiones.prologue.description": "The Driftwalker arrives as the lighthouse calls for attention and the evacuation needs help.",
+  "campaign.mardenuves_decisiones.prologue.dialogue.opening": "The lighthouse cannot wait. Help get everyone still here to safety.",
+  "campaign.mardenuves_decisiones.prologue.dialogue.recorded": "The evacuation has been recorded. The next step will be revealed when the time comes."
 }
