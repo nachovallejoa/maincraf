@@ -1,14 +1,11 @@
 pluginManagement {
     repositories {
-        maven {
-            name = "Fabric"
-            url = "https://maven.fabricmc.net/"
-        }
+        maven { url = 'https://maven.fabricmc.net/' }
         gradlePluginPortal()
         mavenCentral()
     }
 }
 
-rootProject.name = "mods-propios"
-
-include("venas-core")
+rootProject.name = 'marea-mods-propios'
+include 'marea-core'
+include 'marea-campana'
