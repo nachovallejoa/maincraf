@@ -1,9 +1,9 @@
 # Biblia narrativa
 
-> **Pendiente: etapas futuras.** No se creó ni inventó lore, personajes, trama o mundo en la misión de investigación técnica.
+> **Pendiente: etapas futuras.** La misión de investigación técnica no crea ni inventa lore, personajes, trama o mundo.
 
 - Premisa: pendiente.
-- Mundo y contexto: pendiente.
-- Personajes y facciones: pendiente.
-- Cronología y tono: pendiente.
+- Mundo y contexto: pendientes.
+- Personajes y facciones: pendientes.
+- Cronología y tono: pendientes.
 - Requisitos narrativos RPG: pendientes de definición y autorización.
