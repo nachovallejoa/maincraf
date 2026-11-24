@@ -1,18 +1,8 @@
 plugins {
-    id "base"
+    id "net.fabricmc.fabric-loom-remap" version "1.6.12" apply false
 }
 
-gradle.projectsEvaluated {
-    tasks.named("build") {
-        dependsOn subprojects.collect { project ->
-            project.tasks.named("build")
-        }
-    }
-}
-
-subprojects {
-    tasks.withType(JavaCompile).configureEach {
-        options.encoding = "UTF-8"
-        options.release = 17
-    }
+allprojects {
+    group = "com.mardenuves"
+    version = "1.0.0"
 }
