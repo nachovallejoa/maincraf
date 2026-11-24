@@ -1,8 +1,8 @@
 plugins {
-    id "base"
+    id 'fabric-loom' version '1.6.4' apply false
 }
 
 allprojects {
-    group = "com.venasdelcielo"
-    version = "1.0.0"
+    group = 'es.marea'
+    version = '0.1.0'
 }
