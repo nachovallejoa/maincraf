@@ -1,37 +1,34 @@
 #!/usr/bin/env python3
-"""Construye el ZIP de instalación para TLauncher, sin redistribuir mods ajenos."""
+"""Crea el paquete ZIP listo para instalar en TLauncher."""
+
+from __future__ import annotations
 
 import json
 import re
-import shutil
 import sys
 import urllib.error
+import urllib.parse
 import urllib.request
 import zipfile
 from pathlib import Path
+from typing import Any
 
 from build_mrpack import (
     BuildError,
     DIST_DIR,
     ROOT,
     USER_AGENT,
-    compiled_own_mod_jars,
+    _compiled_own_mod_jars,
+    _safe_pack_stem,
+    _copy_tree_files,
     read_manifest,
-    resolve_mods,
+    get_modrinth_mods,
 )
 
-
-FABRIC_META = "https://meta.fabricmc.net/v2/versions/loader"
-
-
-def _safe_pack_component(text):
-    return re.sub(r"[^A-Za-z0-9._-]+", "-", text.strip()).strip(".-") or "modpack"
+FABRIC_META_BASE = "https://meta.fabricmc.net/v2/versions/loader"
 
 
-def fetch_fabric_profile(minecraft_version, loader_version):
-    url = "{}/{}/{}/profile/json".format(
-        FABRIC_META, minecraft_version, loader_version
-    )
+def _http_json(url: str) -> Any:
     request = urllib.request.Request(
         url,
         headers={
@@ -41,109 +38,117 @@ def fetch_fabric_profile(minecraft_version, loader_version):
     )
     try:
         with urllib.request.urlopen(request, timeout=45) as response:
-            profile = json.loads(response.read().decode("utf-8"))
-    except (urllib.error.URLError, TimeoutError, OSError, json.JSONDecodeError) as exc:
-        raise BuildError(
-            "No se pudo descargar el perfil Fabric desde {}: {}".format(url, exc)
-        ) from exc
+            return json.loads(response.read().decode("utf-8"))
+    except (urllib.error.URLError, TimeoutError, json.JSONDecodeError, OSError) as exc:
+        raise BuildError(f"Fallo consultando {url}: {exc}") from exc
 
+
+def fetch_fabric_profile(minecraft_version: str, loader_version: str) -> dict[str, Any]:
+    mc = urllib.parse.quote(minecraft_version, safe="")
+    loader = urllib.parse.quote(loader_version, safe="")
+    url = f"{FABRIC_META_BASE}/{mc}/{loader}/profile/json"
+    profile = _http_json(url)
     if not isinstance(profile, dict):
-        raise BuildError("El perfil Fabric recibido no es un objeto JSON.")
-    version_id = profile.get("id")
-    if not isinstance(version_id, str) or not version_id.strip():
-        raise BuildError("El perfil Fabric no contiene un campo id válido.")
-    if profile.get("inheritsFrom") != minecraft_version:
-        raise BuildError(
-            "El perfil Fabric no hereda de Minecraft {}.".format(minecraft_version)
+        raise BuildError(f"Fabric Meta no devolvio un perfil JSON valido: {url}")
+
+    profile_id = profile.get("id")
+    if not isinstance(profile_id, str) or not profile_id.strip():
+        raise BuildError(f"El perfil de Fabric Meta no contiene un id valido: {url}")
+    if not isinstance(profile.get("inheritsFrom"), str) or not profile["inheritsFrom"].strip():
+        raise BuildError(f"El perfil de Fabric Meta no contiene inheritsFrom: {url}")
+    return profile
+
+
+def _nonempty_file(path: Path) -> bool:
+    try:
+        return path.is_file() and path.stat().st_size > 0
+    except OSError:
+        return False
+
+
+def _write_tlauncher_manifest(path: Path, mods: list[dict[str, Any]]) -> None:
+    # Los mods con client_side unsupported son exclusivos de servidor para el pack cliente.
+    entries = []
+    for mod in mods:
+        if mod["client_side"] == "unsupported":
+            continue
+        entries.append(
+            {
+                "url": mod["url"],
+                "sha1": mod["sha1"],
+                "filename": mod["filename"],
+                "size": mod["size"],
+            }
         )
-    return version_id, profile
+    path.write_text(json.dumps(entries, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
 
 
-def _copy_tree_contents(source, destination):
-    if not source.is_dir():
-        return
-    for item in sorted(source.iterdir()):
-        target = destination / item.name
-        if item.is_dir():
-            shutil.copytree(item, target, dirs_exist_ok=True)
-        else:
-            target.parent.mkdir(parents=True, exist_ok=True)
-            shutil.copy2(item, target)
-
-
-def build_tlauncher():
+def build_tlauncher_zip() -> Path:
     manifest = read_manifest()
-    resolved = resolve_mods(manifest)
-    version_id, profile = fetch_fabric_profile(
-        manifest["minecraft_version"], manifest["fabric_loader_version"]
+    mods = get_modrinth_mods(manifest)
+    profile = fetch_fabric_profile(
+        manifest["minecraft_version"],
+        manifest["fabric_loader_version"],
     )
+
+    profile_id = profile["id"]
+    if any(char in profile_id for char in ("/", "\\", "..")):
+        raise BuildError(f"Fabric Meta devolvio un id no seguro para una ruta: {profile_id!r}")
 
     DIST_DIR.mkdir(parents=True, exist_ok=True)
-    pack_name = _safe_pack_component(manifest["name"])
-    pack_version = _safe_pack_component(manifest["version"])
-    output_path = DIST_DIR / "{}-{}-tlauncher.zip".format(pack_name, pack_version)
-
-    staging = DIST_DIR / ".tlauncher-staging"
-    if staging.exists():
-        shutil.rmtree(staging)
-    staging.mkdir(parents=True)
-
-    version_dir = staging / "versions" / version_id
-    version_dir.mkdir(parents=True)
-    (version_dir / "{}.json".format(version_id)).write_text(
-        json.dumps(profile, ensure_ascii=False, indent=2) + "\n",
-        encoding="utf-8",
+    output = DIST_DIR / (
+        f"{_safe_pack_stem(manifest['name'])}-"
+        f"{_safe_pack_stem(manifest['version'])}-tlauncher.zip"
     )
-
     overrides = ROOT / "pack" / "overrides"
-    _copy_tree_contents(overrides, staging)
+    launcher_files = ROOT / "tlauncher"
+    own_jars = _compiled_own_mod_jars()
 
-    own_jars = compiled_own_mod_jars()
-    if own_jars:
-        mods_dir = staging / "mods"
-        mods_dir.mkdir(parents=True, exist_ok=True)
-        for jar in own_jars:
-            shutil.copy2(jar, mods_dir / jar.name)
-
-    third_party = [
-        {
-            "url": mod["url"],
-            "sha1": mod["sha1"],
-            "filename": mod["filename"],
-            "size": mod["size"],
-        }
-        for mod in resolved
-        if mod.get("client_side") != "unsupported"
-    ]
-    (staging / "mods-terceros.json").write_text(
-        json.dumps(third_party, ensure_ascii=True, indent=2) + "\n",
-        encoding="utf-8",
-    )
-
-    for filename in ("instalar.ps1", "INSTALAR.bat", "LEEME.txt"):
-        source = ROOT / "tlauncher" / filename
-        if not source.is_file():
-            raise BuildError("Falta el archivo requerido tlauncher/{}.".format(filename))
-        shutil.copy2(source, staging / filename)
+    required_launcher_files = ("instalar.ps1", "INSTALAR.bat", "LEEME.txt")
+    for filename in required_launcher_files:
+        path = launcher_files / filename
+        if not path.is_file():
+            raise BuildError(f"Falta el archivo requerido para el ZIP TLauncher: {path}")
 
     try:
-        with zipfile.ZipFile(
-            output_path, "w", compression=zipfile.ZIP_DEFLATED
-        ) as archive:
-            for path in sorted(staging.rglob("*")):
-                if path.is_file():
-                    archive.write(path, path.relative_to(staging).as_posix())
-    finally:
-        shutil.rmtree(staging, ignore_errors=True)
+        with zipfile.ZipFile(output, "w", compression=zipfile.ZIP_DEFLATED) as archive:
+            profile_path = f"versions/{profile_id}/{profile_id}.json"
+            archive.writestr(
+                profile_path,
+                json.dumps(profile, ensure_ascii=False, indent=2) + "\n",
+            )
 
-    print("Creado: {}".format(output_path))
-    print("Perfil Fabric: {}".format(version_id))
-    return output_path
+            if overrides.is_dir():
+                for path in sorted(overrides.rglob("*")):
+                    if not path.is_file() or not _nonempty_file(path):
+                        continue
+                    archive.write(path, path.relative_to(overrides).as_posix())
+
+            for jar in own_jars:
+                archive.write(jar, f"mods/{jar.name}")
+
+            manifest_temp = DIST_DIR / "mods-terceros.json"
+            _write_tlauncher_manifest(manifest_temp, mods)
+            archive.write(manifest_temp, "mods-terceros.json")
+            manifest_temp.unlink(missing_ok=True)
+
+            for filename in required_launcher_files:
+                archive.write(launcher_files / filename, filename)
+    except (OSError, zipfile.BadZipFile) as exc:
+        raise BuildError(f"No se pudo crear el ZIP de TLauncher {output}: {exc}") from exc
+
+    print(f"Creado: {output}")
+    return output
+
+
+def main() -> int:
+    try:
+        build_tlauncher_zip()
+        return 0
+    except BuildError as exc:
+        print(f"ERROR: {exc}", file=sys.stderr)
+        return 1
 
 
 if __name__ == "__main__":
-    try:
-        build_tlauncher()
-    except BuildError as error:
-        print("ERROR: {}".format(error), file=sys.stderr)
-        sys.exit(1)
+    raise SystemExit(main())
