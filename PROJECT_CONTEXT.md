@@ -1,21 +1,23 @@
-# Contexto del proyecto
+# PROJECT_CONTEXT
 
 ## Modo autónomo
 
-El usuario aprobó todo y delegó todas las decisiones al equipo. No quiere cuestionarios ni conocer el contenido del modpack; el equipo toma las decisiones necesarias, preserva las sorpresas narrativas y entrega la documentación y el paquete para que el usuario lo descubra jugando. La autonomía no autoriza inventar datos de compatibilidad, dependencias, licencias ni resultados de pruebas, ni subir, retirar, sustituir, modificar o redistribuir archivos de mods de terceros.
+El usuario aprobó todo y delegó todas las decisiones al equipo. No quiere cuestionarios ni conocer el contenido del modpack; se trabaja autónomamente y se comunican los resultados de integración. Hardware actualizado: 12 GB instalados, unos 10 GB disponibles; Windows usa unos 500 MB. Launcher del usuario: TLauncher en Windows.
 
-## Hardware declarado por el usuario
+## Estado del paquete Horizonte
 
-El usuario informó 12 GB de RAM instalados, unos 10 GB disponibles y que Windows usa unos 500 MB. Son datos declarados, no una medición o verificación independiente. El sistema operativo, la configuración completa, la RAM física total y los benchmarks siguen sin verificarse.
+- Minecraft 1.20.1; Loader declarado 0.20.1 según Fabric Meta.
+- El manifiesto se redujo a un subconjunto. No se declara listo para instalar mientras dependencias obligatorias sigan sin resolverse.
+- JAR, compatibilidad completa, configuraciones y rendimiento conjunto: [SIN VERIFICAR].
+- No se suben JAR de mods de terceros.
+- La configuración específica de mods no se incorpora sin validación contra los JAR exactos.
+- `-Xmx5G` es recomendación operativa aportada, no una medición validada.
 
-## Entrega de modpack
+## Mods propios
 
-La Marea de los Mil Soles usa Minecraft 1.20.1 y Fabric Loader 0.20.1 según los hallazgos recibidos. `pack/mods.json` contiene una selección provisional y sus incertidumbres: dependencias obligatorias pendientes, metadatos no verificados y falta de evidencia suficiente para garantizar que sea instalable. No se presenta como un paquete completo listo para publicar. Los mods de terceros se obtienen de sus fuentes autorizadas durante la compilación/instalación; no se almacenan sus JAR en Git.
+El núcleo de campaña usa Fabric y persistencia `PersistentState`. Las firmas Yarn mencionadas para 1.20.1+build.10 se consultaron, pero la compilación no se ejecutó. La configuración `guardarCampana` no está conectada al guardado persistente. El comportamiento del gestor ante datos de esquema futuro está [SIN VERIFICAR]. Balance, contenido frente a una especificación aprobada y dependencias finales permanecen sin validar.
 
-No se incluyen configuraciones especulativas. Memoria y argumentos JVM recomendados no están establecidos con evidencia de pruebas para el equipo. La estructura de instalación específica en TLauncher sigue sin verificar.
+## Integración y pruebas
 
-## Mods propios y pruebas
-
-La entrega recibida describe un módulo propio de campaña, pero la implementación y los archivos de `mareas-core` señalados no se incorporan en esta actualización porque el árbol existente del repositorio contiene `venas-core` y el contenido textual recibido usa una ruta diferente. No se inventa ni se renombra código para cubrir esta discrepancia. La compilación no se ejecutó. Compatibilidad de Loom, compilación Gradle y ejecución en juego quedan pendientes de prueba.
-
-Las consultas incompletas sobre mods y dependencias se registran como pendientes indicando que las fuentes consultadas no devolvieron verificación suficiente; no se completan con suposiciones.
+TLauncher para Windows es el objetivo de instalación prioritario. Los constructores obtienen versiones y hashes desde las APIs durante el build; los archivos de terceros se descargan en el equipo del usuario, nunca se versionan ni distribuyen como JAR en el repositorio.
+La compilación Gradle y el empaquetado deben comprobarse en GitHub Actions. La prueba de juego queda pendiente de que el usuario ejecute el paquete.
