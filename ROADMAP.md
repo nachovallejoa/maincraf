@@ -1,7 +1,7 @@
 # Hoja de ruta
 
-- **Integración — en revisión:** manifiesto de modpack, constructores, módulos propios, documentación e instalador TLauncher incorporados. Dependencias obligatorias y correspondencias exactas de artefactos aún quedan pendientes.
-- **Entrega — en revisión:** documentación y artefactos previstos en el workflow; el paquete no se declara listo para instalar mientras existan dependencias sin cerrar y el build no haya concluido.
-- **Pruebas — pendiente:** esperar la compilación en GitHub Actions y que el usuario instale y juegue para probar la experiencia. La compilación Gradle y el arranque no están confirmados.
-- **Cierre del conjunto RPG — pendiente:** revisar proyectos, versiones Fabric/Minecraft y dependencias de Remnants/Trailier Tales, FTB Quests, Skill Tree, Better Combat y Bosses of Mass Destruction. No completar datos que las fuentes no devolvieron.
-- **Validación en ejecución — pendiente:** compatibilidad conjunta, JAR exactos, rendimiento en el hardware y configuraciones solo se afirmarán tras pruebas.
+- **Integración — en revisión:** manifiesto documental, constructores, módulos propios, documentación e instalador TLauncher incorporados. Dependencias obligatorias y correspondencia exacta de artefactos siguen pendientes.
+- **Entrega — en revisión:** documentación y archivos de construcción preparados. No afirmar que el paquete se haya generado o publicado hasta contar con resultado de GitHub Actions.
+- **Pruebas — pendiente:** esperar la compilación en GitHub Actions; después, el usuario debe instalar y jugar el paquete para probar la experiencia en TLauncher/Windows. La compilación Gradle y el arranque no están confirmados.
+- **Cierre del conjunto RPG — pendiente:** revisar proyectos, versiones Fabric/Minecraft y dependencias. No completar campos que las fuentes no devolvieron.
+- **Validación en ejecución — pendiente:** compatibilidad conjunta, JAR exactos, rendimiento en hardware y configuraciones solo se afirmarán tras pruebas.
