@@ -1,0 +1,19 @@
+{
+  "schemaVersion": 1,
+  "id": "marea_core",
+  "version": "${version}",
+  "name": "La Marea: Núcleo",
+  "description": "Estado de campaña y persistencia para La Marea de los Mil Soles.",
+  "environment": "*",
+  "entrypoints": {
+    "main": [
+      "es.marea.core.MareaCore"
+    ]
+  },
+  "depends": {
+    "fabricloader": ">=0.20.1",
+    "minecraft": "1.20.1",
+    "java": ">=17",
+    "fabric-api": ">=0.92.11+1.20.1"
+  }
+}
