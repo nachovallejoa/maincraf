@@ -1,4 +1,4 @@
-Descarga el archivo que termina en -tlauncher.zip desde Releases o Actions.
-Extrae TODO el ZIP antes de usarlo: clic derecho > Extraer todo.
-No ejecutes INSTALAR.bat suelto ni desde dentro del ZIP.
+Descarga de Releases el archivo que termina en -tlauncher.zip.
+Antes de instalar, extrae TODO el .zip (clic derecho, Extraer todo).
 Abre la carpeta extraida y haz doble clic en INSTALAR.bat.
+No ejecutes el .bat suelto, desde el repositorio ni dentro del .zip.
