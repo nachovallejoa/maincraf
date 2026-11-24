@@ -1,4 +1,4 @@
 {
-  "_comment": "NO PRECARGAR: este esquema y valores no quedaron verificados para Sodium 0.5.13/Minecraft 1.20.1 en esta revisión. Archivo conservado como propuesta previa, no como configuración aprobada ni sintonizada para Radeon R3. Es preferible que Sodium genere su archivo y configurar en una instancia aislada tras validar.",
+  "_comment": "NO PRECARGAR: este marcador documental no es configuración de Sodium. El esquema y los valores exactos no se verificaron para Sodium 0.5.13/Minecraft 1.20.1. Dejar que Sodium genere su archivo tras validar el driver y configurar desde la interfaz en una instancia aislada.",
   "status": "NOT_PRELOADABLE_UNVERIFIED"
 }
