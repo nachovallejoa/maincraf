@@ -5,53 +5,46 @@
 ### Requisitos
 
 - Windows y TLauncher instalado.
-- Conexion a Internet para descargar los mods de terceros desde Modrinth durante la instalacion.
-- La carpeta de datos de Minecraft existente. Por defecto, en Windows es `%APPDATA%\.minecraft`.
-- Minecraft 1.20.1 usa Java 17. El launcher debe poder usar Java compatible.
+- Conexion a Internet para descargar los mods de terceros durante la instalacion.
+- La carpeta de datos de TLauncher debe existir. Por defecto, en Windows es `%APPDATA%\.minecraft`.
+- [SIN VERIFICAR] La prueba de este perfil con la version instalada de TLauncher y con la opcion de directorios aislados no se ha realizado.
 
-### Obtener y extraer el paquete
+### Descargar y extraer el paquete
 
-1. Abre la pagina **Releases** de este repositorio. Descarga el archivo cuyo nombre termina en `-tlauncher.zip`.
-2. Tambien puedes descargar el ZIP desde **Actions**: abre una ejecucion terminada correctamente y descarga el artefacto de instalacion.
-3. Extrae el ZIP completo: clic derecho sobre el archivo y elige **Extraer todo**.
-4. Abre la carpeta extraida y haz doble clic en `INSTALAR.bat`.
+1. Abre la pagina **Releases** del repositorio y descarga el archivo que termina en `-tlauncher.zip`. Tambien se puede descargar como artefacto desde **Actions** cuando un workflow haya terminado correctamente.
+2. No descargues `INSTALAR.bat` por separado desde el repositorio. El BAT no funciona suelto ni desde la carpeta `tlauncher` del repositorio.
+3. En Windows, haz clic derecho en el ZIP y elige **Extraer todo**. Extrae todo el contenido a una carpeta.
+4. Abre esa carpeta extraida y haz doble clic en `INSTALAR.bat`. No ejecutes el instalador desde dentro del ZIP.
 
-**Importante:** `INSTALAR.bat` no funciona si se descarga suelto desde el repositorio, si se ejecuta desde la carpeta `tlauncher` del repositorio o si se abre dentro del ZIP sin extraerlo. Necesita `mods-terceros.json` y la carpeta `versions` que vienen dentro del ZIP completo.
+El instalador usa `%APPDATA%\.minecraft` por defecto. Si la carpeta no existe, se detiene sin instalar. Para una carpeta de juego personalizada, se puede ejecutar PowerShell desde la carpeta extraida con una ruta explicita:
+`powershell -NoProfile -ExecutionPolicy Bypass -File ".\instalar.ps1" -MinecraftDir "RUTA_COMPLETA_A\.minecraft"`
 
-El instalador usa `%APPDATA%\.minecraft` por defecto. Si tu TLauncher tiene configurada otra carpeta de juego, el script permite una ruta alternativa al ejecutarlo con PowerShell, por ejemplo:
+El instalador respalda los mods que ya existan, y copia la configuracion y `options.txt` existentes, dentro de `respaldo-modpack-fecha-hora` en `.minecraft`. Si una descarga de Modrinth falla o no coincide con el SHA1/tamano esperado, se informa al final; no uses el pack si falta un mod necesario.
 
-```powershell
-.\instalar.ps1 -Destino "D:\Games\.minecraft"
-```
+### Iniciar y revertir
 
-Si la carpeta indicada no existe, el instalador se detiene sin crearla.
-
-### Finalizar y jugar
-
-1. Cuando termine, abre TLauncher.
-2. Selecciona en la lista de versiones la version instalada que muestra el instalador.
-3. En los ajustes de TLauncher, asigna la memoria indicada al final de este documento.
+1. Abre TLauncher.
+2. En la lista de versiones, selecciona `fabric-loader-0.20.1-1.20.1`.
+3. En los ajustes de TLauncher, configura la memoria indicada abajo.
 4. Inicia el juego.
 
-TLauncher documenta una ubicacion configurable para el directorio del juego y carpetas de versiones. Su documentacion consultada no confirma que exista una opcion general de “carpeta separada por version” que cambie la ubicacion de `mods/`. **[SIN VERIFICAR]** Por seguridad, deja seleccionada la carpeta `.minecraft` que usa el launcher y no actives una opcion de directorios separados si tu version del launcher la muestra; si usas una ruta propia, indica esa carpeta con `-Destino`.
+TLauncher permite cambiar el directorio general de los archivos del juego en sus ajustes. La documentacion consultada describe esa ubicacion, pero no confirma una opcion de carpetas aisladas por version que cambie donde se buscan `mods` y `config`. Por tanto, deja desactivada cualquier opcion de directorio separado por version si aparece. [SIN VERIFICAR] La presencia y comportamiento de esa opcion dependen de la version concreta del launcher.
 
-### Respaldo y vuelta atras
+Para volver atras, cierra Minecraft. En `.minecraft`, mueve o elimina la carpeta `mods` instalada y, desde la carpeta `respaldo-modpack-fecha-hora`, restaura `mods-anteriores` como `mods` si el instalador la creo. Restaura tambien `config` y `options.txt` desde ese respaldo si quieres recuperar esos archivos. No elimines el respaldo hasta comprobar que ya no lo necesitas.
 
-Antes de copiar el contenido nuevo, el instalador mueve la carpeta `mods` previa que contenga archivos y guarda copias de `config` y `options.txt` existentes en `respaldo-modpack-<fecha-y-hora>` dentro de `.minecraft`.
+## Opcional: Prism Launcher o Modrinth App
 
-Para volver atras:
+Importa el archivo `.mrpack` desde la funcion de importar modpack de tu launcher. Los launchers compatibles descargan los mods de Modrinth; no copies JARs de terceros desde este repositorio.
 
-1. Cierra Minecraft y TLauncher.
-2. Abre `.minecraft\respaldo-modpack-<fecha-y-hora>`.
-3. Restaura desde alli la carpeta `mods` anterior y los archivos/carpeta de configuracion que quieras recuperar. Si ya existe un `mods` nuevo, apartalo antes de devolver el anterior.
-4. Elimina la carpeta de version Fabric instalada solo si no vas a volver a seleccionarla.
+## Memoria y argumentos JVM
 
-## Prism Launcher o Modrinth App (opcional)
+El manifiesto no incluye argumentos JVM ni una recomendacion de memoria para el paquete. Para un equipo con unos 10 GB de RAM disponibles para Windows, una recomendacion prudente es asignar **4 GB** a Minecraft. No asignes toda la RAM del equipo al juego. [SIN VERIFICAR] La memoria concreta adecuada depende de otros programas abiertos y del hardware; no se midio esta instancia.
 
-El archivo `.mrpack` se puede importar en Prism Launcher mediante **Add Instance > Import**. Modrinth App tambien permite instalar y jugar modpacks en su aplicacion. TLauncher no usa el archivo `.mrpack`; para TLauncher usa el ZIP terminado en `-tlauncher.zip`.
+No se necesitan argumentos JVM adicionales aportados por el paquete.
 
-## Memoria, argumentos y diagnostico
+## Si el juego no arranca
 
-El manifiesto no proporciona memoria ni argumentos JVM. **[SIN VERIFICAR]** Con unos 10 GB de RAM total en Windows, una recomendacion prudente inicial es asignar **4 GB** al juego, dejando memoria al sistema y otras aplicaciones. La ayuda oficial de Minecraft advierte que la asignacion debe corresponder a la RAM disponible y da como referencia que en sistemas de 64 bits no se recomienda asignar mas de la mitad de la RAM total. No se agregan argumentos JVM personalizados; conserva los que configure TLauncher.
-
-Para problemas de inicio, abre la carpeta de juego desde el icono de carpeta de TLauncher y revisa `logs\latest.log`; si el juego genero un informe de fallo, revisa tambien `crash-reports\`. En TLauncher puedes activar la consola de desarrollador en sus ajustes para ver la salida de inicio. Adjunta el registro completo al pedir ayuda.
+- Abre la carpeta de datos de Minecraft desde TLauncher con su boton de carpeta, o revisa `%APPDATA%\.minecraft`.
+- Consulta `logs/latest.log` y, si hubo un cierre inesperado, el archivo mas reciente de `crash-reports/`.
+- En TLauncher, activa la consola de desarrollador o la consola de Minecraft en los ajustes para ver errores durante el inicio.
+- Comprueba que seleccionaste la version Fabric instalada y que no hubo descargas fallidas. Guarda el texto del error y el registro antes de pedir ayuda.
