@@ -1,94 +1,90 @@
 #!/usr/bin/env python3
-"""Construye un .mrpack consultando los datos verificables en Modrinth."""
+"""Crea el archivo .mrpack usando Modrinth y los datos locales del pack."""
+
+from __future__ import annotations
 
 import json
 import re
-import shutil
 import sys
 import urllib.error
+import urllib.parse
 import urllib.request
 import zipfile
 from pathlib import Path
-
+from typing import Any
 
 ROOT = Path(__file__).resolve().parents[1]
 MANIFEST_PATH = ROOT / "pack" / "mods.json"
 DIST_DIR = ROOT / "dist"
-USER_AGENT = "HorizonteModpackBuilder/1.0 (GitHub Actions)"
-API_BASE = "https://api.modrinth.com/v2"
+USER_AGENT = "DerivaModpackBuilder/1.0 (GitHub Actions; contact: repository maintainers)"
 
 
 class BuildError(RuntimeError):
-    """Error con datos de manifiesto, API o archivos de entrada."""
+    pass
 
 
-def _nonempty_string(value):
-    return isinstance(value, str) and bool(value.strip())
+def _read_json(path: Path) -> Any:
+    try:
+        with path.open("r", encoding="utf-8") as stream:
+            return json.load(stream)
+    except FileNotFoundError as exc:
+        raise BuildError(f"No existe el manifiesto requerido: {path}") from exc
+    except json.JSONDecodeError as exc:
+        raise BuildError(f"JSON invalido en {path}: {exc}") from exc
 
 
-def _first_nonempty(data, keys):
-    for key in keys:
-        value = data.get(key)
-        if _nonempty_string(value):
+def _first_nonempty(mapping: dict[str, Any], names: tuple[str, ...]) -> str | None:
+    for name in names:
+        value = mapping.get(name)
+        if isinstance(value, str) and value.strip():
             return value.strip()
     return None
 
 
-def read_manifest(path=MANIFEST_PATH):
-    """Lee el manifiesto validando Minecraft, Loader y los IDs de versión."""
-    try:
-        data = json.loads(Path(path).read_text(encoding="utf-8"))
-    except FileNotFoundError as exc:
-        raise BuildError("No existe pack/mods.json.") from exc
-    except (OSError, json.JSONDecodeError) as exc:
-        raise BuildError("No se pudo leer pack/mods.json: {}".format(exc)) from exc
+def read_manifest(path: Path = MANIFEST_PATH) -> dict[str, Any]:
+    """Lee el manifiesto con alias de campos tolerantes y valida lo imprescindible."""
+    raw = _read_json(path)
+    if not isinstance(raw, dict):
+        raise BuildError(f"El manifiesto debe ser un objeto JSON: {path}")
 
-    if not isinstance(data, dict):
-        raise BuildError("pack/mods.json debe contener un objeto JSON.")
+    minecraft_version = _first_nonempty(raw, ("minecraft_version", "game_version"))
+    loader_version = _first_nonempty(raw, ("fabric_loader_version", "loader_version"))
 
-    minecraft_version = _first_nonempty(
-        data, ("minecraft_version", "game_version")
-    )
     if not minecraft_version:
         raise BuildError(
-            "Falta minecraft_version (o game_version) en pack/mods.json."
+            "Falta minecraft_version (o game_version) o esta vacio en pack/mods.json."
         )
-
-    loader_version = _first_nonempty(
-        data, ("fabric_loader_version", "loader_version")
-    )
     if not loader_version:
         raise BuildError(
-            "Falta fabric_loader_version (o loader_version) en pack/mods.json."
+            "Falta fabric_loader_version (o loader_version) o esta vacio en pack/mods.json."
         )
 
-    raw_mods = data.get("mods", [])
-    if not isinstance(raw_mods, list):
-        raise BuildError("El campo mods de pack/mods.json debe ser una lista.")
+    mods = raw.get("mods")
+    if not isinstance(mods, list):
+        raise BuildError("El campo 'mods' debe ser una lista en pack/mods.json.")
 
-    mods = []
-    for index, item in enumerate(raw_mods, 1):
+    normalized_mods: list[dict[str, Any]] = []
+    for index, item in enumerate(mods, start=1):
         if not isinstance(item, dict):
-            raise BuildError("La entrada de mod #{} no es un objeto.".format(index))
+            raise BuildError(f"El mod #{index} no es un objeto JSON.")
         version_id = _first_nonempty(item, ("version_id", "id"))
         if not version_id:
-            raise BuildError(
-                "La entrada de mod #{} no tiene version_id ni id.".format(index)
-            )
-        mods.append({"version_id": version_id})
+            raise BuildError(f"Falta version_id (o id) del mod #{index} en pack/mods.json.")
+        normalized_mods.append({"version_id": version_id})
 
-    name = _first_nonempty(data, ("name",)) or "modpack"
-    version = _first_nonempty(data, ("version",)) or "1.0.0"
+    name = _first_nonempty(raw, ("name",)) or "modpack"
+    pack_version = _first_nonempty(raw, ("version",)) or "1.0.0"
+
     return {
         "name": name,
-        "version": version,
+        "version": pack_version,
         "minecraft_version": minecraft_version,
         "fabric_loader_version": loader_version,
-        "mods": mods,
+        "mods": normalized_mods,
     }
 
 
-def _get_json(url):
+def _http_json(url: str) -> Any:
     request = urllib.request.Request(
         url,
         headers={
@@ -99,140 +95,127 @@ def _get_json(url):
     try:
         with urllib.request.urlopen(request, timeout=45) as response:
             return json.loads(response.read().decode("utf-8"))
-    except (urllib.error.URLError, TimeoutError, OSError, json.JSONDecodeError) as exc:
-        raise BuildError("No se pudo consultar {}: {}".format(url, exc)) from exc
+    except (urllib.error.URLError, TimeoutError, json.JSONDecodeError, OSError) as exc:
+        raise BuildError(f"Fallo consultando {url}: {exc}") from exc
 
 
-def _get_version_data(version_id):
-    return _get_json("{}/version/{}".format(API_BASE, version_id))
+def get_modrinth_mod_data(version_id: str) -> dict[str, Any]:
+    """Obtiene version y proyecto de Modrinth. Compartida con build_tlauncher.py."""
+    if not isinstance(version_id, str) or not version_id.strip():
+        raise BuildError("Se intento consultar un id de version Modrinth vacio.")
 
-
-def _get_project_data(project_id):
-    return _get_json("{}/project/{}".format(API_BASE, project_id))
-
-
-def _project_env(project):
-    def side_value(field):
-        value = project.get(field, "unknown")
-        if value in ("required", "optional", "unsupported"):
-            return value
-        # La especificación de Modrinth permite unknown y valores no previstos.
-        return "optional"
-
-    return {
-        "client": side_value("client_side"),
-        "server": side_value("server_side"),
-    }
-
-
-def resolve_mod(version_id):
-    """Obtiene el archivo principal, hashes, tamaño, URL y env de un mod."""
+    version_url = "https://api.modrinth.com/v2/version/" + urllib.parse.quote(
+        version_id.strip(), safe=""
+    )
     try:
-        version_data = _get_version_data(version_id)
-        if not isinstance(version_data, dict):
-            raise BuildError("La respuesta de versión no es un objeto JSON.")
+        version = _http_json(version_url)
+        if not isinstance(version, dict):
+            raise BuildError("La respuesta de version no es un objeto JSON.")
 
-        files = version_data.get("files")
+        files = version.get("files")
         if not isinstance(files, list) or not files:
-            raise BuildError("La versión no incluye archivos descargables.")
-
+            raise BuildError("La version no contiene archivos descargables.")
         primary = next(
-            (file for file in files if isinstance(file, dict) and file.get("primary")),
+            (file for file in files if isinstance(file, dict) and file.get("primary") is True),
             None,
         )
         if primary is None:
             primary = next((file for file in files if isinstance(file, dict)), None)
-        if primary is None:
-            raise BuildError("La lista de archivos no contiene un archivo utilizable.")
+        if not primary:
+            raise BuildError("No se encontro archivo principal en la version.")
 
-        url = primary.get("url")
+        file_url = primary.get("url")
         filename = primary.get("filename")
         hashes = primary.get("hashes")
-        project_id = version_data.get("project_id")
-        size = primary.get("size")
-
-        if not _nonempty_string(url):
-            raise BuildError("El archivo principal no tiene URL.")
-        if not _nonempty_string(filename):
-            raise BuildError("El archivo principal no tiene nombre.")
-        if not _nonempty_string(project_id):
-            raise BuildError("La versión no tiene project_id.")
+        if not isinstance(file_url, str) or not file_url.strip():
+            raise BuildError("El archivo principal no incluye una URL.")
+        if not isinstance(filename, str) or not filename.strip():
+            raise BuildError("El archivo principal no incluye filename.")
         if not isinstance(hashes, dict):
             raise BuildError("El archivo principal no incluye hashes.")
         sha1 = hashes.get("sha1")
         sha512 = hashes.get("sha512")
-        if not _nonempty_string(sha1) or not _nonempty_string(sha512):
-            raise BuildError("El archivo principal debe incluir SHA1 y SHA512.")
-        if not isinstance(size, int) or size < 0:
-            raise BuildError("El archivo principal no incluye un tamaño válido.")
+        project_id = version.get("project_id")
+        if not isinstance(sha1, str) or not sha1.strip():
+            raise BuildError("El archivo principal no incluye hash sha1.")
+        if not isinstance(sha512, str) or not sha512.strip():
+            raise BuildError("El archivo principal no incluye hash sha512.")
+        if not isinstance(project_id, str) or not project_id.strip():
+            raise BuildError("La version no incluye project_id.")
 
-        project = _get_project_data(project_id)
+        size = primary.get("size")
+        if not isinstance(size, int) or size < 0:
+            raise BuildError("El archivo principal no incluye un size valido.")
+
+        project_url = "https://api.modrinth.com/v2/project/" + urllib.parse.quote(
+            project_id, safe=""
+        )
+        project = _http_json(project_url)
         if not isinstance(project, dict):
             raise BuildError("La respuesta del proyecto no es un objeto JSON.")
+
+        client_side = _normalize_env(project.get("client_side"))
+        server_side = _normalize_env(project.get("server_side"))
 
         return {
             "version_id": version_id,
             "project_id": project_id,
-            "url": url,
+            "url": file_url,
             "filename": filename,
             "sha1": sha1,
             "sha512": sha512,
             "size": size,
-            "env": _project_env(project),
-            "client_side": project.get("client_side", "unknown"),
-            "server_side": project.get("server_side", "unknown"),
+            "client_side": client_side,
+            "server_side": server_side,
         }
     except BuildError as exc:
-        raise BuildError(
-            "No se pudieron obtener los datos del mod con version_id {!r}: {}".format(
-                version_id, exc
-            )
-        ) from exc
+        raise BuildError(f"Modrinth version_id '{version_id}': {exc}") from exc
 
 
-def resolve_mods(manifest):
-    return [resolve_mod(mod["version_id"]) for mod in manifest["mods"]]
+def _normalize_env(value: Any) -> str:
+    if value in ("required", "optional", "unsupported"):
+        return value
+    return "optional"
 
 
-def compiled_own_mod_jars():
-    """Lista JAR compilados propios, excluyendo classifiers sources y dev."""
-    jars = []
-    mods_dir = ROOT / "mods-propios"
-    if not mods_dir.exists():
-        return jars
+def get_modrinth_mods(manifest: dict[str, Any]) -> list[dict[str, Any]]:
+    """Consulta los metadatos completos de cada mod indicado por el manifiesto."""
+    results: list[dict[str, Any]] = []
+    for item in manifest["mods"]:
+        version_id = item["version_id"]
+        results.append(get_modrinth_mod_data(version_id))
+    return results
 
-    for path in sorted(mods_dir.glob("**/build/libs/*.jar")):
-        if path.name.endswith("-sources.jar") or path.name.endswith("-dev.jar"):
+
+def _safe_pack_stem(name: str) -> str:
+    cleaned = re.sub(r"[^\w.-]+", "-", name.strip(), flags=re.UNICODE).strip("-.")
+    return cleaned or "modpack"
+
+
+def _copy_tree_files(archive: zipfile.ZipFile, source: Path, prefix: str) -> None:
+    if not source.is_dir():
+        return
+    for path in sorted(source.rglob("*")):
+        if path.is_file():
+            relative = path.relative_to(source).as_posix()
+            archive.write(path, f"{prefix}/{relative}" if prefix else relative)
+
+
+def _compiled_own_mod_jars() -> list[Path]:
+    base = ROOT / "mods-propios"
+    if not base.is_dir():
+        return []
+    jars: list[Path] = []
+    for jar in sorted(base.glob("**/build/libs/*.jar")):
+        if jar.name.endswith("-sources.jar") or jar.name.endswith("-dev.jar"):
             continue
-        jars.append(path)
+        jars.append(jar)
     return jars
 
 
-def _safe_pack_component(text):
-    text = re.sub(r"[^A-Za-z0-9._-]+", "-", text.strip())
-    return text.strip(".-") or "modpack"
-
-
-def _copy_tree_contents(source, destination):
-    if not source.is_dir():
-        return
-    for item in sorted(source.iterdir()):
-        target = destination / item.name
-        if item.is_dir():
-            shutil.copytree(item, target, dirs_exist_ok=True)
-        else:
-            target.parent.mkdir(parents=True, exist_ok=True)
-            shutil.copy2(item, target)
-
-
-def build_mrpack():
+def build_mrpack() -> Path:
     manifest = read_manifest()
-    resolved = resolve_mods(manifest)
-    DIST_DIR.mkdir(parents=True, exist_ok=True)
-
-    pack_name = _safe_pack_component(manifest["name"])
-    pack_version = _safe_pack_component(manifest["version"])
-    output_path = DIST_DIR / "{}-{}.mrpack".format(pack_name, pack_version)
+    mod_data = get_modrinth_mods(manifest)
 
     index = {
         "formatVersion": 1,
@@ -241,16 +224,19 @@ def build_mrpack():
         "name": manifest["name"],
         "files": [
             {
-                "path": "mods/{}".format(mod["filename"]),
+                "path": f"mods/{mod['filename']}",
                 "hashes": {
                     "sha1": mod["sha1"],
                     "sha512": mod["sha512"],
                 },
-                "env": mod["env"],
+                "env": {
+                    "client": mod["client_side"],
+                    "server": mod["server_side"],
+                },
                 "downloads": [mod["url"]],
                 "fileSize": mod["size"],
             }
-            for mod in resolved
+            for mod in mod_data
         ],
         "dependencies": {
             "minecraft": manifest["minecraft_version"],
@@ -258,44 +244,39 @@ def build_mrpack():
         },
     }
 
-    staging = DIST_DIR / ".mrpack-staging"
-    if staging.exists():
-        shutil.rmtree(staging)
-    staging.mkdir(parents=True)
-
-    (staging / "modrinth.index.json").write_text(
-        json.dumps(index, ensure_ascii=False, indent=2) + "\n",
-        encoding="utf-8",
+    DIST_DIR.mkdir(parents=True, exist_ok=True)
+    output = DIST_DIR / (
+        f"{_safe_pack_stem(manifest['name'])}-{_safe_pack_stem(manifest['version'])}.mrpack"
     )
 
     overrides = ROOT / "pack" / "overrides"
-    if overrides.is_dir() and any(overrides.iterdir()):
-        _copy_tree_contents(overrides, staging / "overrides")
-
-    own_jars = compiled_own_mod_jars()
-    if own_jars:
-        own_mods_dir = staging / "overrides" / "mods"
-        own_mods_dir.mkdir(parents=True, exist_ok=True)
-        for jar in own_jars:
-            shutil.copy2(jar, own_mods_dir / jar.name)
+    own_jars = _compiled_own_mod_jars()
 
     try:
-        with zipfile.ZipFile(
-            output_path, "w", compression=zipfile.ZIP_DEFLATED
-        ) as archive:
-            for path in sorted(staging.rglob("*")):
-                if path.is_file():
-                    archive.write(path, path.relative_to(staging).as_posix())
-    finally:
-        shutil.rmtree(staging, ignore_errors=True)
+        with zipfile.ZipFile(output, "w", compression=zipfile.ZIP_DEFLATED) as archive:
+            archive.writestr(
+                "modrinth.index.json",
+                json.dumps(index, ensure_ascii=False, indent=2) + "\n",
+            )
+            if overrides.is_dir():
+                _copy_tree_files(archive, overrides, "overrides")
+            for jar in own_jars:
+                archive.write(jar, f"overrides/mods/{jar.name}")
+    except OSError as exc:
+        raise BuildError(f"No se pudo escribir el paquete .mrpack {output}: {exc}") from exc
 
-    print("Creado: {}".format(output_path))
-    return output_path
+    print(f"Creado: {output}")
+    return output
+
+
+def main() -> int:
+    try:
+        build_mrpack()
+        return 0
+    except BuildError as exc:
+        print(f"ERROR: {exc}", file=sys.stderr)
+        return 1
 
 
 if __name__ == "__main__":
-    try:
-        build_mrpack()
-    except BuildError as error:
-        print("ERROR: {}".format(error), file=sys.stderr)
-        sys.exit(1)
+    raise SystemExit(main())
