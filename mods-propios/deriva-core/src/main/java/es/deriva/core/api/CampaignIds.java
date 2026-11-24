@@ -3,10 +3,7 @@ package es.deriva.core.api;
 import java.util.Set;
 
 /**
- * Identificadores estables compartidos por los módulos propios.
- *
- * Las habilidades y sus IDs no se enumeran aquí: sus detalles concretos
- * todavía no están definidos en las mecánicas documentadas.
+ * IDs estables usados por los módulos de campaña.
  */
 public final class CampaignIds {
     public static final String CLASS_GUARDACORRIENTE = "guardacorriente";
@@ -35,10 +32,10 @@ public final class CampaignIds {
     }
 
     public static boolean isClassId(String id) {
-        return CLASS_IDS.contains(id);
+        return id != null && CLASS_IDS.contains(id);
     }
 
     public static boolean isFactionId(String id) {
-        return FACTION_IDS.contains(id);
+        return id != null && FACTION_IDS.contains(id);
     }
 }
