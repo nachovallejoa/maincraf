@@ -1,0 +1,14 @@
+version:3465
+enableVsync:false
+entityShadows:false
+renderDistance:6
+simulationDistance:6
+entityDistanceScaling:0.75
+particles:1
+maxFps:260
+graphicsMode:0
+ao:false
+prioritizeChunkUpdates:0
+biomeBlendRadius:0
+renderClouds:"false"
+mipmapLevels:0
