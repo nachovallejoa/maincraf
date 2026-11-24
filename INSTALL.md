@@ -1,44 +1,22 @@
-# Instalación
+# Instalacion
 
-## Estado del paquete
+## TLauncher en Windows
 
-**Este repositorio no contiene actualmente un paquete instalable verificado.** `pack/mods.json` es provisional: hay mods sin IDs confirmados y dependencias obligatorias con versiones/artefactos pendientes. El constructor debe detenerse si no puede resolver y validar los metadatos; no rellenes huecos manualmente con suposiciones ni descargues archivos de fuentes no autorizadas.
+1. Descarga el ZIP `-tlauncher.zip` desde Releases o el artefacto `tlauncher-package` de Actions.
+2. Descomprime el ZIP completo.
+3. Ejecuta `INSTALAR.bat`. Por defecto instala en `%APPDATA%\.minecraft`; puedes indicar otra carpeta como argumento.
+4. Abre TLauncher y selecciona la version Fabric instalada.
 
-No se ha comprobado la estructura de instalación específica de TLauncher. No se garantiza una compilación exitosa, inicio, compatibilidad integral ni rendimiento. Espera el resultado real del workflow y la revisión de los bloqueos antes de distribuir o instalar un artefacto como final.
+El instalador descarga los mods de terceros en el equipo y comprueba sus SHA1. Los JAR de terceros no se guardan en este repositorio ni se distribuyen dentro del ZIP. La carpeta `mods/` existente y la configuracion se respaldan antes de copiar los componentes del paquete.
 
-## Cuando exista un artefacto `.mrpack` validado
+## Prism Launcher o Modrinth App
 
-### Descargar desde Releases
+Importa el `.mrpack` desde la interfaz del launcher. El paquete contiene metadatos para que el launcher descargue los mods desde sus fuentes.
 
-1. Abre la sección **Releases** del repositorio.
-2. Descarga el archivo `.mrpack` de una versión cuya compilación esté completada correctamente.
-3. Si el archivo está empaquetado como ZIP, extráelo para obtener el `.mrpack`.
+## Memoria
 
-### Descargar desde Actions
+Recomendacion operativa aportada: `-Xmx5G`. **[SIN VERIFICAR]** No hay mediciones del uso real de memoria ni validacion en el hardware. No se agregan argumentos JVM adicionales.
 
-1. Abre la pestaña **Actions** del repositorio.
-2. Entra en una ejecución completada correctamente del workflow **Build Modpack**.
-3. En **Artifacts**, descarga el artefacto del modpack.
-4. Si se descargó como ZIP, extráelo para obtener el archivo `.mrpack`.
+## Limites conocidos
 
-## Importar en Prism Launcher o Modrinth App
-
-Solo cuando exista un `.mrpack` validado por build y revisado:
-
-1. Abre el launcher y usa la opción para importar una instancia o modpack desde archivo.
-2. Selecciona el `.mrpack`.
-3. Confirma la importación y espera que el launcher obtenga los componentes requeridos desde sus fuentes autorizadas.
-4. Antes de jugar, verifica que instancia use Minecraft `1.20.1` y el loader del manifiesto.
-
-Los pasos y disponibilidad pueden variar según la versión del launcher. TLauncher no está cubierto por instrucciones verificadas.
-
-## Memoria y argumentos JVM
-
-No hay cifra de memoria o argumentos JVM recomendados verificados para este paquete. El usuario declaró 12 GB de RAM instalados, unos 10 GB disponibles y Windows usando unos 500 MB; son datos declarados, no mediciones independientes ni resultados de pruebas. Conserva los valores predeterminados del launcher hasta disponer de validación en el equipo. No se afirma un heap óptimo ni se recomiendan banderas JVM específicas.
-
-## Si el juego no arranca
-
-1. Confirma que instalaste una instancia importada desde el artefacto correcto y espera a que el launcher termine las descargas.
-2. Verifica la versión de Minecraft y Fabric Loader mostrada en la instancia.
-3. Guarda `logs/latest.log` y, si existe, el informe correspondiente en `crash-reports`.
-4. Comparte los registros completos al solicitar ayuda, retirando datos privados. No se pueden diagnosticar fallos sin logs.
+El manifiesto es reducido y no se declara listo para instalar: quedan dependencias requeridas sin cerrar y algunas versiones, nombres de archivo, JAR y compatibilidad del conjunto **[SIN VERIFICAR]**. No se han incorporado configuraciones de mods no validadas. La compilacion del mod propio no se ha ejecutado ni confirmado.
