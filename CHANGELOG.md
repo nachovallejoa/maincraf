@@ -2,8 +2,9 @@
 
 ## Etapa 7 — Modpack
 
-- Se reemplaza la lista previa por un manifiesto reducido con IDs citados para Minecraft 1.20.1.
-- Se corrige el ID de ModernFix y se excluyen versiones o proyectos con compatibilidad/dependencias no verificadas.
-- Se añaden constructores para mrpack y ZIP de instalación TLauncher, descargando terceros en tiempo de ejecución y sin guardar sus JAR en Git.
-- Se documentan límites, contexto autónomo, decisiones, manifiesto y hoja de ruta.
-- Compilación, compatibilidad completa, dependencias y prueba en juego siguen pendientes o [SIN VERIFICAR].
+- Se reemplaza la lista previa por el manifiesto del perfil Minecraft 1.20.1 con IDs/versiones indicados en los hallazgos de revisión.
+- ImmediatelyFast y Dynamic FPS se fijan en las versiones elegidas para el perfil objetivo; ModernFix queda identificado con el ID Fabric citado.
+- Se incluyen los módulos propios `deriva-core` y `deriva-progression`, documentación de instalación, constructores para mrpack y TLauncher, y workflow de build.
+- Los mods de terceros se consultan/descargan durante la ejecución; nunca se incorporan sus JAR al repositorio.
+- Se registran contexto autónomo actualizado, decisiones, inventario de mods y estado de la hoja de ruta.
+- Dependencias exhaustivas, compatibilidad global, compilación integral y prueba real en juego permanecen pendientes o [SIN VERIFICAR].
