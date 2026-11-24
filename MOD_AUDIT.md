@@ -1,58 +1,74 @@
-# Auditoría de mods — candidatos Minecraft 1.20.1
+# Auditoría de mods
 
 ## Estado y alcance
 
-Candidatos documentales, no lista instalada ni aprobada. No se ejecutó Minecraft ni se midieron FPS, frametimes, RAM, CPU/GPU, carga o compatibilidad. No se proporcionó manifiesto RPG ni JARs; compatibilidad con el pack completo: **[SIN VERIFICAR]**. Hardware declarado (no verificado independientemente): Athlon 5150, Radeon R3 integrada, 12 GB RAM, HDD, Windows, 1280×720. Driver/OpenGL local: **[SIN VERIFICAR]**.
+- Estado: candidatos documentales; no es lista de instalación, aprobación ni compatibilidad probada.
+- Manifiesto y JARs: no encontrados según el inventario recibido; el paquete completo no puede verificarse.
+- No se ejecutó Minecraft ni se midieron FPS, frametimes, RAM, CPU/GPU, carga o compatibilidad.
+- No instalar, modificar ni redistribuir mods sin autorización expresa. No subir JARs ni otros binarios de terceros.
+- No redistribuir JARs sin revisar licencia y términos del archivo exacto.
 
-No modificar el pack sin autorización. No subir JARs. Revisar términos antes de redistribuir; licencia identificada no equivale a permiso universal de distribución.
+## Clasificación
 
-## Criterios
+| Categoría | Regla |
+|---|---|
+| Imprescindible | Dependencia o requisito funcional confirmado por manifiesto/JAR. |
+| Recomendado | Candidato pertinente para prueba; no equivale a aprobado. |
+| Opcional | Solo necesario para usos o escenas concretas. |
+| Reemplazable | Alternativa para la misma función; exige comparar y autorizar. |
+| Prescindible | No justificado o cubierto por opciones existentes; requiere evidencia. |
+| Incompatible | Conflicto reproducible de combinación exacta; no usar por mera sospecha. |
 
-- Diferenciar datos de ficha, pruebas locales y pendientes.
-- No atribuir mejoras sin mediciones repetibles.
-- Registrar archivo exacto, Minecraft, loader, dependencias y hash local si está disponible (sin subir el JAR).
-- Probar estabilidad y funciones RPG: modelos, entidades, partículas, bloques, recursos, progresión y mecánicas.
-- Usar copias de mundos para pruebas que puedan alterar chunks/guardados.
-- Conservar `latest.log`, crash report y pasos de reproducción.
+## Discrepancia de versiones
+
+Las listas recibidas difieren, entre otros, en Entity Culling (`1.7.0` frente a `1.12.1-1.20.1`) e ImmediatelyFast (`1.2.4` frente a `1.2.21`). Sin manifiesto/JARs no se puede decidir cuál corresponde al proyecto. La tabla conserva candidatos documentales separados; no combinarlos como instalación real.
 
 ## Candidatos Fabric 1.20.1
 
-| Candidato | Archivo/versión citada | Hecho de fuente comprobado en esta revisión | Pendientes y cautelas | Estado |
-|---|---|---|---|---|
-| Sodium | `mc1.20.1-0.5.13-fabric` | Fabric/Quilt 1.20.1; PolyForm Shield 1.0.0. [Ficha](https://modrinth.com/mod/sodium/version/mc1.20.1-0.5.13-fabric) | GPU/OpenGL Radeon R3 local y pack **[SIN VERIFICAR]**. Si Indium: 1.0.36+; si Iris: 1.7.6+. Revisar términos de redistribución. | Candidato a prueba |
-| Lithium | `mc1.20.1-0.11.4-fabric` | Fabric/Quilt 1.20.1; LGPL-3.0-only. [Ficha](https://modrinth.com/mod/lithium/version/mc1.20.1-0.11.4-fabric) | Dependencia del JAR exacto **[SIN VERIFICAR]**. Archivo de overrides vacío conserva defaults según [documentación de rama](https://github.com/CaffeineMC/lithium-fabric/blob/mc1.20.1-0.11.4/lithium-mixin-config.md). | Candidato a prueba |
-| ModernFix | `5.25.2+mc1.20.1` Fabric | MC 1.20.1/Fabric y LGPL-3.0-only. [Ficha](https://modrinth.com/mod/modernfix/version/5.25.2%2Bmc1.20.1) | `mixin.perf.dynamic_resources=false` por defecto, confirmado en [código](https://github.com/embeddedt/ModernFix/blob/2535174e/common/src/main/java/org/embeddedt/modernfix/core/config/ModernFixEarlyConfig.java); mantener apagado hasta auditar pack. Compatibilidad **[SIN VERIFICAR]**. | Candidato incremental |
-| Entity Culling | `1.7.0-1.20.1` Fabric | Archivo y tr7zw Protective License. [Ficha](https://modrinth.com/mod/entityculling/version/1JrKE0F6) | La ficha consultada no confirma Fabric API como dependencia obligatoria; dependencia **[SIN VERIFICAR]**. Probar entidades/modelos RPG y revisar licencia. | Opcional |
-| ImmediatelyFast | `1.2.4+1.20.1` | MC 1.20–1.20.1, Fabric/Forge/Quilt y LGPL-3.0-or-later. [Ficha](https://modrinth.com/mod/immediatelyfast/version/1.2.4%2B1.20.1) | Buffering de texto de carteles desactivado por defecto por incompatibilidades. Configuración completa/dependencias **[SIN VERIFICAR]**. | Opcional |
-| Embeddium | `0.3.31+mc1.20.1` | Forge y NeoForge 1.20.1; LGPL-3.0-only. [Ficha](https://modrinth.com/mod/embeddium/version/0.3.31%2Bmc1.20.1) | Alternativa de loader, no para Fabric. Pack/GPU **[SIN VERIFICAR]**. | Solo si loader lo exige |
-| FerriteCore | `6.0.1` Fabric, citado | Versión citada en material recibido. | Ficha/licencia/dependencias exactas y compatibilidad requieren revisión. | Candidato sin aprobación |
-| BadOptimizations | `2.4.1-1.20.1` | Versión citada en material recibido. | Metadata, licencia, dependencias, pack e impacto **[SIN VERIFICAR]**. | Opcional posterior |
-| Dynamic FPS | `3.9.5` | Versión citada en material recibido. | Archivo/dependencias/licencia exactos **[SIN VERIFICAR]**. Solo considerar para segundo plano; no presentarlo como FPS activo. | Condicional |
-| Fabric API | `0.92.2+1.20.1` | Versión citada en material recibido. | Necesidad para el conjunto y ficha exacta **[SIN VERIFICAR]**; añadir solo si se requiere. | Dependencia condicional |
-| More Culling | `1.20.1-0.24.6` | Candidato citado. | Build, dependencias/licencia/pack **[SIN VERIFICAR]**. Solapamiento parcial con Entity Culling. | Condicional |
-| Particle Core | `0.2.5+1.20.1` | Candidato citado. | Dependencias y cambios visuales **[SIN VERIFICAR]**. | Condicional |
-| Noisium | `2.3.0+mc1.20-1.20.1` | Candidato citado. | Build/licencia/estado y beneficio local **[SIN VERIFICAR]**. No extrapolar a chunks existentes. | Condicional |
-| Ksyxis | `1.3.4` | Candidato citado. | Loader/build/efecto en spawn chunks **[SIN VERIFICAR]**. Solo en copia y con autorización. | Condicional, un jugador |
-| Indium | `1.0.36+mc1.20.1` | Sodium indica 1.0.36+ si se utiliza. | Añadir solo si manifiesto/mod consumidor lo necesita; resto **[SIN VERIFICAR]**. | No por defecto |
+| Mod | Versión candidata documental | Función/lado | Evidencia, estado y cautelas |
+|---|---|---|---|
+| Sodium | `0.5.13` | Renderer, cliente | Ficha exacta confirma Fabric/Quilt 1.20.1, solo cliente y PolyForm Shield 1.0.0. Radeon R3/driver y pack sin probar. Si se usa Indium, ficha exige 1.0.36 o superior; Indium solo si el pack necesita Fabric Rendering API. |
+| Lithium | `0.11.4` | Lógica, Fabric/Quilt | Archivo 1.20.1 confirmado; licencia publicada LGPLv3, sin afirmar variante no verificada. Compatibilidad del pack pendiente. Archivo de overrides vacío conserva defaults según documentación de esa rama. |
+| ModernFix | `5.25.2+mc1.20.1` | Arranque/memoria, Fabric candidato | Archivo exacto y metadatos/licencia pendientes de verificación en este paquete. Mantener `mixin.perf.dynamic_resources=false`; no asumir compatibilidad con pack. |
+| FerriteCore | `6.0.1` | Memoria, Fabric/Quilt | Ficha exacta confirma 1.20.1, MIT y lado cliente/servidor opcional. Ahorro concreto no medido; conflicto citado con Hydrogen permanece sin verificar. |
+| Entity Culling | `1.12.1-1.20.1` | Culling, cliente Fabric | Archivo Fabric publicado; usa CPU y beneficio neto en Athlon 5150 no medido. Licencia personalizada tr7zw Protective License: no redistribuir el JAR fuera de los términos del autor/plataforma. |
+| ImmediatelyFast | `1.2.21` (archivo `+1.20.4`, declara 1.20.1) | Renderizado, cliente Fabric | Archivo y LGPLv3 confirmados. Efecto en esta iGPU no medido. |
+| Dynamic FPS | `3.9.5` | Actividad en segundo plano | Versión, archivo, dependencias y licencia exactos: **[SIN VERIFICAR]**. No tratar como acelerador de FPS en primer plano. |
+| Fabric API | `0.92.6+1.20.1` | API Fabric | Ficha y Apache-2.0 confirmadas; no es automáticamente necesaria. Añadir solo si los mods aprobados la requieren. |
+| C2ME | Sin versión aprobada | Chunks/paralelismo | Fuera de la base inicial; CPU/I/O y efecto local sin medir. Archivo/licencia exactos: **[SIN VERIFICAR]**. |
 
-## Exclusiones y solapamientos
+## Candidatos Forge 1.20.1
 
-- No combinar Sodium con Embeddium; pertenecen a alternativas de plataforma.
-- Para Forge, no combinar reemplazos equivalentes de lógica sin verificar conflicto y necesidad.
-- C2ME queda fuera de la base: build/pack/efectos no resueltos.
-- Starlight, LazyDFU, Fastload, LightSpeedRe, Sodium Extra, Memory Leak Fix, OptiFine/OptiFabric no forman parte de la base aprobada; no hay aprobación ni beneficio local demostrado.
-- No incluir shaders, texturas pesadas, animaciones ni cambios visuales como optimizaciones.
+Usar Forge solo si lo exige el manifiesto. No combinar Embeddium con Sodium o Rubidium; no sumar renderers equivalentes.
 
-## Configuración precargable documentada
+| Mod | Versión candidata recibida | Condición/estado |
+|---|---|---|
+| Embeddium | `0.3.31+mc1.20.1` | Candidato Forge; driver Radeon R3 y rendimiento no verificados. Licencia exacta del archivo sin verificar aquí. |
+| Radium | `0.12.4` | Versión, licencia e incompatibilidad citada con Canary **[SIN VERIFICAR]**. |
+| ModernFix | `5.28.0+mc1.20.1` | Archivo/versión/licencia exactos **[SIN VERIFICAR]**; Dynamic Resources false. |
+| FerriteCore | `6.0.1` | MIT verificada para proyecto/versión; compatibilidad con pack no probada. |
+| Entity Culling | `1.12.1-1.20.1` | Archivo Forge publicado; licencia personalizada; no redistribuir JAR fuera de términos. |
+| ImmediatelyFast | `1.5.5` | Archivo, versión y licencia exactos **[SIN VERIFICAR]**. |
+| Dynamic FPS | `3.7.7` | Archivo, dependencias y licencia exactos **[SIN VERIFICAR]**; segundo plano solamente. |
+| Particle Core | `0.3.3+1.20.1+forge` | Opcional; no incluir en núcleo. Versión/licencia exactas **[SIN VERIFICAR]**. |
 
-No precargar Sodium JSON ni `options.txt`: esquema/valores exactos para estas builds y propósito no verificados. Lithium puede conservarse intencionalmente vacío para defaults, según su documentación de rama. ModernFix Dynamic Resources se mantiene en `false` según código citado. Consultar archivos en `config-propuesta/instancia-1.20.1/`; son propuestas documentales, no validación en juego.
+## Licencias y redistribución
 
-## Registro de pruebas pendiente
+- Sodium: PolyForm Shield 1.0.0, confirmada en ficha exacta.
+- Lithium: LGPLv3 publicada en ficha exacta; no precisar variante no confirmada en el archivo.
+- FerriteCore: MIT confirmada en ficha 6.0.1.
+- ImmediatelyFast 1.2.21: LGPLv3 confirmada en ficha del archivo.
+- Fabric API 0.92.6: Apache-2.0 confirmada en ficha.
+- Entity Culling: licencia personalizada tr7zw Protective License. La política del autor permite inclusión en modpacks alojados en CurseForge/Modrinth bajo sus condiciones, pero no autoriza redistribución general del JAR. Revisar términos antes de publicar/empaquetar.
+- ModernFix, Dynamic FPS, Embeddium, Radium y Particle Core: licencia del archivo exacto **[SIN VERIFICAR]** en esta revisión.
 
-| Fecha | Instancia/pack y hash | Configuración | Escenario | Repeticiones | Logs/incidentes | Rendimiento observado | Resultado funcional | Decisión/aprobador |
-|---|---|---|---|---:|---|---|---|---|
-|  |  |  |  |  |  |  |  |  |
+## Campos pendientes por candidato
 
-## Datos pendientes
+- Autoría del archivo exacto, hash SHA-256 y fuente de descarga (sin subir el JAR).
+- Dependencias reales del manifiesto y metadatos del JAR.
+- Compatibilidad con el pack completo y el hardware/controlador local.
+- Licencia del archivo exacto y permiso según canal/plataforma de distribución.
+- FPS, frametimes, CPU, RAM y tiempos de carga medidos reproduciblemente.
+- Clasificación aprobada por responsable.
 
-Manifiesto RPG/loader/versión; JARs y hashes locales; configs, recursos/datapacks/shaders; Java, launcher, Windows y controlador Radeon; pruebas de carga/regresión/rendimiento; y revisión de licencias según distribución prevista.
+Fuentes documentales verificadas y límites: ver enlaces exactos en el paquete de revisión y mantenerlos asociados a cada versión; las fichas no demuestran compatibilidad local ni rendimiento.
