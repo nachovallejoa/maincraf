@@ -1,283 +1,342 @@
 param(
     [Parameter(Mandatory = $false)]
-    [string]$Destino
+    [string]$MinecraftDir
 )
 
 $ErrorActionPreference = "Stop"
 
-$AvisoPaquete = "El instalador no funciona suelto ni desde la carpeta tlauncher del repositorio. Descarga de Releases el archivo que termina en -tlauncher.zip, extraelo completo y ejecutalo desde esa carpeta extraida."
-
-function Test-NonEmptyString {
-    param([object]$Value)
-    return ($null -ne $Value -and $Value -is [string] -and -not [string]::IsNullOrWhiteSpace($Value))
-}
-
-function Get-ValidChildPath {
-    param(
-        [string]$Base,
-        [string]$Child
-    )
-    if (-not (Test-NonEmptyString $Base)) {
-        throw "La ruta base esta vacia o no es valida."
-    }
-    if (-not (Test-NonEmptyString $Child)) {
-        throw "El nombre de ruta esta vacio o no es valido."
-    }
-    return Join-Path -Path $Base -ChildPath $Child
-}
-
-function Copy-DirectoryContents {
-    param(
-        [string]$Source,
-        [string]$Target
-    )
-    if (-not (Test-NonEmptyString $Source) -or -not (Test-Path -LiteralPath $Source -PathType Container)) {
-        return
-    }
-    if (-not (Test-NonEmptyString $Target)) {
-        throw "La ruta de destino para copiar esta vacia."
-    }
-    New-Item -ItemType Directory -Path $Target -Force | Out-Null
-    Get-ChildItem -LiteralPath $Source -Force | ForEach-Object {
-        Copy-Item -LiteralPath $_.FullName -Destination $Target -Recurse -Force
-    }
-}
+$MissingPackageMessage = @"
+Este instalador no funciona suelto ni desde la carpeta tlauncher del repositorio.
+Descarga de Releases el archivo que termina en -tlauncher.zip, extraelo completo y ejecuta INSTALAR.bat desde esa carpeta extraida.
+"@
 
 try {
-    # Resuelve la carpeta del paquete y valida sus piezas antes de cualquier
-    # operación de instalación o uso de rutas derivadas.
-    $CarpetaPaquete = $PSScriptRoot
-    if (-not (Test-NonEmptyString $CarpetaPaquete)) {
-        $RutaInvocacion = $MyInvocation.MyCommand.Path
-        if (Test-NonEmptyString $RutaInvocacion) {
-            $CarpetaPaquete = Split-Path -Parent $RutaInvocacion
+    $PackageRoot = $PSScriptRoot
+    if ([string]::IsNullOrWhiteSpace($PackageRoot)) {
+        $CommandPath = $MyInvocation.MyCommand.Path
+        if ([string]::IsNullOrWhiteSpace($CommandPath)) {
+            Write-Host $MissingPackageMessage
+            exit 1
+        }
+        $PackageRoot = Split-Path -Parent $CommandPath
+    }
+
+    if ([string]::IsNullOrWhiteSpace($PackageRoot)) {
+        Write-Host $MissingPackageMessage
+        exit 1
+    }
+
+    # Antes de cualquier otra operacion, validar que se trata del ZIP completo.
+    $ThirdPartyManifest = Join-Path -Path $PackageRoot -ChildPath "mods-terceros.json"
+    $VersionsRoot = Join-Path -Path $PackageRoot -ChildPath "versions"
+
+    if ([string]::IsNullOrWhiteSpace($ThirdPartyManifest) -or
+        -not (Test-Path -LiteralPath $ThirdPartyManifest -PathType Leaf) -or
+        [string]::IsNullOrWhiteSpace($VersionsRoot) -or
+        -not (Test-Path -LiteralPath $VersionsRoot -PathType Container)) {
+        Write-Host $MissingPackageMessage
+        exit 1
+    }
+
+    $ProfileFiles = @(Get-ChildItem -LiteralPath $VersionsRoot -Filter "*.json" -File -Recurse)
+    $ValidProfiles = @()
+    foreach ($ProfileFile in $ProfileFiles) {
+        if ($null -eq $ProfileFile -or [string]::IsNullOrWhiteSpace($ProfileFile.FullName)) {
+            continue
+        }
+        if ($ProfileFile.BaseName -eq $ProfileFile.Directory.Name) {
+            $ValidProfiles += $ProfileFile
         }
     }
-
-    if (-not (Test-NonEmptyString $CarpetaPaquete) -or
-        -not (Test-Path -LiteralPath $CarpetaPaquete -PathType Container)) {
-        Write-Host $AvisoPaquete -ForegroundColor Red
+    if ($ValidProfiles.Count -lt 1) {
+        Write-Host $MissingPackageMessage
         exit 1
     }
 
-    $ManifestMods = Get-ValidChildPath -Base $CarpetaPaquete -Child "mods-terceros.json"
-    $VersionsPath = Get-ValidChildPath -Base $CarpetaPaquete -Child "versions"
-    if (-not (Test-Path -LiteralPath $ManifestMods -PathType Leaf) -or
-        -not (Test-Path -LiteralPath $VersionsPath -PathType Container)) {
-        Write-Host $AvisoPaquete -ForegroundColor Red
-        exit 1
+    $ProfileFile = $ValidProfiles[0]
+    $VersionId = $ProfileFile.BaseName
+    if ([string]::IsNullOrWhiteSpace($VersionId)) {
+        throw "El id de version esta vacio en la ruta '$($ProfileFile.FullName)'."
     }
 
-    $Perfiles = @(Get-ChildItem -LiteralPath $VersionsPath -Directory -ErrorAction Stop |
-        ForEach-Object {
-            $VersionFolder = $_
-            if (Test-NonEmptyString $VersionFolder.Name) {
-                $ProfileFile = Get-ValidChildPath -Base $VersionFolder.FullName -Child ($VersionFolder.Name + ".json")
-                if (Test-Path -LiteralPath $ProfileFile -PathType Leaf) {
-                    [PSCustomObject]@{
-                        Id = $VersionFolder.Name
-                        Directory = $VersionFolder.FullName
-                        Profile = $ProfileFile
-                    }
-                }
-            }
-        })
-
-    if ($Perfiles.Count -lt 1) {
-        Write-Host $AvisoPaquete -ForegroundColor Red
-        exit 1
+    $ProfileJson = Get-Content -LiteralPath $ProfileFile.FullName -Raw -Encoding UTF8 | ConvertFrom-Json
+    if ($null -eq $ProfileJson -or [string]::IsNullOrWhiteSpace([string]$ProfileJson.id)) {
+        throw "El perfil no contiene un id valido: '$($ProfileFile.FullName)'."
+    }
+    if ([string]$ProfileJson.id -ne $VersionId) {
+        throw "El id del perfil no coincide con su carpeta: '$($ProfileFile.FullName)'."
     }
 
-    if (Test-NonEmptyString $Destino) {
-        $DestinoMinecraft = $Destino.Trim()
-    }
-    else {
+    if ([string]::IsNullOrWhiteSpace($MinecraftDir)) {
         $AppData = [Environment]::GetFolderPath("ApplicationData")
-        if (-not (Test-NonEmptyString $AppData)) {
-            throw "No se pudo obtener la carpeta APPDATA."
+        if ([string]::IsNullOrWhiteSpace($AppData)) {
+            throw "No se pudo determinar la carpeta APPDATA."
         }
-        $DestinoMinecraft = Get-ValidChildPath -Base $AppData -Child ".minecraft"
+        $MinecraftDir = Join-Path -Path $AppData -ChildPath ".minecraft"
     }
 
-    if (-not (Test-NonEmptyString $DestinoMinecraft) -or
-        -not (Test-Path -LiteralPath $DestinoMinecraft -PathType Container)) {
-        Write-Host "No existe la carpeta de destino .minecraft: $DestinoMinecraft" -ForegroundColor Red
-        Write-Host "No se ha modificado ningun archivo."
+    if ([string]::IsNullOrWhiteSpace($MinecraftDir)) {
+        throw "La ruta de destino .minecraft esta vacia."
+    }
+    if (-not (Test-Path -LiteralPath $MinecraftDir -PathType Container)) {
+        Write-Host "No existe la carpeta .minecraft de destino: '$MinecraftDir'. No se realizaron cambios."
         exit 1
     }
 
-    $DestinoMinecraft = (Resolve-Path -LiteralPath $DestinoMinecraft).Path
-    $Fecha = Get-Date -Format "yyyyMMdd-HHmmss"
-    $Respaldo = Get-ValidChildPath -Base $DestinoMinecraft -Child ("respaldo-modpack-" + $Fecha)
-    $ModsDestino = Get-ValidChildPath -Base $DestinoMinecraft -Child "mods"
-    $ModsFuente = Get-ValidChildPath -Base $CarpetaPaquete -Child "mods"
-    $ConfigDestino = Get-ValidChildPath -Base $DestinoMinecraft -Child "config"
-    $ConfigFuente = Get-ValidChildPath -Base $CarpetaPaquete -Child "config"
-    $OptionsDestino = Get-ValidChildPath -Base $DestinoMinecraft -Child "options.txt"
-    $OptionsFuente = Get-ValidChildPath -Base $CarpetaPaquete -Child "options.txt"
-    $VersionsDestino = Get-ValidChildPath -Base $DestinoMinecraft -Child "versions"
-
-    # Se conserva copia de la carpeta de mods previa cuando contiene archivos.
-    if (Test-Path -LiteralPath $ModsDestino -PathType Container) {
-        $ModsExistentes = @(Get-ChildItem -LiteralPath $ModsDestino -Force -ErrorAction Stop)
-        if ($ModsExistentes.Count -gt 0) {
-            New-Item -ItemType Directory -Path $Respaldo -Force | Out-Null
-            $ModsRespaldo = Get-ValidChildPath -Base $Respaldo -Child "mods"
-            Move-Item -LiteralPath $ModsDestino -Destination $ModsRespaldo -Force
-        }
+    $ThirdPartyData = Get-Content -LiteralPath $ThirdPartyManifest -Raw -Encoding UTF8 | ConvertFrom-Json
+    if ($null -eq $ThirdPartyData) {
+        throw "El archivo de mods de terceros no contiene JSON valido: '$ThirdPartyManifest'."
+    }
+    if ($ThirdPartyData -isnot [System.Array]) {
+        throw "El archivo mods-terceros.json debe contener una lista JSON: '$ThirdPartyManifest'."
     }
 
-    # Respalda options.txt y config existentes antes de reemplazar.
-    $HayOptions = Test-Path -LiteralPath $OptionsDestino -PathType Leaf
-    $HayConfig = Test-Path -LiteralPath $ConfigDestino -PathType Container
-    if ($HayOptions -or $HayConfig) {
-        New-Item -ItemType Directory -Path $Respaldo -Force | Out-Null
-        if ($HayOptions) {
-            $OptionsRespaldo = Get-ValidChildPath -Base $Respaldo -Child "options.txt"
-            Copy-Item -LiteralPath $OptionsDestino -Destination $OptionsRespaldo -Force
-        }
-        if ($HayConfig) {
-            $ConfigRespaldo = Get-ValidChildPath -Base $Respaldo -Child "config"
-            Copy-DirectoryContents -Source $ConfigDestino -Target $ConfigRespaldo
-        }
+    $ModsSource = Join-Path -Path $PackageRoot -ChildPath "mods"
+    $ConfigSource = Join-Path -Path $PackageRoot -ChildPath "config"
+    $OptionsSource = Join-Path -Path $PackageRoot -ChildPath "options.txt"
+    $VersionSource = Join-Path -Path $PackageRoot -ChildPath "versions"
+    $OwnModFiles = @()
+    if (-not [string]::IsNullOrWhiteSpace($ModsSource) -and
+        (Test-Path -LiteralPath $ModsSource -PathType Container)) {
+        $OwnModFiles = @(Get-ChildItem -LiteralPath $ModsSource -File -Filter "*.jar")
     }
 
-    # Instala el perfil de Fabric bajo .minecraft/versions/<id>/.
-    if (-not (Test-Path -LiteralPath $VersionsDestino -PathType Container)) {
-        New-Item -ItemType Directory -Path $VersionsDestino -Force | Out-Null
+    $Stamp = Get-Date -Format "yyyyMMdd-HHmmss"
+    if ([string]::IsNullOrWhiteSpace($Stamp)) {
+        throw "No se pudo crear la marca de fecha para el respaldo."
     }
-    foreach ($Perfil in $Perfiles) {
-        if (-not (Test-NonEmptyString $Perfil.Id) -or
-            -not (Test-NonEmptyString $Perfil.Directory)) {
-            throw "Se encontro un perfil de version con datos vacios."
-        }
-        $VersionIdDestino = Get-ValidChildPath -Base $VersionsDestino -Child $Perfil.Id
-        New-Item -ItemType Directory -Path $VersionIdDestino -Force | Out-Null
-        Copy-Item -LiteralPath $Perfil.Profile -Destination $VersionIdDestino -Force
-    }
+    $BackupDir = Join-Path -Path $MinecraftDir -ChildPath "respaldo-modpack-$Stamp"
 
-    # Copia los JAR propios compilados que contiene el ZIP, si la carpeta existe.
-    if (Test-Path -LiteralPath $ModsFuente -PathType Container) {
-        if (-not (Test-Path -LiteralPath $ModsDestino -PathType Container)) {
-            New-Item -ItemType Directory -Path $ModsDestino -Force | Out-Null
-        }
-        Get-ChildItem -LiteralPath $ModsFuente -File -Filter "*.jar" |
-            Where-Object {
-                -not $_.Name.EndsWith("-sources.jar", [StringComparison]::OrdinalIgnoreCase) -and
-                -not $_.Name.EndsWith("-dev.jar", [StringComparison]::OrdinalIgnoreCase)
-            } |
-            ForEach-Object {
-                Copy-Item -LiteralPath $_.FullName -Destination $ModsDestino -Force
+    $ExistingMods = Join-Path -Path $MinecraftDir -ChildPath "mods"
+    if (-not [string]::IsNullOrWhiteSpace($ExistingMods) -and
+        (Test-Path -LiteralPath $ExistingMods -PathType Container)) {
+        $ExistingFiles = @(Get-ChildItem -LiteralPath $ExistingMods -Force -Recurse)
+        if ($ExistingFiles.Count -gt 0) {
+            if ([string]::IsNullOrWhiteSpace($BackupDir)) {
+                throw "La ruta del respaldo esta vacia."
             }
-    }
-
-    # Aplica config y options solo cuando vienen incluidos en el paquete.
-    if (Test-Path -LiteralPath $ConfigFuente -PathType Container) {
-        Copy-DirectoryContents -Source $ConfigFuente -Target $ConfigDestino
-    }
-    if (Test-Path -LiteralPath $OptionsFuente -PathType Leaf) {
-        Copy-Item -LiteralPath $OptionsFuente -Destination $OptionsDestino -Force
-    }
-
-    # Lee y valida la lista de descargas de terceros.
-    $ListaMods = Get-Content -LiteralPath $ManifestMods -Raw -Encoding UTF8 | ConvertFrom-Json
-    if ($null -eq $ListaMods) {
-        throw "El archivo mods-terceros.json esta vacio o no contiene JSON valido: $ManifestMods"
-    }
-    if ($ListaMods -isnot [System.Array]) {
-        $ListaMods = @($ListaMods)
-    }
-
-    if (-not (Test-Path -LiteralPath $ModsDestino -PathType Container)) {
-        New-Item -ItemType Directory -Path $ModsDestino -Force | Out-Null
-    }
-
-    try {
-        [Net.ServicePointManager]::SecurityProtocol = [Net.SecurityProtocolType]::Tls12
-    }
-    catch {
-        throw "No se pudo habilitar TLS 1.2 para descargar mods: $($_.Exception.Message)"
-    }
-
-    $Descargados = New-Object System.Collections.Generic.List[string]
-    $Fallidos = New-Object System.Collections.Generic.List[string]
-
-    foreach ($Mod in $ListaMods) {
-        $Nombre = $null
-        $Url = $null
-        $Sha1 = $null
-        if ($null -ne $Mod) {
-            $Nombre = $Mod.filename
-            $Url = $Mod.url
-            $Sha1 = $Mod.sha1
-        }
-
-        if (-not (Test-NonEmptyString $Nombre) -or
-            -not (Test-NonEmptyString $Url) -or
-            -not (Test-NonEmptyString $Sha1)) {
-            $Fallidos.Add("Entrada con URL, filename o SHA1 ausente en $ManifestMods")
-            continue
-        }
-
-        if ($Nombre -match '[/\\:]' -or $Nombre -eq "." -or $Nombre -eq "..") {
-            $Fallidos.Add("Nombre de archivo no seguro: $Nombre")
-            continue
-        }
-
-        $ArchivoDestino = Get-ValidChildPath -Base $ModsDestino -Child $Nombre
-        $Correcto = $false
-        for ($Intento = 1; $Intento -le 2 -and -not $Correcto; $Intento++) {
-            try {
-                Invoke-WebRequest -Uri $Url -OutFile $ArchivoDestino -UseBasicParsing -TimeoutSec 120
-                $HashActual = (Get-FileHash -LiteralPath $ArchivoDestino -Algorithm SHA1).Hash
-                if (-not (Test-NonEmptyString $HashActual) -or
-                    $HashActual.ToLowerInvariant() -ne $Sha1.ToLowerInvariant()) {
-                    Remove-Item -LiteralPath $ArchivoDestino -Force -ErrorAction SilentlyContinue
-                    throw "El SHA1 no coincide para $Nombre"
-                }
-                $Correcto = $true
-                $Descargados.Add($Nombre)
+            New-Item -ItemType Directory -Path $BackupDir -Force | Out-Null
+            $BackupMods = Join-Path -Path $BackupDir -ChildPath "mods-anteriores"
+            if ([string]::IsNullOrWhiteSpace($BackupMods)) {
+                throw "La ruta de respaldo de mods esta vacia."
             }
-            catch {
-                if (Test-Path -LiteralPath $ArchivoDestino -PathType Leaf) {
-                    Remove-Item -LiteralPath $ArchivoDestino -Force -ErrorAction SilentlyContinue
+            Move-Item -LiteralPath $ExistingMods -Destination $BackupMods
+        }
+    }
+
+    $ExistingOptions = Join-Path -Path $MinecraftDir -ChildPath "options.txt"
+    if (-not [string]::IsNullOrWhiteSpace($ExistingOptions) -and
+        (Test-Path -LiteralPath $ExistingOptions -PathType Leaf)) {
+        if ([string]::IsNullOrWhiteSpace($BackupDir)) {
+            throw "La ruta del respaldo esta vacia."
+        }
+        New-Item -ItemType Directory -Path $BackupDir -Force | Out-Null
+        Copy-Item -LiteralPath $ExistingOptions -Destination $BackupDir -Force
+    }
+
+    $ExistingConfig = Join-Path -Path $MinecraftDir -ChildPath "config"
+    if (-not [string]::IsNullOrWhiteSpace($ExistingConfig) -and
+        (Test-Path -LiteralPath $ExistingConfig -PathType Container)) {
+        if ([string]::IsNullOrWhiteSpace($BackupDir)) {
+            throw "La ruta del respaldo esta vacia."
+        }
+        New-Item -ItemType Directory -Path $BackupDir -Force | Out-Null
+        $BackupConfig = Join-Path -Path $BackupDir -ChildPath "config"
+        if ([string]::IsNullOrWhiteSpace($BackupConfig)) {
+            throw "La ruta de respaldo de config esta vacia."
+        }
+        Copy-Item -LiteralPath $ExistingConfig -Destination $BackupConfig -Recurse -Force
+    }
+
+    $DestinationVersions = Join-Path -Path $MinecraftDir -ChildPath "versions"
+    $VersionFolderName = $ProfileFile.Directory.Name
+    if ([string]::IsNullOrWhiteSpace($VersionFolderName)) {
+        throw "La carpeta de version del perfil esta vacia: '$($ProfileFile.FullName)'."
+    }
+    $VersionSourceFolder = Join-Path -Path $VersionSource -ChildPath $VersionFolderName
+    $VersionDestinationFolder = Join-Path -Path $DestinationVersions -ChildPath $VersionFolderName
+
+    if (-not (Test-Path -LiteralPath $VersionSourceFolder -PathType Container)) {
+        throw "No existe la carpeta del perfil dentro del paquete: '$VersionSourceFolder'."
+    }
+    if ([string]::IsNullOrWhiteSpace($DestinationVersions) -or
+        [string]::IsNullOrWhiteSpace($VersionDestinationFolder)) {
+        throw "La ruta de destino del perfil esta vacia."
+    }
+    New-Item -ItemType Directory -Path $DestinationVersions -Force | Out-Null
+    Copy-Item -LiteralPath $VersionSourceFolder -Destination $DestinationVersions -Recurse -Force
+
+    $InstalledOwnMods = 0
+    if ($OwnModFiles.Count -gt 0) {
+        $DestinationMods = Join-Path -Path $MinecraftDir -ChildPath "mods"
+        if ([string]::IsNullOrWhiteSpace($DestinationMods)) {
+            throw "La ruta de destino mods esta vacia."
+        }
+        New-Item -ItemType Directory -Path $DestinationMods -Force | Out-Null
+        foreach ($OwnMod in $OwnModFiles) {
+            if ($null -eq $OwnMod -or [string]::IsNullOrWhiteSpace($OwnMod.FullName)) {
+                continue
+            }
+            Copy-Item -LiteralPath $OwnMod.FullName -Destination $DestinationMods -Force
+            $InstalledOwnMods++
+        }
+    }
+
+    $InstalledConfig = $false
+    if (-not [string]::IsNullOrWhiteSpace($ConfigSource) -and
+        (Test-Path -LiteralPath $ConfigSource -PathType Container)) {
+        $ConfigFiles = @(Get-ChildItem -LiteralPath $ConfigSource -Force -Recurse -File)
+        if ($ConfigFiles.Count -gt 0) {
+            $ConfigDestination = Join-Path -Path $MinecraftDir -ChildPath "config"
+            if ([string]::IsNullOrWhiteSpace($ConfigDestination)) {
+                throw "La ruta de destino config esta vacia."
+            }
+            Copy-Item -LiteralPath $ConfigSource -Destination $MinecraftDir -Recurse -Force
+            $InstalledConfig = $true
+        }
+    }
+
+    $InstalledOptions = $false
+    if (-not [string]::IsNullOrWhiteSpace($OptionsSource) -and
+        (Test-Path -LiteralPath $OptionsSource -PathType Leaf)) {
+        $OptionsInfo = Get-Item -LiteralPath $OptionsSource
+        if ($null -ne $OptionsInfo -and $OptionsInfo.Length -gt 0) {
+            $OptionsDestination = Join-Path -Path $MinecraftDir -ChildPath "options.txt"
+            if ([string]::IsNullOrWhiteSpace($OptionsDestination)) {
+                throw "La ruta de destino options.txt esta vacia."
+            }
+            Copy-Item -LiteralPath $OptionsSource -Destination $OptionsDestination -Force
+            $InstalledOptions = $true
+        }
+    }
+
+    $DownloadFailures = New-Object System.Collections.Generic.List[string]
+    [Net.ServicePointManager]::SecurityProtocol = [Net.SecurityProtocolType]::Tls12
+
+    $DestinationMods = Join-Path -Path $MinecraftDir -ChildPath "mods"
+    if ($ThirdPartyData.Count -gt 0) {
+        if ([string]::IsNullOrWhiteSpace($DestinationMods)) {
+            throw "La ruta de destino mods esta vacia."
+        }
+        New-Item -ItemType Directory -Path $DestinationMods -Force | Out-Null
+    }
+
+    foreach ($Entry in $ThirdPartyData) {
+        try {
+            if ($null -eq $Entry) {
+                throw "Entrada nula en mods-terceros.json."
+            }
+            $Url = [string]$Entry.url
+            $Hash = [string]$Entry.sha1
+            $FileName = [string]$Entry.filename
+            $ExpectedSize = $Entry.size
+
+            if ([string]::IsNullOrWhiteSpace($Url) -or
+                [string]::IsNullOrWhiteSpace($Hash) -or
+                [string]::IsNullOrWhiteSpace($FileName)) {
+                throw "Falta URL, SHA1 o nombre de archivo en la entrada del mod."
+            }
+            if ($Url -notmatch '^https://') {
+                throw "La URL no usa HTTPS: '$Url'."
+            }
+            if ($FileName -match '[\\/]' -or $FileName -match '^\.\.?$') {
+                throw "Nombre de archivo no seguro: '$FileName'."
+            }
+            if ($Hash -notmatch '^[0-9a-fA-F]{40}$') {
+                throw "SHA1 no valido para '$FileName'."
+            }
+            if ($null -eq $ExpectedSize -or [int64]$ExpectedSize -lt 0) {
+                throw "Tamano ausente o no valido para '$FileName'."
+            }
+
+            $TargetFile = Join-Path -Path $DestinationMods -ChildPath $FileName
+            if ([string]::IsNullOrWhiteSpace($TargetFile)) {
+                throw "La ruta de descarga esta vacia para '$FileName'."
+            }
+
+            $Downloaded = $false
+            for ($Attempt = 1; $Attempt -le 2; $Attempt++) {
+                try {
+                    Invoke-WebRequest -Uri $Url -OutFile $TargetFile -UseBasicParsing -TimeoutSec 120
+                    if (-not (Test-Path -LiteralPath $TargetFile -PathType Leaf)) {
+                        throw "No se creo el archivo descargado: '$TargetFile'."
+                    }
+                    $DownloadedInfo = Get-Item -LiteralPath $TargetFile
+                    if ($DownloadedInfo.Length -ne [int64]$ExpectedSize) {
+                        throw "Tamano incorrecto en '$TargetFile': recibido $($DownloadedInfo.Length), esperado $ExpectedSize."
+                    }
+                    $ActualHash = (Get-FileHash -LiteralPath $TargetFile -Algorithm SHA1).Hash
+                    if ([string]::IsNullOrWhiteSpace($ActualHash) -or
+                        $ActualHash.ToLowerInvariant() -ne $Hash.ToLowerInvariant()) {
+                        throw "SHA1 incorrecto para '$TargetFile'."
+                    }
+                    $Downloaded = $true
+                    break
                 }
-                if ($Intento -eq 2) {
-                    $Fallidos.Add("$Nombre - $($_.Exception.Message)")
+                catch {
+                    if (Test-Path -LiteralPath $TargetFile -PathType Leaf) {
+                        Remove-Item -LiteralPath $TargetFile -Force
+                    }
+                    if ($Attempt -eq 2) {
+                        throw
+                    }
+                    Start-Sleep -Seconds 2
                 }
             }
+            if (-not $Downloaded) {
+                throw "Descarga fallida para '$FileName'."
+            }
+        }
+        catch {
+            $FailureText = "$([string]$Entry.filename): $($_.Exception.Message)"
+            [void]$DownloadFailures.Add($FailureText)
         }
     }
 
     Write-Host ""
-    Write-Host "Instalacion terminada para el perfil: $($Perfiles[0].Id)" -ForegroundColor Green
-    Write-Host "Mods de terceros descargados correctamente: $($Descargados.Count)"
-    if ($Fallidos.Count -gt 0) {
-        Write-Host "Descargas fallidas:" -ForegroundColor Yellow
-        foreach ($Fallo in $Fallidos) {
-            Write-Host " - $Fallo" -ForegroundColor Yellow
+    Write-Host "Instalacion terminada."
+    Write-Host "Version instalada: $VersionId"
+    Write-Host "Mods propios copiados: $InstalledOwnMods"
+    Write-Host "Configuracion copiada: $InstalledConfig"
+    Write-Host "options.txt copiado: $InstalledOptions"
+    if (-not [string]::IsNullOrWhiteSpace($BackupDir) -and
+        (Test-Path -LiteralPath $BackupDir -PathType Container)) {
+        Write-Host "Respaldo creado en: '$BackupDir'"
+    } else {
+        Write-Host "No habia mods, config ni options.txt que respaldar."
+    }
+
+    if ($DownloadFailures.Count -gt 0) {
+        Write-Host ""
+        Write-Host "Descargas que fallaron:"
+        foreach ($Failure in $DownloadFailures) {
+            Write-Host " - $Failure"
         }
+    } else {
+        Write-Host "Descargas de mods de terceros: correctas."
     }
-    else {
-        Write-Host "No hubo descargas fallidas."
-    }
-    if (Test-Path -LiteralPath $Respaldo -PathType Container) {
-        Write-Host "Respaldo creado en: $Respaldo"
-    }
+
     Write-Host ""
     Write-Host "Siguientes pasos:"
     Write-Host "1. Abre TLauncher."
-    Write-Host "2. Elige en la lista de versiones: $($Perfiles[0].Id)"
-    Write-Host "3. En los ajustes de TLauncher, asigna la memoria recomendada para tu equipo."
+    Write-Host "2. Elige en la lista de versiones '$VersionId'."
+    Write-Host "3. Ajusta la memoria recomendada en los ajustes de TLauncher."
     Write-Host "4. Inicia el juego."
-    Write-Host "Para volver atras, cierra TLauncher y restaura desde la carpeta de respaldo indicada."
+    Write-Host "Para volver atras, cierra el juego; mueve la carpeta mods instalada fuera de .minecraft y restaura mods-anteriores desde el respaldo si el instalador la creo."
+    Write-Host "Restaura tambien config y options.txt desde el respaldo si necesitas recuperar los valores anteriores."
 }
 catch {
-    $RutaError = "(ruta no disponible)"
-    if ($_.TargetObject -is [string] -and -not [string]::IsNullOrWhiteSpace($_.TargetObject)) {
-        $RutaError = $_.TargetObject
+    $FailedPath = $null
+    if ($null -ne $_.TargetObject) {
+        $FailedPath = [string]$_.TargetObject
     }
-    Write-Host "Fallo la instalacion. Paso o ruta: $RutaError" -ForegroundColor Red
-    Write-Host "Detalle: $($_.Exception.Message)" -ForegroundColor Red
+    if ([string]::IsNullOrWhiteSpace($FailedPath) -and
+        -not [string]::IsNullOrWhiteSpace($MinecraftDir)) {
+        $FailedPath = $MinecraftDir
+    }
+    if ([string]::IsNullOrWhiteSpace($FailedPath)) {
+        $FailedPath = "(ruta no disponible)"
+    }
+    Write-Host "ERROR: fallo el paso de instalacion para la ruta '$FailedPath'. Detalle: $($_.Exception.Message)"
     exit 1
 }
