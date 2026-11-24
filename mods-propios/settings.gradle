@@ -1,15 +1,14 @@
 pluginManagement {
     repositories {
-        maven {
-            name = "Fabric"
-            url = "https://maven.fabricmc.net/"
-        }
-        mavenCentral()
+        maven { url = 'https://maven.fabricmc.net/' }
         gradlePluginPortal()
+        mavenCentral()
     }
 }
 
-rootProject.name = "mar-de-nubes-mods"
+rootProject.name = 'mar-de-nubes-mods'
 
-include("nucleo-campana")
-include("decisiones-campana")
+include 'deriva-core'
+include 'deriva-progression'
+include 'nucleo-campana'
+include 'decisiones-campana'
