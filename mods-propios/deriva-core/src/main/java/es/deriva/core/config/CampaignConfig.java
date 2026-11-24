@@ -1,154 +1,55 @@
 package es.deriva.core.config;
 
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+import com.google.gson.JsonParseException;
+import net.fabricmc.loader.api.FabricLoader;
+
 import java.io.IOException;
 import java.io.Reader;
 import java.io.Writer;
-import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.util.Properties;
 
 /**
- * Configuración externa del núcleo.
- *
- * Los valores iniciales corresponden a las cifras documentadas de la
- * propuesta de progresión. No definen fuentes de XP ni habilidades.
+ * Configuración externa en config/deriva_core.json.
+ * Se crean defaults si el archivo aún no existe.
  */
 public final class CampaignConfig {
-    private static final Path CONFIG_PATH = Path.of("config", "deriva.properties");
+    private static final Gson GSON = new GsonBuilder().setPrettyPrinting().create();
+    private static final Path CONFIG_PATH =
+            FabricLoader.getInstance().getConfigDir().resolve("deriva_core.json");
 
     private static volatile CampaignConfig instance;
 
-    private final boolean classSelectionEnabled;
-    private final int maxLevel;
-    private final int xpBase;
-    private final int xpStep;
-    private final int attributePointsEveryLevels;
-    private final int skillPointsPerLevel;
-    private final int skillNodeCost;
-
-    private CampaignConfig(
-            boolean classSelectionEnabled,
-            int maxLevel,
-            int xpBase,
-            int xpStep,
-            int attributePointsEveryLevels,
-            int skillPointsPerLevel,
-            int skillNodeCost
-    ) {
-        this.classSelectionEnabled = classSelectionEnabled;
-        this.maxLevel = maxLevel;
-        this.xpBase = xpBase;
-        this.xpStep = xpStep;
-        this.attributePointsEveryLevels = attributePointsEveryLevels;
-        this.skillPointsPerLevel = skillPointsPerLevel;
-        this.skillNodeCost = skillNodeCost;
-    }
+    private boolean classSelectionEnabled = true;
+    private int maxLevel = 30;
+    private int xpBase = 100;
+    private int xpStep = 25;
+    private int attributePointsEveryLevels = 2;
+    private int skillPointsPerLevel = 1;
+    private int skillNodeCost = 1;
 
     public static CampaignConfig get() {
-        CampaignConfig current = instance;
-        if (current != null) {
-            return current;
-        }
-
-        synchronized (CampaignConfig.class) {
-            if (instance == null) {
-                instance = loadFromDisk();
-            }
-            return instance;
-        }
+        CampaignConfig result = instance;
+        return result == null ? load() : result;
     }
 
-    /**
-     * Carga o crea el archivo de configuración. Puede volver a llamarse
-     * desde el hilo del servidor si un módulo futuro incorpora recarga.
-     */
     public static synchronized CampaignConfig load() {
-        instance = loadFromDisk();
-        return instance;
-    }
-
-    private static CampaignConfig loadFromDisk() {
-        Properties properties = defaults();
-
-        try {
-            if (Files.exists(CONFIG_PATH)) {
-                try (Reader reader = Files.newBufferedReader(CONFIG_PATH, StandardCharsets.UTF_8)) {
-                    properties.load(reader);
-                }
-            } else {
-                Path parent = CONFIG_PATH.getParent();
-                if (parent != null) {
-                    Files.createDirectories(parent);
-                }
-
-                try (Writer writer = Files.newBufferedWriter(CONFIG_PATH, StandardCharsets.UTF_8)) {
-                    properties.store(writer, "Deriva campaign configuration");
-                }
+        if (Files.exists(CONFIG_PATH)) {
+            try (Reader reader = Files.newBufferedReader(CONFIG_PATH)) {
+                CampaignConfig loaded = GSON.fromJson(reader, CampaignConfig.class);
+                instance = sanitize(loaded == null ? new CampaignConfig() : loaded);
+                return instance;
+            } catch (IOException | JsonParseException exception) {
+                System.err.println("[deriva_core] No se pudo leer deriva_core.json; se usan valores predeterminados: "
+                        + exception.getMessage());
             }
-        } catch (IOException exception) {
-            throw new IllegalStateException(
-                    "No se pudo leer o crear " + CONFIG_PATH,
-                    exception
-            );
         }
 
-        return new CampaignConfig(
-                readBoolean(properties, "class_selection_enabled", true),
-                readInteger(properties, "max_level", 30, 1, 30),
-                readInteger(properties, "xp_base", 100, 1, 1_000_000),
-                readInteger(properties, "xp_step", 25, 0, 1_000_000),
-                readInteger(properties, "attribute_points_every_levels", 2, 1, 30),
-                readInteger(properties, "skill_points_per_level", 1, 0, 100),
-                readInteger(properties, "skill_node_cost", 3, 1, 100)
-        );
-    }
-
-    private static Properties defaults() {
-        Properties properties = new Properties();
-        properties.setProperty("class_selection_enabled", "true");
-        properties.setProperty("max_level", "30");
-        properties.setProperty("xp_base", "100");
-        properties.setProperty("xp_step", "25");
-        properties.setProperty("attribute_points_every_levels", "2");
-        properties.setProperty("skill_points_per_level", "1");
-        properties.setProperty("skill_node_cost", "3");
-        return properties;
-    }
-
-    private static int readInteger(
-            Properties properties,
-            String key,
-            int defaultValue,
-            int minimum,
-            int maximum
-    ) {
-        String raw = properties.getProperty(key);
-        if (raw == null) {
-            return defaultValue;
-        }
-
-        try {
-            int value = Integer.parseInt(raw.trim());
-            return value >= minimum && value <= maximum ? value : defaultValue;
-        } catch (NumberFormatException exception) {
-            return defaultValue;
-        }
-    }
-
-    private static boolean readBoolean(Properties properties, String key, boolean defaultValue) {
-        String raw = properties.getProperty(key);
-        if (raw == null) {
-            return defaultValue;
-        }
-
-        if ("true".equalsIgnoreCase(raw.trim())) {
-            return true;
-        }
-        if ("false".equalsIgnoreCase(raw.trim())) {
-            return false;
-        }
-        return defaultValue;
+        instance = new CampaignConfig();
+        saveDefaults(instance);
+        return instance;
     }
 
     public boolean isClassSelectionEnabled() {
@@ -179,11 +80,32 @@ public final class CampaignConfig {
         return skillNodeCost;
     }
 
-    public int xpRequiredForLevel(int level) {
-        if (level < 1 || level >= maxLevel) {
-            return 0;
-        }
+    /**
+     * Recibe el nivel actual; el nivel 1 requiere xpBase para alcanzar nivel 2.
+     */
+    public int xpRequiredForLevel(int currentLevel) {
+        long required = (long) xpBase + (long) xpStep * Math.max(0, currentLevel - 1);
+        return (int) Math.min(Integer.MAX_VALUE, required);
+    }
 
-        return xpBase + xpStep * (level - 1);
+    private static CampaignConfig sanitize(CampaignConfig config) {
+        config.maxLevel = Math.max(1, config.maxLevel);
+        config.xpBase = Math.max(1, config.xpBase);
+        config.xpStep = Math.max(0, config.xpStep);
+        config.attributePointsEveryLevels = Math.max(0, config.attributePointsEveryLevels);
+        config.skillPointsPerLevel = Math.max(0, config.skillPointsPerLevel);
+        config.skillNodeCost = Math.max(1, config.skillNodeCost);
+        return config;
+    }
+
+    private static void saveDefaults(CampaignConfig config) {
+        try {
+            Files.createDirectories(CONFIG_PATH.getParent());
+            try (Writer writer = Files.newBufferedWriter(CONFIG_PATH)) {
+                GSON.toJson(config, writer);
+            }
+        } catch (IOException exception) {
+            System.err.println("[deriva_core] No se pudo crear deriva_core.json: " + exception.getMessage());
+        }
     }
 }
