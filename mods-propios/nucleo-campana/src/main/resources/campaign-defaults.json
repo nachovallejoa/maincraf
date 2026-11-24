@@ -1,24 +1,8 @@
 {
-  "schema_version": 1,
+  "schema": 1,
   "campaign": {
-    "max_level": 30,
-    "attribute_point_every_levels": 2,
-    "skill_points_after_level_one": 1,
-    "xp_base": 100,
-    "xp_increment_per_level": 25,
-    "factions": [
-      "liga_del_lastre",
-      "cartografos_del_prisma",
-      "hermandad_del_vaiven",
-      "flota_sumergida"
-    ],
-    "regions": [
-      "cabo_de_las_campanas",
-      "jardines_de_oria",
-      "darsena_de_los_remaches",
-      "nimbo_de_vidrio",
-      "fosa_de_marea",
-      "corona_de_espejos"
-    ]
-  }
+    "prologue_started": false,
+    "lighthouse_evacuation_recorded": false
+  },
+  "note": "Los valores persistentes del mundo son la fuente de verdad; este archivo documenta sus valores iniciales."
 }
