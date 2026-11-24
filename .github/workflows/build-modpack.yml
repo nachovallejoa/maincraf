@@ -13,113 +13,87 @@ jobs:
   build:
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout repository
-        uses: actions/checkout@v7
+      - name: Checkout
+        uses: actions/checkout@v6
 
-      - name: Read Minecraft and Loom versions
-        id: versions
-        shell: bash
+      - name: Leer versiones del paquete
+        id: pack
+        shell: python
         run: |
-          python3 - <<'PY'
           import json
-          import os
-          import re
           from pathlib import Path
 
-          manifest_path = Path("pack/mods.json")
-          if not manifest_path.is_file():
-              raise SystemExit(f"ERROR: falta {manifest_path}")
+          path = Path("pack/mods.json")
+          if not path.is_file():
+              raise SystemExit(f"Falta el manifiesto requerido: {path}")
+          try:
+              data = json.loads(path.read_text(encoding="utf-8"))
+          except Exception as exc:
+              raise SystemExit(f"No se pudo leer {path}: {exc}")
+          if not isinstance(data, dict):
+              raise SystemExit(f"El manifiesto {path} debe ser un objeto JSON")
 
-          data = json.loads(manifest_path.read_text(encoding="utf-8"))
-          minecraft = data.get("minecraft_version") or data.get("game_version")
-          if not isinstance(minecraft, str) or not minecraft.strip():
-              raise SystemExit("ERROR: falta minecraft_version (o game_version) en pack/mods.json")
+          mc = data.get("minecraft_version") or data.get("game_version")
+          if not isinstance(mc, str) or not mc.strip():
+              raise SystemExit("Falta minecraft_version (o game_version) en pack/mods.json")
 
-          major_minor = tuple(int(part) for part in re.match(r"^(\d+)\.(\d+)", minecraft.strip()).groups())
-          java = "17" if major_minor <= (1, 20) and minecraft.strip() != "1.20.5" else (
-              "17" if minecraft.strip() in ("1.20.1", "1.20.2", "1.20.3", "1.20.4") else "21"
-          )
-          if minecraft.strip().startswith("1.20.") and int(minecraft.strip().split(".")[2]) <= 4:
-              java = "17"
+          version = 17 if tuple(int(x) for x in mc.strip().split(".")[:2]) <= (1, 20) and mc.strip() != "1.20.5" else 21
+          # En Minecraft 1.20.5+ se requiere Java 21; las versiones hasta 1.20.4 usan Java 17.
+          parts = tuple(int(x) for x in mc.strip().split(".")[:3])
+          if parts[:2] == (1, 20) and len(parts) >= 3:
+              version = 17 if parts[2] <= 4 else 21
+          elif parts[0] == 1 and parts[1] < 20:
+              version = 17
+          elif parts[0] == 1 and parts[1] == 20:
+              version = 17 if len(parts) < 3 or parts[2] <= 4 else 21
+          else:
+              version = 21
 
-          loom = None
-          settings = Path("mods-propios/settings.gradle")
-          builds = [Path("mods-propios/build.gradle")]
-          builds.extend(sorted(Path("mods-propios").glob("*/build.gradle")))
-          for build in builds:
-              if not build.is_file():
-                  continue
-              text = build.read_text(encoding="utf-8")
-              match = re.search(r"""(?:id\s*[\("' ]+fabric-loom[\)"']*\s*version\s*[\("' ]+|fabric-loom['"]?\s+version\s+['"])([^'" )]+)""", text)
-              if match:
-                  loom = match.group(1)
-                  break
-          if loom is None and settings.is_file():
-              text = settings.read_text(encoding="utf-8")
-              match = re.search(r"""id\s+["']fabric-loom["']\s+version\s+["']([^"']+)""", text)
-              if match:
-                  loom = match.group(1)
+          with open(Path(__import__("os").environ["GITHUB_OUTPUT"]), "a", encoding="utf-8") as out:
+              out.write(f"java={version}\n")
 
-          # [SIN VERIFICAR] Loom 1.10 requiere Gradle 8.12 según la publicación oficial de Fabric.
-          # Para la versión declarada 1.10.5, se fija 8.12 como línea segura de Loom 1.10.
-          gradle = "8.12"
-          if loom and not loom.startswith("1.10"):
-              print(f"::warning::Loom detectado {loom}; Gradle 8.12 se eligio por la referencia oficial de Loom 1.10 [SIN VERIFICAR para esta version].")
-
-          output = os.environ["GITHUB_OUTPUT"]
-          with open(output, "a", encoding="utf-8") as stream:
-              stream.write(f"minecraft={minecraft.strip()}\n")
-              stream.write(f"java={java}\n")
-              stream.write(f"gradle={gradle}\n")
-              stream.write(f"loom={loom or 'no detectado'}\n")
-          PY
-
-      - name: Set up Java
+      - name: Configurar Java
         uses: actions/setup-java@v6
         with:
           distribution: temurin
-          java-version: ${{ steps.versions.outputs.java }}
+          java-version: ${{ steps.pack.outputs.java }}
 
-      - name: Set up Gradle
+      - name: Configurar Gradle
         uses: gradle/actions/setup-gradle@v6
         with:
-          gradle-version: '8.12'
-          cache-provider: basic
+          # Loom 1.6.12 y la compatibilidad exacta del conjunto no se probaron aquí.
+          # Gradle 8.7 es la base conservadora documentada para Loom 1.6.
+          gradle-version: '8.7'
 
-      - name: Build own mods when settings.gradle exists
-        if: ${{ hashFiles('mods-propios/settings.gradle') != '' }}
-        working-directory: mods-propios
-        run: gradle build --stacktrace
+      - name: Compilar mods propios
+        shell: bash
+        run: |
+          if [ -f mods-propios/settings.gradle ]; then
+            cd mods-propios
+            gradle build --stacktrace
+          else
+            echo "No existe mods-propios/settings.gradle; se omite la compilacion de mods propios."
+          fi
 
-      - name: Build TLauncher package
-        run: python3 scripts/build_tlauncher.py
+      - name: Construir paquetes
+        run: |
+          python3 scripts/build_tlauncher.py
+          python3 scripts/build_mrpack.py
 
-      - name: Build Modrinth package
-        run: python3 scripts/build_mrpack.py
-
-      - name: Upload TLauncher ZIP artifact
+      - name: Subir artefactos TLauncher y mrpack
         uses: actions/upload-artifact@v7
         with:
-          name: modpack-tlauncher
-          path: dist/*-tlauncher.zip
+          name: modpack-installers
+          path: |
+            dist/*-tlauncher.zip
+            dist/*.mrpack
           if-no-files-found: error
-          retention-days: 30
 
-      - name: Upload Modrinth mrpack artifact
-        uses: actions/upload-artifact@v7
+      - name: Crear Release
+        if: startsWith(github.ref, 'refs/tags/')
+        uses: softprops/action-gh-release@v2
         with:
-          name: modpack-mrpack
-          path: dist/*.mrpack
-          if-no-files-found: error
-          retention-days: 30
-
-      - name: Publish GitHub Release
-        uses: softprops/action-gh-release@v3
-        with:
-          tag_name: modpack-${{ github.run_number }}
-          name: Modpack build ${{ github.run_number }}
-          make_latest: false
-          preserve_order: true
           files: |
             dist/*-tlauncher.zip
             dist/*.mrpack
+          fail_on_unmatched_files: true
