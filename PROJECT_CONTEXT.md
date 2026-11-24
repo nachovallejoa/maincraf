@@ -2,14 +2,14 @@
 
 ## Modo autónomo
 
-El usuario aprobó todo y delegó todas las decisiones al equipo. No quiere cuestionarios ni conocer el contenido del modpack; se trabaja autónomamente y se comunican los resultados de integración.
+El usuario aprobó todo y delegó todas las decisiones al equipo. No quiere cuestionarios ni conocer el contenido del modpack; el trabajo se realiza de forma autónoma y se comunican los resultados de integración.
 
 Hardware actualizado: 12 GB instalados, unos 10 GB disponibles; Windows usa unos 500 MB. Launcher del usuario: TLauncher en Windows.
 
 ## Estado del paquete Mar de Nubes
 
 - Perfil objetivo Minecraft `1.20.1`; Loader declarado `0.20.1` según Fabric Meta.
-- El manifiesto contiene un subconjunto documental de mods con datos de versiones verificables. No se afirma que esté listo para instalar mientras dependencias obligatorias sigan sin resolverse.
+- El manifiesto contiene el subconjunto documental de mods con datos de versiones verificables. No se afirma que esté listo para instalar mientras dependencias obligatorias sigan sin resolverse.
 - JAR, compatibilidad completa, configuraciones y rendimiento conjunto: [SIN VERIFICAR].
 - No se suben JAR de mods de terceros.
 - La configuración específica de mods no se incorpora sin validación contra los JAR exactos.
@@ -28,5 +28,5 @@ La compilación Gradle y el empaquetado deben comprobarse en GitHub Actions. La 
 ## Pendientes por datos no disponibles
 
 - El contenido original de `pack/mods.json` no estaba disponible en la revisión; el manifiesto actual es una reconstrucción documental.
-- No se recibió lista completa de JAR instalados ni conteo final/INCOMPLETE a conservar; se mantiene la nota pendiente tal como fue entregada en el resumen del paquete.
-- No hay pruebas de ejecución de la compilación ni de juego en la máquina destino.
+- No se recibió una lista completa de JAR instalados ni conteo final/incomplete a conservar; se mantiene la nota pendiente tal como fue entregada en el resumen del paquete.
+- No hay pruebas de ejecución de la compilación ni del juego en la máquina destino.
