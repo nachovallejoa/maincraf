@@ -1,4 +1,4 @@
-name: Build Modpack
+name: Build modpack packages
 
 on:
   push:
@@ -14,73 +14,64 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
-        uses: actions/checkout@v6
+        uses: actions/checkout@v7
 
-      - name: Read modpack metadata
-        id: pack
-        shell: python
-        run: |
-          import json
-          import os
-          from pathlib import Path
-
-          manifest = json.loads(Path("pack/mods.json").read_text(encoding="utf-8"))
-          minecraft = manifest["minecraft_version"]
-          major, minor, patch = (int(part) for part in minecraft.split("."))
-          java = "17" if (major, minor, patch) <= (1, 20, 4) else "21"
-
-          with open(os.environ["GITHUB_OUTPUT"], "a", encoding="utf-8") as output:
-              output.write(f"java={java}\n")
-
-      - name: Set up Java
+      - name: Set up Java 17
         uses: actions/setup-java@v6
         with:
           distribution: temurin
-          java-version: ${{ steps.pack.outputs.java }}
-
-      - name: Check Loom version and configure Gradle
-        if: ${{ hashFiles('mods-propios/settings.gradle') != '' }}
-        shell: bash
-        run: |
-          set -euo pipefail
-          files=(mods-propios/settings.gradle mods-propios/build.gradle)
-          found="$(grep -hEo "fabric-loom[^[:space:]]*[[:space:]]+version[[:space:]]+['\"][^'\"]+['\"]|fabric-loom[^[:space:]]*:[^[:space:]'\"]+" "${files[@]}" 2>/dev/null | head -n 1 || true)"
-          if [[ -z "$found" ]]; then
-            echo "::error::No se pudo identificar la versión de Fabric Loom en mods-propios/settings.gradle o build.gradle; no es seguro fijar Gradle sin ese dato."
-            exit 1
-          fi
-          echo "Declaración de Loom detectada: $found"
-          if [[ "$found" != *"1.6"* ]]; then
-            echo "::error::Este workflow configura Gradle 8.7, documentado para Loom 1.6. Ajusta gradle-version al requisito de la versión de Loom detectada."
-            exit 1
-          fi
+          java-version: '17'
 
       - name: Set up Gradle
-        if: ${{ hashFiles('mods-propios/settings.gradle') != '' }}
         uses: gradle/actions/setup-gradle@v6
         with:
-          gradle-version: '8.7'
+          gradle-version: '9.8.2'
+          cache-provider: basic
 
       - name: Build own mods
-        if: ${{ hashFiles('mods-propios/settings.gradle') != '' }}
-        run: gradle build
-        working-directory: mods-propios
+        shell: bash
+        run: |
+          if [ -f mods-propios/settings.gradle ]; then
+            cd mods-propios
+            gradle build --stacktrace
+          else
+            echo "ERROR: no existe mods-propios/settings.gradle"
+            exit 1
+          fi
 
-      - name: Build Modrinth pack
-        run: python3 scripts/build_mrpack.py
+      - name: Build TLauncher and mrpack packages
+        run: |
+          python3 scripts/build_tlauncher.py
+          python3 scripts/build_mrpack.py
 
-      - name: Upload .mrpack artifact
+      - name: Upload TLauncher ZIP artifact
         uses: actions/upload-artifact@v7
         with:
-          name: mrpack
-          path: '*.mrpack'
+          name: tlauncher-package
+          path: dist/*-tlauncher.zip
           if-no-files-found: error
 
-      - name: Publish GitHub Release
-        uses: softprops/action-gh-release@v3
+      - name: Upload mrpack artifact
+        uses: actions/upload-artifact@v7
         with:
-          tag_name: modpack-${{ github.run_number }}
-          name: Modpack build ${{ github.run_number }}
-          files: '*.mrpack'
-          fail_on_unmatched_files: true
-          make_latest: false
+          name: mrpack-package
+          path: dist/*.mrpack
+          if-no-files-found: error
+
+      - name: Publish Release
+        if: github.event_name == 'push' && github.ref == 'refs/heads/etapa-7-modpack'
+        env:
+          GH_TOKEN: ${{ github.token }}
+        shell: bash
+        run: |
+          shopt -s nullglob
+          tlauncher=(dist/*-tlauncher.zip)
+          mrpack=(dist/*.mrpack)
+          if [ "${#tlauncher[@]}" -ne 1 ] || [ "${#mrpack[@]}" -ne 1 ]; then
+            echo "ERROR: se esperaba exactamente un ZIP TLauncher y un mrpack."
+            exit 1
+          fi
+          tag="modpack-${GITHUB_RUN_NUMBER}"
+          gh release create "$tag" "${tlauncher[0]}" "${mrpack[0]}" \
+            --title "Paquete del modpack ${GITHUB_RUN_NUMBER}" \
+            --notes "Paquetes TLauncher y mrpack; consultar INSTALL.md y las advertencias de verificación."
