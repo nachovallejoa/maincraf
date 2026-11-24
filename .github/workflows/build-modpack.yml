@@ -1,0 +1,79 @@
+name: Build modpack
+
+on:
+  push:
+    branches:
+      - etapa-7-modpack
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  build-modpack:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v6
+
+      - name: Read Minecraft version
+        id: pack
+        shell: bash
+        run: |
+          python3 - <<'PY' >> "$GITHUB_OUTPUT"
+          import json
+          from pathlib import Path
+
+          manifest = json.loads(Path("pack/mods.json").read_text(encoding="utf-8"))
+          version = manifest["minecraft_version"]
+          parts = tuple(int(part) for part in version.split("."))
+          java = "21" if parts >= (1, 20, 5) else "17"
+          print(f"java-version={java}")
+          PY
+
+      - name: Set up Java
+        uses: actions/setup-java@v6
+        with:
+          distribution: temurin
+          java-version: ${{ steps.pack.outputs.java-version }}
+
+      - name: Set up Gradle
+        uses: gradle/actions/setup-gradle@v6
+        with:
+          gradle-version: '8.10.1'
+
+      - name: Build own mods when a Gradle project exists
+        if: ${{ hashFiles('mods-propios/settings.gradle') != '' }}
+        working-directory: mods-propios
+        run: gradle build
+
+      - name: Build Modrinth pack
+        run: python3 scripts/build_mrpack.py
+
+      - name: Resolve package filename
+        id: artifact
+        shell: bash
+        run: |
+          python3 - <<'PY' >> "$GITHUB_OUTPUT"
+          import json
+          from pathlib import Path
+
+          manifest = json.loads(Path("pack/mods.json").read_text(encoding="utf-8"))
+          print(f"file={manifest['name']}-{manifest['version']}.mrpack")
+          PY
+
+      - name: Upload package artifact
+        uses: actions/upload-artifact@v7
+        with:
+          name: modrinth-modpack
+          path: ${{ steps.artifact.outputs.file }}
+          if-no-files-found: error
+          retention-days: 14
+
+      - name: Publish GitHub Release
+        uses: softprops/action-gh-release@v3
+        with:
+          tag_name: modpack-${{ github.run_number }}
+          name: Modpack build ${{ github.run_number }}
+          files: ${{ steps.artifact.outputs.file }}
+          fail_on_unmatched_files: true
