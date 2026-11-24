@@ -1,68 +1,82 @@
-# Auditoría de mods
+# Auditoría de mods — propuesta segunda etapa
 
 ## Estado y alcance
 
 - Los candidatos siguientes son documentales; no son lista de instalación, aprobación ni compatibilidad probada.
-- Manifiesto y JARs del pack no recibidos; no se verificó el pack completo.
-- No se ejecutó Minecraft ni se midieron FPS, frametimes, RAM, CPU/GPU, arranque, carga o compatibilidad.
-- No instalar, modificar ni redistribuir mods sin autorización expresa y revisión de licencia. No subir binarios/JARs de terceros.
-- Las mediciones se dejan vacías intencionalmente: **NO DATA**.
+- El manifiesto del pack y los JAR exactos no se recibieron; no se verificó el pack completo.
+- No se ejecutó Minecraft ni se midieron FPS, frametimes, RAM, CPU/GPU, arranque, carga ni estabilidad.
+- No instalar, modificar ni redistribuir mods sin autorización y revisión de licencias. No subir archivos binarios/JAR de terceros.
+- **NO DATA** significa medición ausente, no cero ni estimación.
 
 ## Clasificación
 
 | Categoría | Regla |
 |---|---|
-| Imprescindible | Requisito funcional confirmado por manifiesto/JAR. |
+| Imprescindible | Requisito funcional confirmado por manifiesto/JAR. Ningún candidato se marca así. |
 | Recomendado provisional | Candidato pertinente para probar; no equivale a aprobación. |
-| Opcional | Solo para uso/escenario concreto. |
-| Reemplazable | Alternativa para una función; comparar y autorizar. |
-| Prescindible | No justificado o cubierto por opciones existentes; requiere evidencia. |
-| Incompatible | Conflicto reproducible de combinación exacta; no asignar por sospecha. |
+| Opcional / reemplazable | Solo para escenario concreto; comparar y autorizar. |
+| Prescindible | No justificado o cubierto por opciones existentes; exige evidencia. |
+| Incompatible | Conflicto reproducible de combinación exacta; no asignarlo por sospecha. |
 
 ## Candidatos propuestos para Fabric 1.20.1
 
-| Mod / build candidata | Clasificación | Función / condición documental | FPS | Frametime | RAM | Arranque | Carga |
+| Mod / build | Clasificación | Función / condiciones documentales | FPS | Frametime | RAM | Arranque | Carga |
 |---|---|---|---|---|---|---|---|
-| Sodium `0.5.13` | Recomendado provisional | Renderizador candidato; build exacta **[SIN VERIFICAR]**. Radeon R3/driver, OpenGL, pack y dependencias sin probar. Polyform Shield 1.0.0 figura en proyecto. |  |  |  |  |  |
-| Lithium `0.11.4` | Recomendado provisional | Candidato complementario al renderizado; build, dependencias y licencia exactas **[SIN VERIFICAR]**. |  |  |  |  |  |
-| FerriteCore `6.0.1` | Recomendado provisional | Ficha consultada: Fabric/Quilt, MC 1.20–1.20.2, MIT. Pack no probado; incompatibilidad citada con Hydrogen no verificada. |  |  |  |  |  |
-| ModernFix `5.25.2+mc1.20.1` | Recomendado provisional | Ficha consultada: Fabric 1.20.1, LGPL-3.0-only. Build/pack/configuración local pendientes. No se aprueba clave Dynamic Resources. |  |  |  |  |  |
-| Entity Culling `1.12.1-1.20.1` | Opcional | Ficha consultada: Fabric 1.20.1/cliente; pack y Sodium no probados. Alertas concretas de CPU/artefactos visuales **[SIN VERIFICAR]**. Licencia personalizada. |  |  |  |  |  |
-| ImmediatelyFast `1.2.1+1.20.1` | Opcional | Ficha: Fabric/Forge/Quilt, MC 1.20–1.20.1. Comprobar incompatibilidad declarada con MemoryLeakFix `<=1.1.1`; interacción con pack sin probar. |  |  |  |  |  |
-| BadOptimizations `2.1.4` | Opcional | La URL recibida identifica 2.1.4 (1.20.1), no 2.4.1. Otra build 2.4.1 compatible no verificada. |  |  |  |  |  |
-| Sodium Extra `0.5.9` | Opcional | Ficha: requiere Sodium y Fabric API; Reese’s Sodium Options e Iris opcionales. No hay opciones/configuración validadas. |  |  |  |  |  |
-| Dynamic FPS `3.9.5` | Opcional | Ficha: Fabric 1.20–1.20.1, requiere Fabric API, Cloth Config opcional. Reduce recursos en segundo plano/inactividad/batería; no es acelerador de primer plano. |  |  |  |  |  |
-| Fabric API `0.92.6+1.20.1` | Dependencia condicionada | Incluir solo si manifiesto o mod aprobado lo requiere. Build/licencia/autor exactos **[SIN VERIFICAR]**. |  |  |  |  |  |
-| Particle Core `0.2.5+1.20.1` | Reemplazable | No añadir de entrada junto con Sodium Extra. Build, dependencias y solapamiento **[SIN VERIFICAR]**. |  |  |  |  |  |
-| More Culling `0.24.6` | Prescindible | Excluido inicialmente; solapamiento y dependencia citados **[SIN VERIFICAR]**. |  |  |  |  |  |
-| C2ME `0.2.0+alpha.11.18+1.20.1` | Prescindible | Fuera de primera pasada; build/riesgos específicos **[SIN VERIFICAR]** en esta revisión. |  |  |  |  |  |
-| Noisium / Noisiumed | Prescindible | Build exacta y relación con Fast Noise **[SIN VERIFICAR]**. |  |  |  |  |  |
-| LazyDFU `0.1.3` | Prescindible | No prioritario; beneficio específico **[SIN VERIFICAR]**. |  |  |  |  |  |
+| Sodium `0.5.13` | Recomendado provisional, condicionado a validar GPU/driver/OpenGL | Candidato de renderizado. Build exacta consultada; compatibilidad con Radeon R3 y pack sin probar. Polyform Shield 1.0.0 según página; revisar términos. | NO DATA | NO DATA | NO DATA | NO DATA | NO DATA |
+| Lithium `0.11.4` | Recomendado provisional | Candidato de lógica de juego. Build consultada; dependencias y compatibilidad conjunta pendientes. LGPL-3.0-only según ficha. | NO DATA | NO DATA | NO DATA | NO DATA | NO DATA |
+| FerriteCore `6.0.1` | Recomendado provisional | Ficha consultada indica Fabric/Quilt y MC 1.20–1.20.2. MIT según ficha; duplicados/pack y posible solapamiento con ModernFix pendientes. | NO DATA | NO DATA | NO DATA | NO DATA | NO DATA |
+| ModernFix `5.25.2+mc1.20.1` | Recomendado provisional para ensayo aislado | Ficha consultada indica Fabric 1.20.1 y LGPL-3.0-only. No aplicar `mixin.perf.dynamic_resources=false`: clave/valor/efecto sin verificar. | NO DATA | NO DATA | NO DATA | NO DATA | NO DATA |
+| Sodium Extra `0.5.9` | Opcional | Add-on para Sodium; ficha consultada indica LGPL-3.0-only. Dependencias exactas por cotejar; no se validaron opciones/configuración. | NO DATA | NO DATA | NO DATA | NO DATA | NO DATA |
+| ImmediatelyFast `1.2.21+1.20.1` | Opcional; artefacto exacto pendiente | Proyecto describe mejoras de renderizado inmediato y menciona incompatibilidades conocidas con OptiFine/OptiFabric. Release exacta, dependencias y licencia del archivo sin verificar. Proyecto muestra LGPL-3.0-or-later. | NO DATA | NO DATA | NO DATA | NO DATA | NO DATA |
+| BadOptimizations `2.4.1` | Opcional; versión exacta pendiente de cotejo | Candidato documental de microoptimizaciones; ficha/compatibilidad conjunta por verificar. MIT según ficha consultada para candidato citado. | NO DATA | NO DATA | NO DATA | NO DATA | NO DATA |
+| Dynamic FPS `3.9.5` | Opcional / reemplazable | Reduce recursos en segundo plano, inactividad o batería; no se propone como aumento de FPS con juego enfocado. Ficha indica MIT. Requisito Fabric API: SIN VERIFICAR. | NO DATA | NO DATA | NO DATA | NO DATA | NO DATA |
 
-Los excluidos no deben borrarse de una instancia existente sin autorización. Sin manifiesto no se puede determinar si alguno forma parte de la instalación.
+## Dependencias condicionales
 
-## Fuentes documentales citadas
+| Componente | Condición para considerar | Pendiente |
+|---|---|---|
+| Fabric API `0.92.6+1.20.1` | Solo si el manifiesto o un mod elegido la requiere. | Necesidad para el conjunto, autor y licencia/artefacto exactos: cotejar; la fuente consultada indicaba Apache-2.0. |
+| Indium `1.0.36` o posterior | Solo si un mod requiere Fabric Rendering API con Sodium 0.5.x. | Indium requiere Fabric API; no compatible con Sodium 0.6.0 o posterior. Versión exacta y licencia del artefacto elegido: cotejar. |
 
-- [Sodium](https://modrinth.com/mod/sodium) · [guía oficial de instalación](https://github.com/CaffeineMC/sodium/wiki/Installation) · [build indicada, pendiente de confirmar](https://modrinth.com/mod/sodium/version/OihdIimA)
-- [Lithium](https://modrinth.com/mod/lithium) · [build indicada](https://modrinth.com/mod/lithium/version/mc1.20.1-0.11.4-fabric)
+## Candidatos pospuestos / no verificados
+
+Estos datos provienen de la propuesta recibida y no se deben tratar como hechos confirmados aquí. No descargar ni incluir JARs por esta auditoría.
+
+| Mod / build propuesta | Estado y pendientes |
+|---|---|
+| Entity Culling `1.12.1-1.20.1` | Pospuesto para prueba aislada. Advertencia de CPU y aplicabilidad al Athlon no verificadas aquí. Licencia/tr7zw Protective License y términos específicos pendientes; no redistribuir sin cotejar el archivo. |
+| Particle Core `0.2.5+1.20.1` | Pospuesto; posible solapamiento funcional con Sodium Extra no demostrado. Build, dependencias y MIT indicados en la propuesta, sin verificar. |
+| More Culling `0.24.6` | Pospuesto. Dependencias, licencia GPL-3.0-only y coste/beneficio locales sin verificar. |
+| C2ME `0.2.0+alpha.11.18+1.20.1` | Fuera de base inicial. Release alpha, estabilidad, compatibilidad, dependencias y discrepancia de licencia LGPL/MIT sin verificar para el artefacto exacto. |
+| ScalableLux | Pospuesto; release Fabric 1.20.1 no comprobada. |
+| Noisium | Pospuesto; no se verificó artefacto utilizable en versiones consideradas. |
+| FastLoad / DashLoader | Pospuestos; releases y compatibilidad no verificadas. |
+| Hydrogen | No incluido; posible incompatibilidad con FerriteCore sin verificar. |
+
+## Referencias consultadas y suministradas
+
+- [Prominence II](https://modrinth.com/modpack/prominence-2-fabric)
+- [Sodium 0.5.13](https://modrinth.com/mod/sodium/version/mc1.20.1-0.5.13-fabric) · [documentación de hardware](https://github.com/CaffeineMC/sodium)
+- [Lithium 0.11.4](https://modrinth.com/mod/lithium/version/mc1.20.1-0.11.4-fabric)
 - [FerriteCore 6.0.1](https://modrinth.com/mod/ferrite-core/version/6.0.1)
-- [ModernFix](https://modrinth.com/mod/modernfix) · [build 5.25.2](https://modrinth.com/mod/modernfix/version/5.25.2%2Bmc1.20.1)
-- [Entity Culling](https://modrinth.com/mod/entityculling) · [build](https://modrinth.com/mod/entityculling/version/xM6y5W1N)
-- [ImmediatelyFast](https://modrinth.com/mod/immediatelyfast) · [build](https://modrinth.com/mod/immediatelyfast/version/txcO4lNF)
-- [BadOptimizations](https://modrinth.com/mod/badoptimizations) · [build 2.1.4 indicada por la URL](https://modrinth.com/mod/badoptimizations/version/GydKiUd0)
-- [Sodium Extra](https://modrinth.com/mod/sodium-extra) · [build](https://modrinth.com/mod/sodium-extra/version/mc1.20.1-0.5.9)
-- [Dynamic FPS](https://modrinth.com/mod/dynamic-fps) · [build](https://modrinth.com/mod/dynamic-fps/version/D9mrJwm0)
-- [Prominence II: Hasturian Era](https://modrinth.com/modpack/prominence-2-fabric): referencia de MC 1.20.1/Fabric; licencia ARR, no redistribuir sin autorización.
+- [ModernFix 5.25.2+mc1.20.1](https://modrinth.com/mod/modernfix/version/5.25.2%2Bmc1.20.1)
+- [Sodium Extra 0.5.9](https://modrinth.com/mod/sodium-extra/version/mc1.20.1-0.5.9)
+- [ImmediatelyFast](https://modrinth.com/mod/immediatelyfast) · [versión propuesta, por verificar](https://modrinth.com/mod/immediatelyfast/version/1.2.21+1.20.1)
+- [BadOptimizations 2.4.1 propuesta](https://modrinth.com/mod/badoptimizations/version/2.4.1)
+- [Dynamic FPS 3.9.5](https://modrinth.com/mod/dynamic-fps/version/D9mrJwm0)
+- [Fabric API](https://modrinth.com/mod/fabric-api/version/0.92.6+1.20.1) · [Indium](https://modrinth.com/mod/indium)
+- Referencias de candidatos pospuestos: [Entity Culling](https://modrinth.com/mod/entityculling/version/xM6y5W1N), [Particle Core](https://modrinth.com/mod/particle-core/version/ryjPL8AJ), [More Culling](https://modrinth.com/mod/moreculling/version/1.20.1-0.24.6), [C2ME](https://modrinth.com/mod/c2me-fabric/version/fyt7FtgA), [ScalableLux](https://modrinth.com/mod/scalablelux/version/Yx1tgJMI), [Noisium](https://modrinth.com/mod/noisium). Estas referencias no se volvieron a verificar en esta revisión.
 
-## Estado de mediciones
+## Mediciones
 
 | Métrica | Resultado |
 |---|---|
-| FPS | **NO DATA** — no se ejecutó benchmark. |
-| Frametime | **NO DATA** — no se midió. |
-| RAM | **NO DATA** — no se midió. |
-| Tiempo de arranque | **NO DATA** — no se midió. |
-| Tiempo de carga | **NO DATA** — no se midió. |
-| Compatibilidad/estabilidad | **NO DATA** — no se probó una instancia. |
+| FPS | NO DATA — no se ejecutó benchmark. |
+| Frametime | NO DATA — no se midió. |
+| RAM | NO DATA — no se midió. |
+| CPU/GPU | NO DATA — no se midió. |
+| Tiempo de arranque | NO DATA — no se midió. |
+| Tiempo de carga | NO DATA — no se midió. |
+| Compatibilidad / estabilidad | NO DATA — no se probó instancia. |
 
-Campos vacíos no significan cero ni resultado favorable. Requiere pruebas controladas y reproducibles en instancia aislada después de revisión/autorización.
+Campos vacíos/NO DATA no significan cero ni resultado favorable. Cualquier medición posterior requiere instancia aislada, condiciones reproducibles y aprobación expresa.
