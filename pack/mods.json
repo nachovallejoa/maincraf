@@ -1,23 +1,7 @@
 {
   "name": "Mar de Nubes",
+  "version": "1.0.0",
   "minecraft_version": "1.20.1",
   "fabric_loader_version": "0.20.1",
-  "mods": [
-    {
-      "id": "sodium",
-      "version_id": "OihdIimA"
-    },
-    {
-      "id": "lithium",
-      "version_id": "iEcXOkz4"
-    },
-    {
-      "id": "ferrite-core",
-      "version_id": "unerR5MN"
-    },
-    {
-      "id": "immediatelyfast",
-      "version_id": "tF2vt38m"
-    }
-  ]
+  "mods": []
 }
