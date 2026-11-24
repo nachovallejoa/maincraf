@@ -1,53 +1,110 @@
-# Protocolo de rendimiento — Minecraft 1.20.1
+# Protocolo de benchmarks de rendimiento
 
 ## Estado
 
-No hay resultados de benchmark: no se ejecutó Minecraft ni se midieron FPS, 1% low, frametimes, RAM, CPU, GPU, disco o cargas. Tablas vacías intencionalmente. Hardware declarado en la entrada: Athlon 5150, Radeon R3 integrada, 12 GB RAM, HDD, Windows y 1280×720; no verificado independientemente. Controlador/OpenGL local: **[SIN VERIFICAR]**.
+- Protocolo; resultados **NO DATA**: no se ejecutó Minecraft ni se midieron FPS, frametimes, RAM, CPU/GPU, disco o cargas. Fuente: entrada de revisión indica que no hay resultados; el equipo/instancia tampoco fue probado en esta misión.
+- Hardware declarado, no verificado independientemente: AMD Athlon 5150 (4 núcleos/1,6 GHz), 12 GB RAM (~9,9 GB utilizables declarados), Radeon R3 integrada, HDD, Windows, 1280×720.
+- Driver local y APIs reportadas **NO DATA**: no se entregó versión/controlador ni lectura OpenGL/Vulkan.
+- Manifiesto/JARs **NO DATA** según inventario recibido; benchmark del pack completo bloqueado.
 
-## Objetivo y etapas
+## Objetivo
 
-Comparar bajo variables controladas: (G0) juego limpio; (G1) base mínima autorizada y builds exactas; (G2+) candidatos uno por vez; (G-final) pack real con manifiesto. Loader es una variable distinta; no tratar Fabric y Forge como comparación de una sola variable. Separar chunks existentes de generación nueva.
+Comparar de forma repetible juego limpio, base de optimización, grupos de mods y pack completo solo después de auditarlo. Separar renderizado, lógica/CPU, memoria, carga, frametimes, HDD y generación de chunks. No atribuir el efecto de un conjunto a un mod individual sin prueba aislada.
 
 ## Herramientas candidatas
 
-CapFrameX/PresentMon/RTSS para frametimes; HWiNFO o AMD Software para sensores; herramientas Windows para proceso/memoria/disco; cronómetro para cargas. Disponibilidad y sensores de Radeon R3: **[SIN VERIFICAR]**. Process Monitor es diagnóstico puntual, no captura rutinaria de FPS por su overhead. Si un sensor falta, anotar “no disponible”, no inferirlo.
+Usar una sola herramienta de captura de frametimes por serie. Confirmar disponibilidad y compatibilidad local. No asumir que todos los sensores de Radeon R3 están disponibles.
 
-## Variables y procedimiento
+| Herramienta | Uso | Estado |
+|---|---|---|
+| CapFrameX | Capturas de frametimes/FPS | Candidata; no ejecutada |
+| PresentMon | Captura de presentación/frame | Candidata; no ejecutada |
+| HWiNFO | Sensores disponibles | Candidata; no ejecutada |
+| Task Manager | CPU, RAM, disco y GPU básicos | Candidata; no ejecutada |
+| WPR/WPA | Diagnóstico ETW separado | Candidata; no ejecutada |
 
-Registrar Windows/build, launcher, Minecraft, loader, Java, driver, lista de mods/versiones/hashes locales, configs, recursos, heap y argumentos JVM, resolución/modo/gráficos, plan de energía, procesos de fondo, ubicación de instancia/mundo y herramientas. No subir JARs.
+Si una lectura no está disponible, anotar “no disponible”; no deducir memoria gráfica compartida ni causa del cuello de botella.
 
-Usar instancia aislada y copias de mundos. Mantener constantes mundo/seed/dimensión/ruta/orientación/acciones/duración. Separar carga de proceso, menú, entrada al mundo y generación de chunks. Para terreno nuevo, restaurar estado inicial equivalente; no mezclar lectura de chunks existentes con generación. Mantener ModernFix en defaults, salvo que una prueba autorizada contraste otra configuración en perfil separado.
+## Variables constantes
 
-Fijar warm-up, duración y número de repeticiones antes de ver resultados. La propuesta recibida sugiere cinco repeticiones válidas; registrar número real, exclusiones y motivo, conservar todas las corridas. No cambiar mods/ajustes a mitad de serie. Guardar logs/capturas originales.
+Registrar y mantener iguales Minecraft, Java, loader, launcher, driver, resolución, modo de pantalla, VSync/límite FPS, heap, argumentos JVM, opciones de vídeo, mundo/semilla/dimensión, posición/orientación/ruta, packs de recursos, shaders y estado de programas en segundo plano.
+
+## Secuencia
+
+| Orden | Etapa | Estado |
+|---:|---|---|
+| 1 | Minecraft limpio + loader requerido | Pendiente |
+| 2 | Base candidata, tras auditar dependencias | Pendiente |
+| 3 | Grupos de mods, añadiendo uno por vez | Pendiente |
+| 4 | Pack completo, tras recibir manifiesto/JARs y aprobar compatibilidad | Bloqueado por falta de manifiesto |
+
+## Escenarios y repeticiones
+
+- **Chunks existentes:** copia idéntica de mundo ya generado; misma posición, cámara, ruta y acciones. Restaurar copia sin cambios antes de cada repetición.
+- **Chunks nuevos:** mismo mundo/semilla y zona no generada; copia limpia por repetición. No mezclar capturas de zona generada con nueva.
+- **Arranque/carga:** definir hitos de inicio/fin; registrar primera carga y posteriores por separado. La aparición de una pantalla no necesariamente significa que terminó la carga.
+- FPS/frametimes: al menos tres capturas válidas por configuración/escenario.
+- Arranque, carga y chunks nuevos: tres repeticiones por configuración/categoría comparada, restaurando el estado.
+- Conservar capturas individuales, intentos inválidos y motivo. Las repeticiones son protocolo, no resultados ni predicción.
 
 ## Métricas
 
-- FPS medio, 1% low y método de cálculo.
-- Frametime y stutters con umbral definido antes de medir.
-- CPU de proceso/total y por núcleo si está disponible.
-- Heap Java usado/máximo y memoria total del proceso/sistema por separado.
-- GPU y memoria gráfica solo si sensores fiables están expuestos.
-- Actividad de disco del dispositivo donde se alojan juego, instancia y mundo.
-- Tiempos de arranque, menú, mundo jugable y generación separados.
+| Métrica | Registro |
+|---|---|
+| FPS medio | Por captura; vacío hasta medir. |
+| 1% low | Herramienta y definición; no asumir definiciones intercambiables. |
+| Frametime/stutter | Distribución, gráfico y picos observados. |
+| CPU | Uso total/por núcleo y herramienta. |
+| RAM | Proceso Java y/o sistema; indicar columna exacta. |
+| GPU/memoria gráfica | Solo si hay lectura disponible y utilizable. |
+| Inicio/carga de mundo | Tiempo por repetición e hitos. |
+| Chunks nuevos | Mismo recorrido; registrar solo lo medido. |
+| HDD | Lecturas disponibles; no inferir causa por sí sola. |
+| Logs/archivos | Ruta, fecha y hash de capturas/logs; no subir JARs. |
 
-No confundir heap máximo con memoria total del proceso ni memoria compartida con VRAM física. No extrapolar rendimiento desde textos promocionales u otros equipos.
+## Registro de ejecución (plantilla)
 
-## Seguridad y validez
+| Campo | Valor |
+|---|---|
+| ID/fecha/responsable | |
+| Etapa y mods exactos | |
+| Minecraft/Java/loader | |
+| Manifiesto y hash | |
+| Driver/versión | |
+| Resolución/VSync/límite | |
+| Distancias de render/simulación | |
+| Ajustes gráficos | |
+| Heap/JVM | |
+| Mundo/semilla/dimensión/copia | |
+| Escenario/ruta | |
+| Calentamiento/caché | |
+| Herramienta/versión | |
+| Sensores disponibles | |
+| Capturas/logs | |
+| Incidencias | |
 
-Detener ante crash, corrupción/pérdida, funciones ausentes, regresión visual, falta de memoria o alerta térmica considerada insegura. Usar respaldos. Marcar inválidas las corridas interrumpidas explicando el motivo; repetir sin borrar registro. Un resultado aislado no demuestra mejora universal.
+## Resultados por repetición — tabla vacía; aún no hay mediciones
 
-## Tabla por repetición — vacía, sin mediciones
+| Etapa | Configuración | Escenario | Repetición | FPS medio | 1% low | Frametime | CPU | RAM | GPU si disponible | Inicio | Mundo | Chunks nuevos | Captura/log | Notas |
+|---|---|---|---:|---|---|---|---|---|---|---|---|---|---|---|
+| | | | 1 | | | | | | | | | | | |
+| | | | 2 | | | | | | | | | | | |
+| | | | 3 | | | | | | | | | | | |
 
-| ID | Fecha | Etapa/mods exactos | Loader/Java | Escenario | Mundo/seed/coords | Repetición | FPS medio | 1% low/método | Frametime | CPU | RAM sistema | Heap usado/máximo | GPU/sensor | Disco | Proceso→menú | Entrada→jugable | Chunks nuevos | Validez/notas |
-|---|---|---|---|---|---|---:|---:|---|---|---|---|---|---|---|---|---|---|---|
-|  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |
-
-## Resumen — vacío
+## Resumen — sin resultados
 
 | Caso | Escenario | Repeticiones válidas | FPS/frametimes | RAM/CPU/GPU/disco | Compatibilidad | Decisión/aprobador |
 |---|---|---:|---|---|---|---|
-|  |  |  |  |  |  |  |
+| | | | | | | |
 
-## Conclusión pendiente
+## Validez y decisión
 
-Completar solo con mediciones: comparación control/base, diferencias repetibles, regresiones visuales/funcionales, limitación respaldada por sensores, estabilidad RPG y decisión autorizada. Hasta entonces no atribuir mejora ni aprobar combinación.
+Repetir y conservar el dato original si cambió escena/ajustes, hubo actividad excepcional del sistema, pérdida de captura, pausa/cambio de ventana o estado de chunks distinto. No declarar mejora con una captura ni solo con FPS medio. Completar decisión únicamente con mediciones, diferencias repetibles, regresiones funcionales/visuales, limitaciones y aprobación responsable.
+
+| Campo | Resultado |
+|---|---|
+| Configuración elegida | |
+| Evidencia | |
+| Limitaciones | |
+| Capturas/logs conservados localmente | |
+| Aprobación del responsable y fecha | |
