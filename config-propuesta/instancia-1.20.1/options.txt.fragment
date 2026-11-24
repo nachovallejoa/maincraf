@@ -1,21 +1,5 @@
 # Fragmento propuesto para options.txt de Minecraft 1.20.1.
-# NO es un archivo completo. No reemplazar el options.txt generado por Minecraft.
-# Fusionar con cuidado en una instancia aislada y comprobar los valores en el juego.
-# Valores propuestos, no ajustes medidos para este equipo.
-version:3465
-renderDistance:4
-simulationDistance:5
-particles:2
-renderClouds:false
-entityShadows:false
-mipmapLevels:0
-graphicsMode:0
-ao:false
-enableVsync:false
-prioritizeChunkUpdates:0
-biomeBlendRadius:0
-entityDistanceScaling:0.5
-maxFps:260
-
-# Referencia de formato/opciones: https://minecraft.wiki/w/Options.txt_(Java_Edition)
-# Minecraft debe generar/guardar el archivo completo. Resolución no forzada.
+# NO ES UN ARCHIVO COMPLETO NI PRESET VALIDADO; no sustituir el options.txt del juego.
+# En esta revisión no se verificaron las claves, rangos y serialización exactos ni su impacto.
+# Mantener como referencia no precargable; validar cada ajuste en instancia aislada y con autorización.
+# Valores de la propuesta anterior omitidos para evitar presentarlos como configuración recomendada.
