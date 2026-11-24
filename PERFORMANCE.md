@@ -1,51 +1,53 @@
-# Protocolo de rendimiento reproducible
+# Protocolo de rendimiento — Minecraft 1.20.1
 
-**Estado:** protocolo; no contiene resultados. No se instaló ni ejecutó Minecraft y no se realizaron benchmarks en esta misión. Las tablas de medición siguen vacías.
-**Hardware declarado:** Athlon 5150, Radeon R3, 12 GB RAM (~9,9 GB utilizables declarados), HDD, Windows, 1280×720; no verificado independientemente. API/controlador gráfico local: [SIN VERIFICAR].
+## Estado
 
-## Objetivo y casos
+No hay resultados de benchmark: no se ejecutó Minecraft ni se midieron FPS, 1% low, frametimes, RAM, CPU, GPU, disco o cargas. Tablas vacías intencionalmente. Hardware declarado en la entrada: Athlon 5150, Radeon R3 integrada, 12 GB RAM, HDD, Windows y 1280×720; no verificado independientemente. Controlador/OpenGL local: **[SIN VERIFICAR]**.
 
-Comparar Minecraft 1.20.1 limpio, base candidata, candidatos incrementales y —cuando se disponga— el pack RPG real. No reemplazar la etapa del pack por uno hipotético.
+## Objetivo y etapas
 
-1. Instancia limpia sin optimizadores ni contenido RPG.
-2. Base candidata Fabric, builds exactas verificadas previamente: Sodium 0.5.13, Lithium 0.11.4, FerriteCore 6.0.1, ModernFix 5.25.2+mc1.20.1, ImmediatelyFast 1.5.5+1.20.4-fabric (rango publicado 1.20–1.20.4).
-3. Comparar cada candidato por separado con la base; opcionales nunca todos juntos al inicio.
-4. Pack RPG completo solo con manifiesto real. Sin manifiesto, declarar etapa pendiente.
+Comparar bajo variables controladas: (G0) juego limpio; (G1) base mínima autorizada y builds exactas; (G2+) candidatos uno por vez; (G-final) pack real con manifiesto. Loader es una variable distinta; no tratar Fabric y Forge como comparación de una sola variable. Separar chunks existentes de generación nueva.
 
-## Condiciones y procedimiento
+## Herramientas candidatas
 
-- Crear perfiles aislados y respaldar mundos; registrar MC, loader, Java, argumentos, mods exactos, configuraciones, hashes locales si disponibles y logs. No subir binarios de mods.
-- Confirmar GPU/controlador/API local antes de atribuir un resultado a Sodium.
-- Mantener constantes mundo/semilla, ruta, orientación, resolución, ajustes, launcher, Java, energía, procesos de fondo y duración. Registrar herramientas/versiones.
-- Separar chunks existentes y nuevos. Para generación nueva, restaurar la misma copia/estado inicial; no confundir con lectura de regiones ya generadas.
-- Medir arranque, menú, entrada/carga del mundo y generación como eventos separados; distinguir caché fría de caliente.
-- ModernFix en predeterminados en la base; cualquier override solo en perfil copia.
-- Usar una herramienta principal de frametimes en toda la serie. Guardar CSV/logs/capturas originales. No ejecutar capturadores concurrentes.
-- Objetivo: cinco repeticiones válidas por caso; anotar número real y exclusiones. No cambiar mods y ajustes gráficos a la vez.
-- FPS medio, frametimes y 1% low deben incluir método/definición; registrar RAM del juego/sistema, CPU, GPU, disco, inicio y carga. Si un sensor no está disponible, marcar “no disponible”, no estimar.
-- CapFrameX/PresentMon, RTSS, HWiNFO, AMD Software o PerfMon son herramientas candidatas, no resultados; comprobar disponibilidad local.
+CapFrameX/PresentMon/RTSS para frametimes; HWiNFO o AMD Software para sensores; herramientas Windows para proceso/memoria/disco; cronómetro para cargas. Disponibilidad y sensores de Radeon R3: **[SIN VERIFICAR]**. Process Monitor es diagnóstico puntual, no captura rutinaria de FPS por su overhead. Si un sensor falta, anotar “no disponible”, no inferirlo.
 
-## Tabla por repetición (sin datos; ninguna medición recibida)
+## Variables y procedimiento
 
-| Caso/ID | Escenario | Repetición | MC/loader/Java | Mods exactos | FPS medio | 1% low y método | Frametime | CPU | RAM juego/sistema | GPU/disco | Inicio/mundo/generación | Incidencias/archivo |
-|---|---|---:|---|---|---|---|---|---|---|---|---|---|
-| | | | | | | | | | | | | |
-| | | | | | | | | | | | | |
-| | | | | | | | | | | | | |
-| | | | | | | | | | | | | |
-| | | | | | | | | | | | | |
+Registrar Windows/build, launcher, Minecraft, loader, Java, driver, lista de mods/versiones/hashes locales, configs, recursos, heap y argumentos JVM, resolución/modo/gráficos, plan de energía, procesos de fondo, ubicación de instancia/mundo y herramientas. No subir JARs.
 
-## Resumen (pendiente de mediciones)
+Usar instancia aislada y copias de mundos. Mantener constantes mundo/seed/dimensión/ruta/orientación/acciones/duración. Separar carga de proceso, menú, entrada al mundo y generación de chunks. Para terreno nuevo, restaurar estado inicial equivalente; no mezclar lectura de chunks existentes con generación. Mantener ModernFix en defaults, salvo que una prueba autorizada contraste otra configuración en perfil separado.
 
-| Caso | Escenario | Repeticiones válidas | FPS/frametimes | RAM/CPU/GPU/disco | Compatibilidad | Conclusión autorizada |
+Fijar warm-up, duración y número de repeticiones antes de ver resultados. La propuesta recibida sugiere cinco repeticiones válidas; registrar número real, exclusiones y motivo, conservar todas las corridas. No cambiar mods/ajustes a mitad de serie. Guardar logs/capturas originales.
+
+## Métricas
+
+- FPS medio, 1% low y método de cálculo.
+- Frametime y stutters con umbral definido antes de medir.
+- CPU de proceso/total y por núcleo si está disponible.
+- Heap Java usado/máximo y memoria total del proceso/sistema por separado.
+- GPU y memoria gráfica solo si sensores fiables están expuestos.
+- Actividad de disco del dispositivo donde se alojan juego, instancia y mundo.
+- Tiempos de arranque, menú, mundo jugable y generación separados.
+
+No confundir heap máximo con memoria total del proceso ni memoria compartida con VRAM física. No extrapolar rendimiento desde textos promocionales u otros equipos.
+
+## Seguridad y validez
+
+Detener ante crash, corrupción/pérdida, funciones ausentes, regresión visual, falta de memoria o alerta térmica considerada insegura. Usar respaldos. Marcar inválidas las corridas interrumpidas explicando el motivo; repetir sin borrar registro. Un resultado aislado no demuestra mejora universal.
+
+## Tabla por repetición — vacía, sin mediciones
+
+| ID | Fecha | Etapa/mods exactos | Loader/Java | Escenario | Mundo/seed/coords | Repetición | FPS medio | 1% low/método | Frametime | CPU | RAM sistema | Heap usado/máximo | GPU/sensor | Disco | Proceso→menú | Entrada→jugable | Chunks nuevos | Validez/notas |
+|---|---|---|---|---|---|---:|---:|---|---|---|---|---|---|---|---|---|---|---|
+|  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |
+
+## Resumen — vacío
+
+| Caso | Escenario | Repeticiones válidas | FPS/frametimes | RAM/CPU/GPU/disco | Compatibilidad | Decisión/aprobador |
 |---|---|---:|---|---|---|---|
-| | | | | | | |
-| | | | | | | |
+|  |  |  |  |  |  |  |
 
-## Límites
+## Conclusión pendiente
 
-- Un resultado de una escena no demuestra mejora universal ni permite extrapolar a la Radeon R3 sin medición local.
-- Separar generación de chunks nuevos de lectura de chunks guardados.
-- No inferir rendimiento desde textos promocionales o benchmarks de otros equipos.
-- No retirar/reemplazar mods solo por FPS; considerar compatibilidad, mantenimiento, calidad y autorización explícita.
-- Dejar vacías las métricas que no se midan e indicar la limitación.
+Completar solo con mediciones: comparación control/base, diferencias repetibles, regresiones visuales/funcionales, limitación respaldada por sensores, estabilidad RPG y decisión autorizada. Hasta entonces no atribuir mejora ni aprobar combinación.
