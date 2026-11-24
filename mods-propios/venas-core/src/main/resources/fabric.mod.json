@@ -1,0 +1,18 @@
+{
+  "schemaVersion": 1,
+  "id": "venas_core",
+  "version": "${version}",
+  "name": "Venas del Cielo: Núcleo",
+  "description": "Núcleo interno para estado y persistencia de campaña.",
+  "environment": "*",
+  "entrypoints": {
+    "main": [
+      "com.venasdelcielo.core.VenasCore"
+    ]
+  },
+  "depends": {
+    "fabricloader": ">=0.20.1",
+    "minecraft": "1.20.1",
+    "fabric-api": ">=0.92.12"
+  }
+}
