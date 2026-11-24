@@ -1,131 +1,147 @@
-# Diseño de juego — La Marea de los Mil Soles
+# Diseño de mecánicas — La Marea de los Mil Soles
 
-> **Estado: propuesta de diseño pendiente de aprobación e implementación.** No confirma compatibilidad entre mods, rendimiento ni correspondencia independiente con la historia aprobada. Los datos marcados **[SIN VERIFICAR]** o pendientes no se completan por inferencia.
+> **Estado: propuesta de diseño pendiente de aprobación final e implementación.** No confirma compatibilidad de mods ni correspondencia independiente con la historia aprobada. Las afirmaciones sobre nombres, escenas, decisiones y desenlaces quedan **[SIN VERIFICAR]** cuando la fuente de historia no está incluida. Los mods son candidatos, no selecciones aprobadas.
 
-## Alcance y principios
+## Alcance, principios y pendientes
 
-Se conservan regiones compactas, transiciones controladas, seis encuentros de jefe, secundarias de peso medio y cuatro desenlaces según la propuesta. Las clases son perfiles, no facciones, y ninguna bloquea misiones. La Ballena no está subordinada a Veyr; las visiones no son certezas; el equipo no determina por sí solo un desenlace. La conexión entre el Almirante Sumergido y Veyr queda **[SIN VERIFICAR]**. Tratar la Ballena como encuentro de jefe/decisión, no como combate obligatorio.
+- Diseño revisado consolidado en esta versión. Clase, nivel, reputación o victoria en combate no deciden por sí solos rutas principales ni finales; las condiciones narrativas y el resultado de encuentro se guardan como estados distintos.
+- Clases opcionales; ninguna clase pierde pruebas, decisiones, información necesaria o rutas principales. Pueden cambiar el modo de obtener o interpretar información.
+- Regiones compactas, arenas controladas y pocos enemigos simultáneos. Evitar generación procedural pesada, movimiento físico de islas, cambios masivos de bloques, lógica continua por tick, entidades y efectos innecesarios.
+- Minecraft 1.20.1 + Fabric es perfil provisional, pendiente de aprobación y verificación de instancia. Compatibilidad de mods, APIs y rendimiento: **[SIN VERIFICAR]**. Equipo objetivo declarado: Athlon 5150, Radeon R3 y HDD; RAM, sistema operativo, configuración completa y benchmarks no proporcionados.
+- Valores de equilibrio y rendimiento no se presuponen. Propuesta autorizada como diseño, no como implementación.
 
-Un único propietario para niveles/estadísticas, un solo árbol de habilidades como base y un sistema de misiones. Reputación, decisiones persistentes, rutas y jefes específicos requieren implementación o integración aún no verificada. Los mods son candidatos, no selecciones aprobadas.
+## 1. Clases y atributos
 
-## Clases
+Las clases describen estilos, no afiliaciones y no cambian por sí solas reputación, misiones o finales.
 
-| Clase | Función | Estadísticas principales | Relación narrativa |
+| Clase | Papel | Atributos que aprovecha | Vínculo temático, no afiliación |
 |---|---|---|---|
-| **Guardacorrientes** | Defensa, protección y control de espacio; aguanta presión, cubre aliados y crea oportunidades para mecanismos. | Vigor y Temple. | Puede colaborar con la Liga del Lastre; no implica pertenencia ni prioridades compartidas. |
-| **Vigía del Prisma** | Observación, precisión y lectura del campo; detecta señales y orienta exploración. | Percepción y Técnica. | Afinidad temática con mapas/registros de los Cartógrafos, sin membresía obligatoria. |
-| **Rompeanclas** | Combate directo y manipulación de mecanismos mediante fuerza, herramientas u oficio. | Técnica y Vigor. | Encaja con maquinaria y nodos, sin imponer afiliación ni violencia como solución universal. |
+| **Guardacorriente** | Defensa, protección y control del espacio; crea momentos seguros para observar o avanzar. | Vigor y Temple. | Afinidad temática con la Liga del Lastre; elegirla no apoya sus cierres ni altera relación. |
+| **Vigía del Prisma** | Observación, movilidad y lectura de señales, terreno e información. | Percepción y Agilidad. | Afinidad temática con los Cartógrafos; no restringe el acceso a conocimiento ni implica apoyo. |
+| **Rompeanclas** | Combate directo, presión contra guardianes y manipulación de mecanismos, con mayor riesgo. | Agilidad y Temple. | Afinidad temática con quienes cuestionan o alteran la Trama; no decide destruir nodos ni una postura narrativa. |
 
-Diferenciación a probar: Guardacorrientes prioriza defensa/apoyo; Rompeanclas, presión y acciones comprometidas; Vigía, precisión e información. Deben ser viables en solitario. La lectura del Vigía no da daño gratis ni resuelve automáticamente encuentros.
+Atributos comunes propuestos:
+- **Vigor:** salud y resistencia a interrupciones.
+- **Agilidad:** recuperación entre acciones y movilidad de combate.
+- **Percepción:** lectura de señales, oportunidades y elementos explorables.
+- **Temple:** acciones técnicas, control de mecanismos y resistencia a efectos de combate.
 
-## Árboles de habilidades y arquetipos
+Valores iniciales, límites, fórmulas, efectos cuantificados y coste/política de reinicio: pendientes; no inventados. Atributos y clases deben variar la respuesta, no eliminar pruebas ni información necesaria.
 
-Tres ramas propuestas por clase; nodos, rangos, costes y requisitos concretos pendientes. Las habilidades no son requisitos exclusivos de misiones; obstáculos principales admiten interacción alternativa, objeto o ruta.
+## 2. Árboles de habilidades y builds
 
-### Guardacorrientes
-- **Baluarte:** reducir daño, proteger a un aliado cercano, resistir interrupciones y sostener posición ante ataques telegrafiados.
-- **Control de corriente:** frenar/apartar enemigos, interrumpir cargas señaladas y crear zonas seguras breves.
-- **Vigilia del refugio:** recuperación entre encuentros, detección de rutas peligrosas y opciones defensivas al usar mecanismos.
-- Arquetipos no balanceados: **Baluarte** (aguante/protección, menos daño), **Interdictor** (interrupción/espacio dependientes de lectura), **Escolta** (protección y utilidad).
+Cada clase tiene tres ramas propuestas de cinco nodos (mejoras menores, técnica activa y especialización final como objetivo). No son llaves de misión. Se conservan los 29 puntos de habilidad propuestos y, como **parámetro inicial de pruebas**, se propone coste de tres puntos por nodo: 15 nodos costarían 45 puntos por clase, por lo que no se completan con 29. No es balance probado ni se presupone mezclar árboles de clases diferentes.
 
-### Vigía del Prisma
-- **Lectura del reflejo:** marcar vulnerabilidades, distinguir señales y revelar pistas de orientación; no convierte visiones en certeza.
-- **Tiro de precisión:** ataques fiables contra blancos marcados y herramientas para ventanas breves.
-- **Cartografía práctica:** buscar desvíos, mecanismos y testimonios sin revelar automáticamente la solución.
-- Arquetipos: **Tirador** (precisión a un objetivo, vulnerable si no aprovecha ventanas), **Analista** (información/apoyo, daño moderado), **Explorador** (observación, rutas y combate).
+**Guardacorriente**
+- **Baluarte:** mitiga presión al mantener posición y protege aliado/interacción. Build: *Muro de ruta*.
+- **Ancla móvil:** recuperación tras esquiva/bloqueo y reposicionamiento. Build: *Escolta*.
+- **Señal de repliegue:** técnica activa que interrumpe o distrae brevemente, gana espacio, no elimina grupos. Build: *Rescatista*.
 
-### Rompeanclas
-- **Impacto:** golpes comprometidos contra armaduras, piezas expuestas y mecanismos vulnerables.
-- **Desmontaje:** interrumpir acciones mecánicas y abrir oportunidades al manipular dispositivos.
-- **Oficio de campo:** reparar, forzar o activar dispositivos durante exploración y encuentros.
-- Arquetipos: **Quebrador** (oportunidad contra protegidos, más exposición), **Ingeniero** (mecanismos/guardianes, menos daño directo), **Vanguardia** (presión y supervivencia en espacios cerrados).
+**Vigía del Prisma**
+- **Lectura de reflejos:** vuelve legibles algunas señales; los reflejos no son predicciones ciertas. Build: *Intérprete*.
+- **Paso de corriente:** esquiva y reposicionamiento para atacar tras apertura. Build: *Navegante*.
+- **Cartografía de campo:** señala pistas, rutas o mecanismos disponibles tras observar; no abre rutas contra condiciones narrativas. Build: *Explorador*.
 
-## Niveles y estadísticas
+**Rompeanclas**
+- **Golpe de fractura:** premia atacar aperturas del guardián o mecanismo. Build: *Desestabilizador*.
+- **Pulso de mecanismo:** mejora interacciones previstas en el encuentro, sin conceder acceso principal fuera de condiciones narrativas. Build: *Técnico*.
+- **Ruptura controlada:** potencia concentrada tras una apertura con menor tolerancia al error. Build: *Asaltante*.
 
-Nivel máximo propuesto: 30. XP para pasar de nivel L al siguiente: **100 + 35 × (L − 1)**. Ejemplos: 1→2 = 100 XP; 10→11 = 415 XP. La suma de umbrales 1→30 (niveles 1 a 29) es **17.110 XP**. Cada nivel ganado concede 1 punto de estadística y 1 punto de habilidad. Asignación inicial en nivel 1: pendiente, no presupuesta.
+Se puede concentrar la inversión en una rama o repartirla entre dos; no se presupone completar las tres. Técnicas legibles y con recuperación clara. Todas las clases necesitan una respuesta viable en todos los encuentros; información o interacción imprescindible debe seguir accesible sin habilidad concreta.
 
-La campaña principal debe bastar para progresar; secundarias son alternativas y no requisitos de nivel obligatorio. No XP repetible por matar indefinidamente enemigos comunes. XP por misión, descubrimiento, encuentro y jefe no está especificada, por lo que no se garantiza alcanzar nivel 30 sin repetición.
+## 3. Niveles, estadísticas y experiencia
 
-- **Vigor:** salud máxima y resistencia a daño físico.
-- **Técnica:** eficacia de armas, herramientas y acciones contra mecanismos.
-- **Percepción:** precisión, lectura de señales y detección de oportunidades.
-- **Temple:** estabilidad ante interrupciones y eficacia defensiva/de apoyo.
+- Nivel máximo propuesto: **30**.
+- Un punto de atributo en cada nivel par del 2 al 30: **15 puntos**.
+- Un punto de habilidad por cada subida tras nivel 1: **29 puntos** al nivel 30.
+- XP para pasar de nivel L al siguiente: **100 + 25 × (L − 1)**. Suma para pasar de nivel 1 a 30: **13.050 XP**.
+- No se requiere nivel para misiones principales, relación con facciones ni finales. La campaña principal debería dejar una build funcional sin secundarias, pero falta presupuesto de XP por acto; es objetivo por verificar, no garantía.
+- No definidos: valores iniciales, límites y fórmulas de atributos, XP inicial, coste de reinicio y efectos cuantificados.
 
-Fuentes propuestas: objetivos principales, secundarias, descubrimientos relevantes, resolución de encuentros con recompensa fija moderada y primera victoria de jefe con recompensa importante. Beneficios y curva requieren pruebas; no hay cifras que demuestren equilibrio o viabilidad solitaria.
+Fuentes propuestas: hitos principales, jefes o resolución alternativa válida, exploración relevante y secundarias de peso medio. Combate ordinario da XP menor y no debe ser fuente eficiente repetible. Intervalos iniciales de prueba: hito principal 450–700 XP; encuentro de jefe 500–800 XP; secundaria 150–300 XP; pista relevante 40–90 XP. No validados. Cada hito recompensa una sola vez; alternativa narrativa válida al jefe debe dar igual XP de encuentro que derrotarlo.
 
-## Equipo y rarezas
+## 4. Equipamiento y rarezas
 
-Rarezas fijas y legibles; cambian principalmente la función, no multiplican daño:
-- **Común:** equipo inicial fiable y reparable.
-- **Mejorado:** ventaja clara y moderada.
-- **Raro:** habilidad/especialización reconocible.
-- **Reliquia:** pieza singular ligada a decisión, jefe o descubrimiento; no superior para todas las builds.
+Equipo amplía opciones sin reemplazar progresión narrativa ni requerir repetición. Rarezas propuestas, no escala de poder validada:
+1. **Corriente:** equipo común, estadística base, sin efecto extra.
+2. **Afinado:** mejora pequeña o utilidad situacional.
+3. **Singular:** efecto temático fijo, ligado a exploración, decisión o reto concreto.
+4. **Reliquia de ancla:** objeto narrativo único; uso y adquisición deben respetar decisiones del acto.
 
-Equipo relevante por misiones, exploración controlada, comercio o jefes, no por farmeo aleatorio. Progresión por acto: Prólogo, equipo común y mejora sencilla ligada al faro/evacuación y pieza del Mastín; Oria, supervivencia, plaga, cultivos y ancla; Dársena, equipo mecánico/defensivo, comercio o planos; Fosa, rutas peligrosas, comunidad y comercio de flota; Nimbo, observación y registros; Acto V, mejoras finales de nodos, misiones y preparación. Las decisiones cambian recursos/apoyos descritos, no cierran facciones ni determinan desenlace. Objetos, estadísticas y cantidades no especificados siguen pendientes.
+Recompensas fijas y no repetibles; ningún objeto imprescindible depende de botín aleatorio. No se fijan magnitudes, límites ni efectos cuantificados por falta de balance. El equipo inicial puede seguir útil para una build adecuada.
 
-## Combate
+- Prólogo/Cabo: equipo común y primera pieza Afinada posible por evacuación/faro/suministros; pieza de Trama narrativa, no botín aleatorio.
+- Oria: utilidad de raíces/cultivos y posible Singular opcional ligada a investigación o encuentro.
+- Dársena: herramientas/protección de archivos y refugios; recompensar pruebas y planes.
+- Fosa: movilidad/supervivencia y recursos no repetibles.
+- Nimbo: Singular ligado a registros/testimonios y expedición de Lena.
+- Corona: mejoras de utilidad por rutas/nodos; Reliquia puede participar en resolución sin forzar final.
 
-Encuentros normales con pocos enemigos simultáneos, espacio para leer señales y, si corresponde, salida o solución contextual. Roles de diseño (no mobs atribuidos a mods): hostigador, defensor, tirador/lanzador, mecánico y guardián pesado. Ataques anunciados y cobertura/alternativas legibles.
+No duplicar pieza narrativa de Trama como recompensa del Mastín salvo que lo establezca la historia aprobada (**[SIN VERIFICAR]**). RPG Inventory se excluye del requisito inicial: añade ranuras, no rarezas. Tierify/TieredZ no seleccionados; versiones exactas y compatibilidad no verificadas.
 
-- Guardacorrientes sostiene línea, protege durante señales y crea ventana segura; menor daño sostenido que Rompeanclas.
-- Vigía identifica blancos/señales, castiga a distancia y evita algunos peligros; más vulnerable acorralado. Información no resuelve automáticamente.
-- Rompeanclas presiona objetivos resistentes y altera dispositivos asumiendo riesgo.
+## 5. Combate
 
-Todos los jefes deben poder abordarse en solitario con cada clase: objetivo de diseño por probar, no balance verificado. Sin cifras de vida, daño, recursos o ventanas no se demuestra la dificultad.
+Combate de señales legibles, posicionamiento y ventanas; errores ocasionales tolerables, desplazamiento sin penalización constante y sin escalado ilimitado de salud. Roles: hostigadores (flancos/reposición), defensores (bloqueo/protección), interrumpidores (ataque fuerte anunciado), vigías/apoyos (preparan ataques o alteran espacio), guardianes de mecanismo (protegen interacción, pueden tener alternativas contextuales). Encuentros ordinarios compactos, como máximo dos roles simultáneos.
 
-## Seis encuentros de jefe propuestos
+- Guardacorriente: sostiene posición, protege interacción o crea repliegue.
+- Vigía: reconoce señales y usa movilidad; no tiene visión infalible.
+- Rompeanclas: interrumpe o concentra daño en apertura, con menos margen para combate prolongado.
 
-No se adjunta una fuente independiente de historia para verificar nombres/eventos; la correspondencia queda **[SIN VERIFICAR]**. Mecánicas y recompensas son diseño, no contenido de mods. Recompensas aportan progreso, no seleccionan desenlace.
+Cada encuentro debe tener respuesta viable para las tres clases y alternativa no dependiente de técnica concreta. Better Combat y demás interoperabilidad no verificados.
 
-1. **Mastín de Lastre — Cabo de las Campanas.** Guardián peligroso, no necesariamente maligno. Carga señalada, presión frontal y placas con abertura breve; mecanismo del faro puede frenar una carga. Fases: aprender patrón, luego gestionar ventanas menores sin carrera de daño. Recompensa descrita: pieza del mecanismo y materiales de mejora temprana; decidir quién conserva pieza es narrativo. Avanza investigación del faro/flota.
-2. **Madre de los Zarcillos Aéreos — Jardines de Oria.** Protectora de raíces ligadas al ancla. Zonas de raíces señaladas; atacar apertura, reposicionarse o usar anclaje para pausa; no es obligatorio dañar raíces indiscriminadamente. Foco: control espacial y anclaje. Recompensa: testimonios/recursos del ancla; no decide su destino. Avance a registros/rutas de Oria.
-3. **Custodio de Remaches — Dársena.** Seguridad de la Liga llevada al extremo. Pistones anunciados, defensa frontal y remaches desactivables/expuestos en pausa; ángulo, bloqueo o mecanismo. Foco: defensa frontal y ciclo mecánico, diferenciado de Madre. Recompensa: planos/materiales. No obliga a publicar pruebas o negociar primero.
-4. **Ballena de Lastre — Fosa.** Criatura afectada por corrientes atrapadas, no subordinada a Veyr. Encuentro de contención/decisión, no matar obligatoriamente. Trayectorias cambian espacio seguro; señales permiten refugiarse, abrir paso o retirarse. Resolver por interacción o combate contenido. Recompensa: ruta elegida e información; ayudar comunidad abre comercio/misiones de flota descritas. Ahuyentarla implica ruta más larga.
-5. **Corista Ciego — Nimbo de Vidrio.** Guardián de registros que muestran que las visiones no son certezas. Pulsos sonoros y reflejos; leer ritmo, dirección o cobertura, sin asumir veracidad de escenas. Fases de aprender pulsos y combinar lectura/aperturas con señales contradictorias. Recompensa: registros y comparación con testimonios; avance a tres futuros posibles y elección de destinatario.
-6. **Almirante Sumergido — Corona de Espejos/Atrio.** Antagonista final que pretende fijar una versión del mundo. Relación con Veyr: **[SIN VERIFICAR]**. Arena delimitada; reflejos/entidades acotados. Fases: órdenes y ataques, interrumpir/sobrevivir mando, disputar núcleo en ventanas anunciadas. Apoyos previos abren ayudas sin sustituir combate. Recompensa: acceso a la elección descrita (matar a Veyr, apartarlo del núcleo o persuadirlo para soltar Trama); no elige opción. Requisitos de los cuatro desenlaces pendientes.
+## 6. Seis jefes propuestos
 
-La Madre y el Custodio comparten mecanismos/interrupción pero sus focos difieren como arriba. Recompensas más concretas para Mastín y Corista; no inventar objetos/estadísticas/cantidades para otros. Sin multitudes permanentes; riesgo de entidades/IA/efectos finales requiere medir.
+Son contenido propio propuesto, no mecánicas implementadas por mods. Arenas delimitadas, fases legibles, enemigos simultáneos acotados. Victoria no decide automáticamente consecuencias narrativas.
 
-## Reputación y facciones
+1. **Mastín de Lastre — Cabo de las Campanas:** guardián peligroso, no necesariamente maligno; carga anunciada y placas con apertura; mecanismo del faro puede frenar carga. XP y pista de rastreo de Flota. Consecuencias de evacuación sobre suministros, apoyo y contactos separadas del combate. Recompensa narrativa exacta **[SIN VERIFICAR]**.
+2. **Madre de los Zarcillos Aéreos — Jardines de Oria:** raíces con ataques telegrafiados y aperturas; responder a criatura o entorno expone vínculo con ancla. XP/testimonio o recurso; no decide conservar, modificar o abandonar el ancla.
+3. **Custodio de Remaches — Dársena:** defensa por sectores, patrón y arena abren oportunidades. Preparación, refugio y pruebas aportan contexto/alternativas. XP y acceso a archivo/refugio/prueba según preparación; victoria no automatiza decisión.
+4. **Ballena de Lastre — Fosa:** corrientes atrapadas y restos alteran espacio; contención/interacción o combate; no es subordinada de Veyr ni necesariamente maligna. Despejar habilita ruta segura; dejarla permite avanzar por ruta más larga viable, sin bloquear acto. Relación de tripulaciones independiente.
+5. **Corista Ciego — Nimbo:** señales y reflejos inciertos; distinguir aperturas sin asumir veracidad de escenas. XP y registros sobre expedición de Lena; decisión de compartir/reservar sigue separada.
+6. **Almirante Sumergido / Veyr — Corona:** arena delimitada, fases claras y pocos enemigos; presión sobre nodos/Trama. Condiciones previas pueden permitir matar a Veyr, apartarlo del núcleo o persuadirlo para soltar la Trama. XP final; no fija por sí solo uno de los cuatro finales. Relación con Flota es un estado aparte; conexión histórica Almirante–Veyr **[SIN VERIFICAR]**.
 
-Cuatro valores separados propuestos: Liga del Lastre (incl. Tavia Renn), Cartógrafos del Prisma (Maela Orin), Hermandad del Vaivén (Saira Nume), Flota Sumergida (lealtades diversas, no bloque enemigo). Escala 0–100 solo formato provisional; valores, cambios y umbrales pendientes. Una decisión puede alterar relaciones distintas, sin enemistad automática.
+Bosses of Mass Destruction añade jefes distintos y no sustituye estos encuentros; su uso no se recomienda para cubrir la campaña.
 
-Efectos propuestos: comercio y suministros moderados; servicios/refugios/testimonios; apoyos o información para transiciones controladas; apoyo final condicionado a misiones/decisiones pero no universalmente obligatorio. Nunca impedir equipo básico/campaña. No hay umbral de reputación fijado para final. Ámbito de guardado (jugador, mundo/equipo o mixto) pendiente.
+## 7. Reputación y facciones
 
-Se conservan cuatro nombres de propuesta: **Cielo inmóvil, Cielo medido, Cielo libre y Marea pactada**. Testimonios y decisiones de varios actos pueden contribuir; requisitos cuantificados no definidos y no se derivan automáticamente de reputación, equipo o victoria. Correspondencia con historia aprobada **[SIN VERIFICAR]**.
+Escala propuesta −2 a +2 para cuatro facciones, sin cambios por matar enemigos. Cambios por decisión y umbrales no definidos: hasta documentarlos, reputación no es requisito de ruta/final ni autoridad única. Registrar rutas, refugios, pruebas, testimonios y condiciones como estados específicos.
 
-## Progresión por actos y dificultad orientativa
+- **Liga del Lastre — Tavia Renn:** apoyo puede facilitar refugios/suministros/rutas seguras; cierres pueden trasladar peligro.
+- **Cartógrafos del Prisma — Maela Orin:** cooperación facilita mapas/testimonios; compartir puede ayudar y concentrar poder.
+- **Hermandad del Vaivén — Saira Nume:** confianza facilita rutas/decisiones comunitarias, no garantiza supervivencia universal.
+- **Flota Sumergida — Ilyan Veyr:** estado refleja divisiones de tripulaciones; no las convierte a todas en enemigas/aliadas. Separar relación con tripulaciones, condiciones narrativas y resultado del encuentro final.
 
-| Acto | Rango orientativo | Progresión | Dificultad prevista (objetivo, no prueba) |
-|---|---:|---|---|
-| Prólogo — Cabo | 1–4 | Evacuación, faro, Mastín, pieza y flota. | Baja-moderada; señales sencillas, pocos enemigos. |
-| I — Jardines de Oria | 4–9 | Cultivos, ancla, plaga y registros; elección altera consecuencias locales/suministros. | Moderada; espacio y peligros localizados. |
-| II — Dársena | 9–15 | Refugio, comercio, Liga, planos, pruebas o negociación. | Moderada; defensores/mecanismos con opciones de evitar/interrumpir. |
-| III — Fosa | 15–21 | Ballena, comunidad, reconstrucción de la Noche. | Moderada-alta controlada; posición/rutas, sin enjambres. |
-| IV — Nimbo | 21–26 | Corista, comparación de futuros y compartir hallazgos. | Moderada-alta; señales contradictorias sin azar injusto. |
-| V — Corona/Atrio | 26–30 | Nodos, rutas, apoyos, confrontación y desenlace. | Alta dentro del equilibrio objetivo; fases legibles y presión acotada. |
+Efectos posibles: comercio moderado no imprescindible; refugios con descanso/información/apoyo no obligatorio; rutas facilitadas pero no controladas por una sola facción; reputación puede aportar apoyo/testimonios/legitimidad, nunca determinar final sola. Village Diplomacy se refiere a aldeas/villagers, no es equivalente a estas facciones.
 
-Rangos se solapan como transición y no son niveles obligatorios. No exigir secundarias ni repetir enemigos para entrar en actos. Campaña principal debe bastar en XP; recompensas XP por actividad pendientes. Rutas por estados/transiciones controladas; sin generación procedural ni dimensión nueva.
+Cuatro finales propuestos; correspondencia con canon **[SIN VERIFICAR]** por falta de historia aprobada independiente:
+- **Cielo inmóvil:** Liga fija rutas; reduce peligro inmediato, puede excluir comunidades y costar recuerdos.
+- **Cielo medido:** control compartido de Cartógrafos con pruebas y acuerdos; reputación no sustituye evidencia.
+- **Cielo libre:** romper nodos devuelve corriente natural; no requiere enemistad con todas las facciones, implica rutas/refugios móviles y posibles hogares perdidos.
+- **Marea pactada:** testimonios compartidos, comunidades afectadas y condiciones técnicas pendientes; reputación no garantiza pacto.
 
-## Misiones y secundarias
+## 8. Progresión por actos
 
-Registro presenta objetivos, pistas y consecuencias sin declarar una decisión correcta. Decisiones persistentes afectan refugios, suministros, testimonios y apoyos. Modelo de guardado individual/equipo/mixto pendiente.
+Bandas orientativas, no requisitos de acceso ni resultados garantizados. Falta suma de XP por acto y prueba de campaña sin secundarias.
 
-- **Prólogo:** evacuar y priorizar; explorar faro; vencer Mastín y decidir pieza; rastrear flota/contacto.
-- **Acto I:** cultivos resistentes; hallar ancla; contener plaga; decisión con Madre; comparar registros de Lena.
-- **Acto II:** investigar zonas afectadas; asegurar refugio; desactivar Custodio/planos; pruebas o negociación con Tavia.
-- **Acto III:** llegar a Fosa; ayudar comunidad; abrir/evitar paso Ballena; versiones de flota; reconstruir Noche y decidir revelar coste.
-- **Acto IV:** ruta real entre reflejos; ocultación de expedición de Lena; registros Corista; comparar tres futuros y decidir destinatario.
-- **Acto V:** llegada conjunta o alternativa; activar/desviar/destruir nodos; comprender red; reconstruir sacrificio; detener a Veyr y elegir futuro.
+| Parte | Nivel orientativo | Foco y dificultad prevista |
+|---|---:|---|
+| Prólogo — Cabo de las Campanas | 1–4 | Evacuación, faro, pieza, Mastín y rastreo; baja-moderada, enseñar señales/entorno. |
+| I — Jardines de Oria | 4–8 | Raíces, ancla y elección; moderada, amenazas localizadas. |
+| II — Dársena de los Remaches | 8–12 | Mapas, archivos, refugio, planes/pruebas ante Custodio; moderada. |
+| III — Fosa de Marea | 12–17 | Tripulación, barrios y Ballena; ruta segura o larga viable; moderada con picos breves, sin enjambres. |
+| IV — Nimbo de Vidrio | 17–22 | Lena, registros y Corista; moderada, señales ambiguas legibles. |
+| V — Corona de Espejos | 22–30 | Nodos, Veyr y finales; moderada/final, arena y presión acotadas. |
 
-Secundarias de peso medio, no obligatorias: Oria — *Huerto de nombres*, *Cosecha compartida*, *Luz prestada*; Dársena — *Grúa de nadie*, *Una pieza, dos promesas*, *Nombres del registro*; Fosa — *Nombre del barco*, *Precio del oxígeno*, *Puerta que sube*; Nimbo — *Árbol que recuerda mal*, *Expedición incompleta*, *Mapa para todos*. Acto V lista temas por facción (Liga: emergencia/anclas/guardia expuesta; Cartógrafos: mapas/luz de Lena/límites cristal; Hermandad: convoy/refugio/ruta regreso; Flota: orden/promesa Veyr/guardia Kest), pero nombres/objetivos concretos no provistos: pendientes, no inventados.
+## 9. Misiones principales y secundarias
 
-Questlog y FTB Quests son alternativas candidatas, solapadas; elegir uno. Integración con estados de campaña no verificada. La auditoría suministrada indica que FTB Quests 2001.4.22 no queda acreditada con las mismas funciones que la evidencia de ramas exclusivas 2001.4.13; dependencias/API/licencia de redistribución requieren verificar. No afirmar equivalencia con diálogo ramificado o campaña lista.
+Correspondencia con historia aprobada independiente **[SIN VERIFICAR]**. Principales propuestas: (1) evacuar Cabo, explorar faro, resolver Mastín y rastrear Flota; (2) investigar raíces/ancla y escoger conservar, modificar o abandonar; (3) obtener mapas, pruebas, refugio y alternativas ante Custodio; (4) descender a Fosa, conocer tripulación y decidir Ballena/ruta larga; (5) recuperar registros de Lena y decidir compartir/reservar; (6) llegar a Corona, resolver nodos/Veyr y final por condiciones acumuladas.
 
-## Mods, validación y límites
+Dos a cuatro secundarias por acto, de funciones distintas: abrir ruta/refugio no obligatorio, aportar testimonio/registro, recurso no imprescindible, apoyo comunitario, relación con personaje/facción y desacuerdos internos. Sin encargos repetidos de recolección/combate como XP eficiente. Secundarias cambian estados/apoyos/información, no son necesarias para terminar ni imponen una opción “correcta”. Acto V sin objetivos concretos documentados: quedan pendientes, no se inventan.
 
-Candidatos, versiones, funciones, dependencias, licencias, compatibilidad y API solo según auditoría aportada; no son instalación/selección aprobada. Skill Tree y Simply Skills: escoger como máximo un árbol externo, ninguno acredita estas clases. PlayerEX y sistema propio: un propietario de progresión. Questlog/FTB Quests: uno. RPG Inventory/Reforged: no combinar sin función diferenciada y pruebas. Bosses of Mass Destruction/Remnants no sustituyen encuentros; Remnants añade dimensión no necesaria. Village Diplomacy no representa las cuatro facciones. No hay API de integración confirmada.
+Ember’s Questing y Mebahel’s RPG son candidatos parcialmente solapados; no se propone instalarlos juntos ni otorgar autoridad duplicada sobre diario, flags o recompensas. Requisitos y compatibilidad: **[SIN VERIFICAR]**.
 
-No hay mediciones en Athlon 5150, Radeon R3 ni HDD: FPS, frametime, memoria, carga, arranque, estabilidad y compatibilidad **[SIN VERIFICAR]**. Regiones compactas, pocos enemigos y arenas delimitadas se mantienen; jefe final con reflejos/IA/efectos es riesgo principal, aún sin cuantificar. Implementar jefes, estados, reputación, rutas y clases es trabajo de desarrollo importante, no simple configuración de árbol/misiones. No subir archivos de mods de terceros.
+## 10. Implementación y criterio de aceptación
 
-Pendientes explícitos: contrastar nombres/eventos/facciones/desenlaces con historia aprobada adjunta; aclarar relación Almirante-Veyr; definir asignación inicial nivel 1, XP por actividad y balance; definir nodos/requisitos de ramas; recompensas específicas aún no descritas; condiciones mecánicas de cuatro finales; secundarias Acto V; ámbito de guardado; verificar builds/dependencias/licencias/APIs y probar rendimiento antes de aprobación/implementación.
+Mantener el estado narrativo actualizado por eventos, no revisión continua. Antes de implementar: confirmar instancia Fabric/versiones; verificar persistencia y migración; ninguna clase/nivel/reputación/secundaria bloquea historia; impedir recompensas duplicadas/estados contradictorios; presupuestar XP y probar campaña sin secundarias y sin farmear; respetar límites de arenas y actividad; escoger un único responsable del diario/recompensas; medir incrementalmente en equipo objetivo. No hay benchmarks ni garantías de FPS, carga o compatibilidad.
+
+Pendientes explícitos: contrastar nombres/escenas/facciones/finales con historia aprobada (fuente no incluida); aclarar relación Almirante–Veyr; definir atributos iniciales, XP por acto y XP por actividad, balance/builds solitarias, costes/requisitos de nodos, recompensas concretas, condiciones técnicas de finales, secundarias del Acto V, ámbito de guardado, versiones/dependencias/licencias/APIs y pruebas locales.
