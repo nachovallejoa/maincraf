@@ -1,70 +1,102 @@
-# Matriz de compatibilidad — Minecraft 1.20.1
+# Matriz de compatibilidad de mods
 
-## Estado
+## Estado y alcance
 
-**Compatibilidad del pack completo: [SIN VERIFICAR].** No se entregó manifiesto RPG, lista de JARs ni instancia ejecutable. No se ejecutó Minecraft. La publicación de un archivo demuestra disponibilidad declarada, no compatibilidad con este hardware o con el pack.
+- Plantilla de registro; no es certificación.
+- Candidata documental principal: Fabric 1.20.1. Forge 1.20.1: alternativa condicionada al manifiesto.
+- Manifiesto y JARs no encontrados según inventario recibido; no se ejecutó Minecraft en este equipo.
+- No marcar compatible hasta validar versiones exactas, dependencias, arranque, mundo y logs. Compatibilidad no equivale a rendimiento aprobado.
+- No subir JARs de terceros.
 
-| Campo | Estado |
+## Entorno por completar
+
+| Campo | Valor |
 |---|---|
-| Minecraft propuesto | 1.20.1, no aprobado |
-| Loader candidato | Fabric; condicionado al manifiesto |
-| Alternativa | Forge, solo si el pack lo exige |
-| Java | Java 17 documentado/recomendado para 1.20.1; runtime local **[SIN VERIFICAR]** |
-| Pack/manifiesto | No entregado |
-| Launcher/instancia | **[SIN VERIFICAR]** |
-| Driver Radeon/OpenGL | **[SIN VERIFICAR]** |
-| JARs/hashes | No entregados |
+| Identificador de instancia / fecha / responsable | |
+| Sistema operativo y build | |
+| CPU / núcleos / hilos | |
+| RAM instalada/utilizable | |
+| GPU / memoria compartida | |
+| Driver y versión | |
+| OpenGL/Vulkan reportado | |
+| Resolución/Hz | |
+| Minecraft | |
+| Java: distribución, versión y arquitectura | |
+| Loader y versión | |
+| Launcher y versión | |
+| Manifiesto y hash | |
+| Heap y argumentos JVM | |
+| `latest.log` y hash | |
 
 ## Estados
 
-- **Candidato:** evidencia de versión/plataforma publicada, sin prueba local.
-- **Pendiente:** evidencia insuficiente.
-- **Compatible en prueba:** solo tras prueba reproducible y evidencia adjunta.
-- **Fallo:** reproducido con logs y pasos.
+| Estado | Significado |
+|---|---|
+| Pendiente | No probado o faltan datos esenciales. |
+| Compatible en prueba | Superó los casos registrados en esa instancia concreta. |
+| Compatible con limitaciones | Funciona con incidencias o limitaciones documentadas. |
+| Incompatible | Falla reproducible en combinación exacta con evidencia. |
+| No evaluado | No corresponde probar aún o no está seleccionado. |
 
-## Matriz Fabric
+## Inventario real por completar
 
-| Candidato | Archivo/plataforma y fuente | Dependencias/cautelas | Arranque | Mundo nuevo/existente | Funciones RPG | Rendimiento |
+| Componente | Versión declarada | Archivo instalado | SHA-256 local | Fuente | Dependencias verificadas | Estado |
 |---|---|---|---|---|---|---|
-| Sodium 0.5.13 | `mc1.20.1-0.5.13-fabric`, Fabric/Quilt [ficha](https://modrinth.com/mod/sodium/version/mc1.20.1-0.5.13-fabric) | Indium ≥1.0.36 si se usa; Iris ≥1.7.6 si se usa. Radeon/OpenGL local **[SIN VERIFICAR]** | Pendiente | Pendiente | Pendiente | No medido |
-| Lithium 0.11.4 | `mc1.20.1-0.11.4-fabric`, Fabric/Quilt [ficha](https://modrinth.com/mod/lithium/version/mc1.20.1-0.11.4-fabric) | Dependencia exacta **[SIN VERIFICAR]**; archivo de overrides vacío mantiene defaults según [documentación](https://github.com/CaffeineMC/lithium-fabric/blob/mc1.20.1-0.11.4/lithium-mixin-config.md) | Pendiente | Pendiente | Pendiente | No medido |
-| ModernFix 5.25.2 | `5.25.2+mc1.20.1`, Fabric [ficha](https://modrinth.com/mod/modernfix/version/5.25.2%2Bmc1.20.1) | Dynamic Resources `false` hasta auditar pack | Pendiente | Pendiente | Revisar recursos/modelos/bloques | No medido |
-| Entity Culling 1.7.0 | `1.7.0-1.20.1` Fabric [ficha](https://modrinth.com/mod/entityculling/version/1JrKE0F6) | Fabric API obligatoria **[SIN VERIFICAR]**; probar entidades/modelos | Pendiente | Pendiente | Pendiente | No medido |
-| ImmediatelyFast 1.2.4 | `1.2.4+1.20.1`, MC 1.20–1.20.1, Fabric/Forge/Quilt [ficha](https://modrinth.com/mod/immediatelyfast/version/1.2.4%2B1.20.1) | Buffering de texto en carteles apagado por defecto; esquema completo **[SIN VERIFICAR]** | Pendiente | Pendiente | Revisar GUI, carteles, texto y partículas | No medido |
-| FerriteCore 6.0.1 | Candidato citado | Ficha/build/dependencias/compatibilidad **[SIN VERIFICAR]** en la revisión | Pendiente | Pendiente | Pendiente | No medido |
-| BadOptimizations 2.4.1 | Candidato citado | Metadata completa **[SIN VERIFICAR]** | Pendiente | Pendiente | Pendiente | No medido |
-| Dynamic FPS 3.9.5 | Candidato citado | Dependencias/licencia exactas **[SIN VERIFICAR]** | Pendiente | Pendiente | Probar foco/reanudación | No medir como FPS activo |
-| Fabric API 0.92.2+1.20.1 | Candidato citado | Usar solo si una build lo requiere | Pendiente | Pendiente | Pendiente | No medido |
-| More Culling / Particle Core / Noisium / Ksyxis | Candidatos citados | Build, efectos y dependencias exactos **[SIN VERIFICAR]** | Pendiente | Prueba con respaldo | Pendiente | No medido |
-| Indium 1.0.36+ | Candidato | Sodium exige al menos esa versión si se usa | Pendiente | Pendiente | Añadir solo si lo requiere el manifiesto | No medido |
+| Minecraft | 1.20.1 candidata | | | | | Pendiente |
+| Java | 17 asociada documentalmente a 1.20.1 | | | | | Pendiente |
+| Loader | Fabric candidato / Forge condicional | | | | | Pendiente |
+| Modpack/manifiesto | No disponible en inventario recibido | | | | | Pendiente |
+| Driver gráfico | No disponible | | | | | Pendiente |
 
-## Matriz Forge/NeoForge
+## Candidatos Fabric 1.20.1
 
-| Candidato | Evidencia documentada | Pendiente |
-|---|---|---|
-| Embeddium `0.3.31+mc1.20.1` | Ficha confirma Forge y NeoForge 1.20.1, LGPL-3.0-only: [fuente](https://modrinth.com/mod/embeddium/version/0.3.31%2Bmc1.20.1) | Pack, GPU, dependencias y pruebas |
-| Entity Culling Forge | Candidato recibido | Ficha exacta/dependencias **[SIN VERIFICAR]** |
-| ImmediatelyFast Forge | La ficha comprobada corresponde a `1.2.4+1.20.1`; no extrapolar a otra build | Archivo Forge exacto y prueba |
-| FerriteCore/ModernFix/Dynamic FPS/BadOptimizations Forge | Candidatos recibidos | Builds y compatibilidad Forge exactas **[SIN VERIFICAR]** |
-| Radium o Canary | Alternativas citadas | Versión/licencia/dependencias/pack **[SIN VERIFICAR]**; no asumir que se combinan |
+| Mod | Candidato documental | Condición conocida | Estado |
+|---|---|---|---|
+| Sodium | 0.5.13 | Radeon R3/driver y pack no verificados; Indium 1.0.36+ solo si el pack necesita FRAPI. | Pendiente |
+| Lithium | 0.11.4 | Dependencias y compatibilidad con pack pendientes. | Pendiente |
+| ModernFix | 5.25.2+mc1.20.1 | Mantener `mixin.perf.dynamic_resources=false`; compatibilidad del pack sin probar. | Pendiente |
+| FerriteCore | 6.0.1 | Pack pendiente; posible conflicto con Hydrogen mencionado, no verificado en esta revisión. | Pendiente |
+| Entity Culling | 1.12.1-1.20.1 | Cliente; coste/beneficio CPU pendiente; licencia personalizada. | Pendiente |
+| ImmediatelyFast | 1.2.21 (archivo `+1.20.4`, declara 1.20.1) | Dependencias del manifiesto y comportamiento local pendientes. | Pendiente |
+| Dynamic FPS | 3.9.5 | Archivo/dependencias exactos sin verificar; no tratar como acelerador activo. | Pendiente |
+| Fabric API | 0.92.6+1.20.1 | Añadir solo si dependencia concreta lo requiere. | Pendiente |
 
-## Pruebas mínimas antes de declarar compatibilidad
+## Candidatos Forge 1.20.1
 
-1. Registrar juego, loader, Java, launcher, driver, mods/versiones/hashes locales y configuración.
-2. Arrancar y guardar `latest.log`.
-3. Probar mundo nuevo y copia de mundo existente.
-4. Revisar modelos, texturas, bloques, fluidos, entidades, GUI y partículas.
-5. Probar sistemas RPG imprescindibles indicados por el usuario, además de recursos/datapacks.
-6. Probar cambios de chunks/spawn solo en respaldo.
-7. Registrar crash report y pasos reproducibles ante fallos.
-8. No declarar compatibilidad hasta tener evidencia; no subir JARs.
+| Mod | Candidato documental | Condición conocida | Estado |
+|---|---|---|---|
+| Embeddium | 0.3.31+mc1.20.1 | No combinar con Sodium/Rubidium; driver local no probado. | Pendiente |
+| Radium | 0.12.4 | Versión e incompatibilidad Canary deben verificarse contra archivos exactos. | Pendiente |
+| ModernFix | 5.28.0+mc1.20.1 | Dynamic Resources false; archivo exacto pendiente. | Pendiente |
+| FerriteCore | 6.0.1 | Compatibilidad del pack pendiente. | Pendiente |
+| Entity Culling | 1.12.1-1.20.1 | Licencia personalizada; no redistribuir JAR fuera de términos. | Pendiente |
+| ImmediatelyFast | 1.5.5 | Archivo/versión exactos pendientes. | Pendiente |
+| Dynamic FPS | 3.7.7 | Archivo/dependencias exactos pendientes. | Pendiente |
+| Particle Core | 0.3.3+1.20.1+forge | Opcional; probar aisladamente si se justifica. | Pendiente |
 
-## Registro vacío
+## Casos de prueba (sin resultados aún)
 
-| Fecha | Loader/versiones | Escenario | Arranque | Funciones | Logs/evidencia | Estado |
-|---|---|---|---|---|---|---|
-|  |  |  |  |  |  |  |
+Guardar logs, crash reports, versiones e hashes de los archivos usados localmente.
 
-## Pendientes
+| ID | Caso | Resultado | Evidencia/log | Incidencias |
+|---|---|---|---|---|
+| C-01 | Arranque de juego + loader sin optimizadores | Pendiente | | |
+| C-02 | Arranque con dependencias mínimas aprobadas | Pendiente | | |
+| C-03 | Llegada al menú sin errores bloqueantes | Pendiente | | |
+| C-04 | Crear/cargar mundo de prueba | Pendiente | | |
+| C-05 | Recorrido de chunks existentes | Pendiente | | |
+| C-06 | Generación de chunks nuevos | Pendiente | | |
+| C-07 | Modelos, recursos, entidades y contenido RPG | Pendiente | | |
+| C-08 | Cambio de dimensión, si aplica | Pendiente | | |
+| C-09 | Reinicio y segunda carga | Pendiente | | |
+| C-10 | Cierre normal | Pendiente | | |
 
-Manifiesto exacto, loader aprobado, runtime/launcher/driver, configuraciones y recursos, requisitos RPG y resultados reproducibles.
+## Incidencias
+
+| ID | Fecha | Archivos exactos | Síntoma reproducible | Pasos | Log | Mitigación probada | Estado |
+|---|---|---|---|---|---|---|---|
+| | | | | | | | |
+
+## Criterio de compatibilidad
+
+Marcar “Compatible en prueba” solo al documentar Minecraft, Java, loader y archivos exactos; dependencias verificadas; arranque al menú y carga de mundo sin fallo bloqueante; sistemas relevantes del pack; incidencias/advertencias; logs conservados. Evaluar rendimiento por separado en `PERFORMANCE.md`.
