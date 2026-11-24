@@ -1,11 +1,11 @@
 # Arquitectura
 
-> **Pendiente: etapas futuras.** No se define arquitectura de sistemas, módulos ni integración hasta disponer de requisitos RPG, manifiesto, decisiones aprobadas y evidencia de compatibilidad.
+> **Pendiente: etapas futuras.** La misión 1 es investigación documental y no define arquitectura de sistemas, módulos ni integración.
 
 - Requisitos funcionales: pendientes.
 - Componentes y límites: pendientes.
-- Loader e integración: pendientes de aprobación.
-- Dependencias y diagramas: pendientes.
+- Loader e integración: pendientes de aprobación y manifiesto.
+- Dependencias/diagramas: pendientes.
 - Restricciones de despliegue: pendientes.
 
-No inferir arquitectura a partir de candidatos de mods de la misión de investigación.
+No inferir arquitectura a partir de candidatos de mods.
