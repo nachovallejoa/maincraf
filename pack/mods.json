@@ -1,50 +1,23 @@
 {
-  "name": "Deriva — Fabric 1.20.1",
-  "version": "1.0.0",
+  "name": "Mar de Nubes",
   "minecraft_version": "1.20.1",
   "fabric_loader_version": "0.20.1",
   "mods": [
     {
-      "slug": "sodium",
-      "version_id": "OihdIimA",
-      "version_number": "mc1.20.1-0.5.13-fabric",
-      "file_name": "sodium-fabric-0.5.13+mc1.20.1.jar",
-      "env": "client"
+      "id": "sodium",
+      "version_id": "OihdIimA"
     },
     {
-      "slug": "lithium",
-      "version_id": "iEcXOkz4",
-      "version_number": "mc1.20.1-0.11.4-fabric",
-      "file_name": "lithium-fabric-mc1.20.1-0.11.4.jar",
-      "env": "both"
+      "id": "lithium",
+      "version_id": "iEcXOkz4"
     },
     {
-      "slug": "ferrite-core",
-      "version_id": "unerR5MN",
-      "version_number": "6.0.1",
-      "file_name": "ferritecore-6.0.1-fabric.jar",
-      "env": "both"
+      "id": "ferrite-core",
+      "version_id": "unerR5MN"
     },
     {
-      "slug": "modernfix",
-      "version_id": "rPmgLeZC",
-      "version_number": "5.25.2+mc1.20.1",
-      "file_name": "modernfix-fabric-5.25.2+mc1.20.1.jar",
-      "env": "both"
-    },
-    {
-      "slug": "immediatelyfast",
-      "version_id": "txcO4lNF",
-      "version_number": "1.2.1+1.20.1",
-      "file_name": "ImmediatelyFast-1.2.1+1.20.1.jar",
-      "env": "client"
-    },
-    {
-      "slug": "dynamic-fps",
-      "version_id": "LLIcc8aO",
-      "version_number": "3.9.0",
-      "file_name": "dynamic-fps-3.9.0+minecraft-1.20.0-fabric.jar",
-      "env": "client"
+      "id": "immediatelyfast",
+      "version_id": "tF2vt38m"
     }
   ]
 }
