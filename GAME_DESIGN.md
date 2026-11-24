@@ -5,5 +5,5 @@
 - Objetivos de diseño: pendientes.
 - Bucle de juego y progresión: pendientes.
 - Sistemas/reglas: pendientes.
-- Misiones/dificultad/balance: pendientes.
+- Misiones, dificultad y balance: pendientes.
 - Criterios de aceptación: pendientes de acordar con el usuario.
