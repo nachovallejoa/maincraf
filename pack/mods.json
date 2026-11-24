@@ -4,92 +4,42 @@
   "fabric_loader_version": "0.20.1",
   "mods": [
     {
+      "name": "Fabric API",
+      "version": "0.92.11+1.20.1",
+      "version_id": "xhLT3C5f",
+      "project_id": "P7dR8mSH",
+      "side": "both",
+      "required": true
+    },
+    {
       "name": "Sodium",
       "version": "0.5.13",
-      "version_id": null,
-      "status": "[SIN VERIFICAR]"
+      "version_id": "OihdIimA",
+      "project_id": "AANobbMI",
+      "side": "client",
+      "required": true
     },
     {
       "name": "Lithium",
       "version": "0.11.4",
       "version_id": "iEcXOkz4",
-      "status": "Verificado en Modrinth para Minecraft 1.20.1; ID: https://modrinth.com/mod/lithium/version/mc1.20.1-0.11.4-fabric"
+      "side": "both",
+      "required": true
     },
     {
       "name": "FerriteCore",
       "version": "6.0.1",
       "version_id": "unerR5MN",
-      "status": "Verificado en Modrinth para Fabric/Quilt y Minecraft 1.20–1.20.2"
+      "side": "both",
+      "required": true
     },
     {
       "name": "ModernFix",
       "version": "5.25.2+mc1.20.1",
       "version_id": "rPmgLeZC",
-      "status": "Verificado en Modrinth para Fabric y Minecraft 1.20.1"
-    },
-    {
-      "name": "BadOptimizations",
-      "version": "2.4.1",
-      "version_id": "DIugITgU",
-      "status": "Verificado en Modrinth para Fabric y Minecraft 1.20.1"
-    },
-    {
-      "name": "Better Combat",
-      "version": "1.9.0+1.20.1-fabric",
-      "version_id": "OtwNg4r4",
-      "status": "Versión verificada; dependencias obligatorias aún sin cerrar"
-    },
-    {
-      "name": "Remnants",
-      "version": "3.0.0+fabric-1.20.1",
-      "version_id": null,
-      "status": "[SIN VERIFICAR]"
-    },
-    {
-      "name": "Bosses of Mass Destruction",
-      "version": "1.7.5-1.20.1",
-      "version_id": "yoCCX4Cc",
-      "status": "Versión verificada; dependencias obligatorias aún sin cerrar"
-    },
-    {
-      "name": "Village Diplomacy",
-      "version": "1.4.0",
-      "version_id": null,
-      "status": "[SIN VERIFICAR]"
-    },
-    {
-      "name": "FTB Quests",
-      "version": "2001.4.22",
-      "version_id": null,
-      "status": "[SIN VERIFICAR]"
+      "side": "both",
+      "required": true
     }
   ],
-  "required_dependencies_missing": [
-    {
-      "for": "Better Combat",
-      "mods": [
-        "Player Animator",
-        "Cloth Config API",
-        "Fabric API"
-      ],
-      "versions_and_version_ids": "[SIN VERIFICAR]"
-    },
-    {
-      "for": "Bosses of Mass Destruction",
-      "mods": [
-        "Cloth Config API",
-        "GeckoLib",
-        "Fabric Language Kotlin",
-        "Fabric API",
-        "Cardinal Components API"
-      ],
-      "versions_and_version_ids": "[SIN VERIFICAR]"
-    }
-  ],
-  "overrides": [],
-  "notes": [
-    "[SIN VERIFICAR] Compatibilidad y dependencias completas del pack.",
-    "[SIN VERIFICAR] Mods para el perfil de hardware objetivo y resultados de rendimiento.",
-    "[SIN VERIFICAR] Estructura de instalación de carpeta de versión en TLauncher."
-  ]
+  "overrides": []
 }
