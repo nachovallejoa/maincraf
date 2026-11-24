@@ -1,38 +1,26 @@
 # Hoja de ruta
 
-## Metodología: 13 etapas secuenciales
+## Etapas y estado
 
-1. **Inventario del repositorio y fuentes** — Registrar archivos reales y límites de acceso. Estado: inventario recibido; revisiones documentales no equivalen a inspección independiente completa.
-2. **Perfil del equipo** — Hardware/sistema/APIs y separar declaraciones de mediciones. Estado: usuario declara 12 GB instalados, unos 10 GB disponibles y Windows usa unos 500 MB; mediciones independientes pendientes.
-3. **Definición del objetivo RPG** — Alcance y criterios. Estado: identidad/pilares registrados; autorización narrativa previa.
-4. **Inventario del pack RPG** — Manifiesto, versiones, loader/dependencias. Estado: selección mínima documentada; Loader exacto, licencias y validación pendientes.
-5. **Comparativa de versiones/loaders** — Evidencia y límites. Estado: documentación de Minecraft 1.20.1/Fabric seleccionada para esta entrega; Loader no fijado.
-6. **Auditoría de mods** — Builds/licencias/dependencias/interacciones. Estado: cuatro mods base verificados según revisión; auditoría de licencias y prueba conjunta pendientes. Candidatos opcionales/RPG excluidos por falta de auditoría suficiente.
-7. **Historia** — Propuesta narrativa y consecuencias. Estado: historia registrada como aprobada en etapa previa; preservar sin spoilers.
-8. **Mecánicas** — Clases, niveles/estadísticas, habilidades/builds, equipo, combate, jefes, reputación, progresión y misiones. Estado: diseño aprobado como propuesta; implementación y verificación técnica pendientes.
-9. **Configuración inicial** — Ajustes y validación en instancia. Estado: pendiente; no se añaden overrides ni configuraciones no verificadas.
-10. **Pruebas de carga** — Arranque, menú, mundo/logs incrementales. Estado: pendiente.
-11. **Pruebas funcionales y compatibilidad** — Progresión, contenido y conflictos. Estado: pendiente.
-12. **Benchmark controlado** — Escenarios reproducibles. Estado: pendiente; no hay mediciones.
-13. **Decisiones y documentación de cierre** — Evidencia, riesgos y cambios. Estado: pendiente.
+Las etapas previas permanecen en sus ramas aisladas. Esta rama registra la integración del modpack y su entrega documental; no implica validación técnica final.
 
-Las etapas son secuenciales; la documentación no equivale a validación técnica.
-
-## Tablero de la entrega del modpack
-
-| Área | Estado | Criterio / pendiente |
+| Área | Estado | Pendiente / criterio |
 |---|---|---|
-| Selección y manifiesto base | Completada documentalmente | Cuatro versiones y archivos de Modrinth registrados; sin JARs de terceros en el repositorio. |
-| Integración | En revisión | Revisar rama, workflow, script e índice generado; `fabric_loader_version` sigue `null`. |
-| Entrega | En revisión | Instrucciones añadidas, pero no declarar paquete listo hasta tener compilación exitosa con Loader exacto. |
-| Pruebas | Pendiente | Build en GitHub tras fijar Loader y luego que el usuario importe, lance y juegue; registrar logs/resultado. |
-| Configuración | Pendiente | Mantener valores predeterminados hasta fuente completa y prueba específica. |
-| Rendimiento | Pendiente | Sin medición local; `-Xmx6G` es solo orientación condicionada, no benchmark. |
+| Selección y manifiesto | Documentalmente actualizado | Dos mods verificados incluidos: Sodium y BadOptimizations. Loader `0.20.1` indicado según Fabric Meta. |
+| Integración | En revisión | Revisar el manifiesto, el constructor y el workflow tras la compilación automática. |
+| Entrega | En revisión | Instrucciones y proceso de empaquetado documentados; no llamar al paquete probado o listo antes de comprobar la build. |
+| Mods propios | Sin implementación en esta entrega | No se recibieron fuentes de código ni detalle técnico suficiente; no se inventaron módulos. |
+| Pruebas | Pendiente | Esperar compilación automática en GitHub y que el usuario importe, inicie y juegue. Registrar logs/resultados; no afirmar pruebas por adelantado. |
+| Rendimiento | Pendiente | No hay benchmark ni mediciones locales. Las opciones son una propuesta de configuración, no una ganancia comprobada. |
+| Licencias | Pendiente | La entrada no proporcionó licencias confirmadas para los mods; verificar antes de redistribución. |
 
-## Seguimiento posterior
+## Pendientes por fuente no verificada
 
-Los módulos propios planificados permanecen sin código y sin proyecto Gradle recibido; no afirmar compilación. Candidatos RPG fuera de selección hasta completar auditoría de versión, dependencias, licencia e interacciones.
+INCOMPLETE: las consultas disponibles no devolvieron metadatos de proyecto y dependencias obligatorias suficientes para Lithium, FerriteCore, ModernFix, Sodium Extra, ImmediatelyFast, Simply Skills y Better Combat. Tampoco quedó verificada la identificación de FTB Quests y del Remnants propuesto. No incorporarlos al manifiesto ni inferir incompatibilidad mientras no haya datos.
 
-## Registro de estado y confidencialidad
+## Próximos hitos
 
-El usuario aprobó el modo autónomo: evitar cuestionarios y decisiones creativas innecesarias, y preservar sorpresas narrativas al comunicar avances. Esta preferencia no elimina verificación técnica, licencias o pruebas. No subir ni redistribuir JARs de terceros.
+1. La compilación automática de GitHub debe ejecutarse al guardar el workflow y su resultado debe revisarse.
+2. Resolver cualquier error de build sin incorporar versiones o código no verificados.
+3. El usuario importa la instancia, la inicia y juega; registrar el resultado solo cuando ocurra.
+4. Mantener pruebas de compatibilidad, rendimiento y licencias como pendientes hasta obtener evidencia.
