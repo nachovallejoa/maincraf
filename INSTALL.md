@@ -1,53 +1,44 @@
 # Instalación
 
-## Requisitos
+## Estado del paquete
 
-- Minecraft Java Edition 1.20.1.
-- Prism Launcher o Modrinth App, actualizado a una versión que permita importar archivos `.mrpack`.
-- Conexión a internet para que el launcher descargue los componentes requeridos durante la instalación.
-- Java 17 para ejecutar Minecraft 1.20.1. Los launchers suelen gestionar Java automáticamente; si se configura manualmente, selecciona Java 17.
-- La memoria recomendada depende de la memoria disponible en el equipo. No hay especificaciones de hardware confirmadas para fijar un valor único.
+**Este repositorio no contiene actualmente un paquete instalable verificado.** `pack/mods.json` es provisional: hay mods sin IDs confirmados y dependencias obligatorias con versiones/artefactos pendientes. El constructor debe detenerse si no puede resolver y validar los metadatos; no rellenes huecos manualmente con suposiciones ni descargues archivos de fuentes no autorizadas.
 
-## Descargar el paquete
+No se ha comprobado la estructura de instalación específica de TLauncher. No se garantiza una compilación exitosa, inicio, compatibilidad integral ni rendimiento. Espera el resultado real del workflow y la revisión de los bloqueos antes de distribuir o instalar un artefacto como final.
 
-### Desde Releases
+## Cuando exista un artefacto `.mrpack` validado
+
+### Descargar desde Releases
 
 1. Abre la sección **Releases** del repositorio.
-2. En el Release más reciente, descarga el archivo `.mrpack`.
+2. Descarga el archivo `.mrpack` de una versión cuya compilación esté completada correctamente.
+3. Si el archivo está empaquetado como ZIP, extráelo para obtener el `.mrpack`.
 
-### Desde Actions
+### Descargar desde Actions
 
 1. Abre la pestaña **Actions** del repositorio.
-2. Entra en la ejecución completada más reciente del workflow **Build Modpack**.
-3. En **Artifacts**, descarga el artefacto `mrpack`.
-4. Si el artefacto se descarga como ZIP, extráelo para obtener el archivo `.mrpack`.
+2. Entra en una ejecución completada correctamente del workflow **Build Modpack**.
+3. En **Artifacts**, descarga el artefacto del modpack.
+4. Si se descargó como ZIP, extráelo para obtener el archivo `.mrpack`.
 
-## Importar en Prism Launcher
+## Importar en Prism Launcher o Modrinth App
 
-1. Abre Prism Launcher.
-2. Selecciona **Add Instance** y después **Import**.
-3. Elige el archivo `.mrpack` descargado.
-4. Confirma la instalación y espera a que termine la descarga de archivos.
-5. Inicia la instancia creada.
+Solo cuando exista un `.mrpack` validado por build y revisado:
 
-## Importar en Modrinth App
+1. Abre el launcher y usa la opción para importar una instancia o modpack desde archivo.
+2. Selecciona el `.mrpack`.
+3. Confirma la importación y espera que el launcher obtenga los componentes requeridos desde sus fuentes autorizadas.
+4. Antes de jugar, verifica que instancia use Minecraft `1.20.1` y el loader del manifiesto.
 
-1. Abre Modrinth App.
-2. Ve a la biblioteca de instancias y selecciona la opción para importar un modpack o archivo.
-3. Selecciona el `.mrpack` descargado.
-4. Espera a que termine la importación y la descarga de archivos.
-5. Inicia la instancia.
+Los pasos y disponibilidad pueden variar según la versión del launcher. TLauncher no está cubierto por instrucciones verificadas.
 
 ## Memoria y argumentos JVM
 
-La memoria y los argumentos JVM recomendados no están fijados en los datos recibidos para este paquete. Conserva los valores predeterminados del launcher mientras no se conozcan las especificaciones del equipo y no agregues argumentos JVM avanzados sin pruebas.
+No hay cifra de memoria o argumentos JVM recomendados verificados para este paquete. El usuario declaró 12 GB de RAM instalados, unos 10 GB disponibles y Windows usando unos 500 MB; son datos declarados, no mediciones independientes ni resultados de pruebas. Conserva los valores predeterminados del launcher hasta disponer de validación en el equipo. No se afirma un heap óptimo ni se recomiendan banderas JVM específicas.
 
 ## Si el juego no arranca
 
-1. Confirma que estás iniciando la instancia importada y que el launcher terminó las descargas.
-2. Revisa que la instancia esté usando Minecraft 1.20.1 y Java 17.
-3. Consulta los registros de la instancia:
-   - En Prism Launcher, abre la instancia y usa **Minecraft Log** o **View Folder** para encontrar `logs/latest.log`.
-   - En Modrinth App, abre la instancia y usa la opción de abrir su carpeta; busca `logs/latest.log`.
-4. Si existe un informe de fallo, busca también la carpeta `crash-reports`.
-5. Guarda el registro completo del intento de inicio y compártelo al solicitar ayuda. No publiques datos privados que el launcher pueda incluir en los registros.
+1. Confirma que instalaste una instancia importada desde el artefacto correcto y espera a que el launcher termine las descargas.
+2. Verifica la versión de Minecraft y Fabric Loader mostrada en la instancia.
+3. Guarda `logs/latest.log` y, si existe, el informe correspondiente en `crash-reports`.
+4. Comparte los registros completos al solicitar ayuda, retirando datos privados. No se pueden diagnosticar fallos sin logs.
