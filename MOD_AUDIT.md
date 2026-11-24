@@ -1,95 +1,103 @@
-# Auditoría RPG de mods — perfil provisional
+# Auditoría de mods RPG — mecánicas
 
-> **Perfil:** Minecraft 1.20.1 + Fabric, pendiente de aprobación. Auditoría documental basada solo en fichas/enlaces suministrados; no acredita instalación, interoperabilidad ni funcionamiento local. “No verificado” no significa incompatible. No se recibieron JAR/manifiesto de instancia; no se inspeccionó ni redistribuyó software de terceros.
+> **Alcance:** auditoría documental basada en fichas/enlaces aportados; perfil candidato Minecraft 1.20.1 + Fabric pendiente de aprobación y verificación de instancia. La presencia de una build publicada no prueba instalación ni funcionamiento local. No se recibieron JARs/manifiestos de instancia ni se inspeccionó o redistribuyó software de terceros. Ningún candidato queda aprobado por esta tabla. Autoría, dependencia, licencia y compatibilidad se anotan solo según evidencia indicada; cualquier dato que no se aportó permanece **[SIN VERIFICAR]**. No se suben archivos de mods.
 
-## Conclusión
+## Resumen de decisión
 
-Hay candidatos para progresión, combate, equipo, misiones y jefes genéricos. Ninguno implementa por sí mismo las tres clases, reputación de cuatro facciones, decisiones persistentes y rutas concretas. Planear un módulo propio o integración demostrada. Solapamientos: Skill Tree/Simply Skills; PlayerEX/estadísticas propias; Questlog/FTB Quests; RPG Inventory/Reforged con funciones distintas por verificar. Remnants añade dimensión no necesaria. Village Diplomacy cubre aldeas, no estas facciones.
+Candidatos para árboles, progresión, inventario/tiers, combate, jefes, reputación y misiones; ninguno implementa por sí solo todas las mecánicas narrativas. No combinar sistemas solapados sin asignar una única autoridad para puntos, equipo, diario y recompensas. Versiones exactas, APIs y compatibilidad deben comprobarse contra artefactos/manifiesto antes de seleccionar. Mods de rendimiento no aprobados y sus cruces con estos candidatos: no verificados.
 
-## Fichas de candidatos RPG documentados
+## Fichas
 
 ### Skill Tree (RPG Series)
-- Build citada: **1.6.1+1.20.1-fabric**, cliente/servidor. Página atribuye 200+ nodos para clases RPG Series, especializaciones y modificadores; no acredita Guardacorrientes, Vigía o Rompeanclas.
-- Dependencias: Pufferfish’s Skills 0.16.7+1.20 y versión emparejada de Spell Engine. Build Fabric 1.20.1 exacta de Pufferfish 0.16.7 no verificada; la ficha aportada de Skills muestra 0.13.2, no acredita requisito 0.16.7.
-- Solapamiento con Simply Skills y PlayerEX. Autor advierte emparejar RPG Series/Spell Engine; Sodium y conjunto no probados. ARR; redistribución no verificada.
-- Adaptación de clases narrativas no comprobada. Rendimiento: **NO DATA**; no se midió FPS, memoria o carga.
-- Fuentes aportadas: [build](https://modrinth.com/mod/skill-tree/version/Bf3op7OA), [Skills 0.13.2](https://modrinth.com/mod/skills/version/XffZOSrD), [proyecto](https://modrinth.com/mod/skill-tree).
+- **Build citada:** `1.6.1+1.20.1-fabric`, cliente/servidor.
+- **Función/cobertura:** árbol de 200+ nodos para clases del ecosistema RPG Series; no acredita Guardacorriente, Vigía o Rompeanclas ni opcionalidad narrativa.
+- **Dependencias:** Pufferfish’s Skills `0.16.7+1.20` y mods de clases RPG Series indicados por proyecto; emparejar versiones/Spell Engine. Build exacta del requisito no confirmada por el material recibido.
+- **Solapamiento/riesgos:** Simply Skills y PlayerEX/progresión propia. Advertencia de incompatibilidad entre generaciones antiguas de RPG Series/Spell Engine. Sodium y conjunto local: no verificado.
+- **Licencia/redistribución:** ARR indicada; redistribución no autorizada/verificada.
+- **Fuente:** [build](https://modrinth.com/mod/skill-tree/version/Bf3op7OA), [proyecto](https://modrinth.com/mod/skill-tree), [Pufferfish build citada](https://modrinth.com/mod/skills/version/XfFZOSrD).
+- **Mediciones locales:** FPS **NO DATA**; frametime **NO DATA**; RAM **NO DATA**; CPU/GPU **NO DATA**; arranque/carga **NO DATA**; estabilidad/compatibilidad **NO DATA**. No se midió en Athlon 5150/Radeon R3/HDD.
 
 ### Simply Skills
-- Build: **1.3.2+1.20.1**, Fabric cliente/servidor. Árbol/especializaciones genéricas, no confirma clases del proyecto.
-- Requiere Spell Power Attributes, Spell Engine, Cloth Config API, Pufferfish’s Skills; RPG Series y otros complementos opcionales según ficha.
-- Se solapa directamente con Skill Tree; no combinar sin propietario claro de builds. Combinación con Sodium no probada. Licencia Timefall Development License 1.2; redistribución del archivo no verificada.
-- Adaptación de historia no verificada. Impacto de rendimiento: **NO DATA**.
-- Fuente: [versión 1.3.2](https://modrinth.com/mod/simply-skills/version/1.3.2+1.20.1).
+- **Build citada:** `1.3.2+1.20.1` Fabric, cliente/servidor.
+- **Función:** pasivas, especializaciones y habilidades activas; no confirma clases propias de campaña.
+- **Dependencias citadas:** Spell Power Attributes, Spell Engine, Cloth Config API y Pufferfish’s Skills; otros complementos según ficha. Cadena completa del artefacto no verificada aquí.
+- **Solapamiento:** directo con Skill Tree; no usar ambos sin propietario claro.
+- **Licencia:** Timefall Development License 1.2 indicada; redistribución no verificada.
+- **Fuente:** [versión](https://modrinth.com/mod/simply-skills/version/1.3.2+1.20.1), [proyecto](https://modrinth.com/mod/simply-skills).
+- **Mediciones locales:** FPS **NO DATA**; frametime **NO DATA**; RAM **NO DATA**; CPU/GPU **NO DATA**; arranque/carga **NO DATA**; estabilidad/compatibilidad **NO DATA**.
 
 ### PlayerEX: Directors Cut
-- Build: **4.0.5+1.20.1**, Fabric/Quilt. Atributos RPG; detalles de niveles/puntos descritos en build 3.7 no se trasladan automáticamente a todos los detalles de 4.0.5.
-- Dependencias visibles/citadas para 4.0.5: oωo, Fabric API, Ranged Weapon API, Fabric Language Kotlin; cadena completa exacta no verificada. Página anterior también menciona Data Attributes y Cloth Config.
-- Solapamiento de niveles/atributos/puntos con árboles y sistema propio. Licencia MIT indicada; comprobar archivo y avisos. Build publicada 2025; configuración detallada 4.0.5 pendiente.
-- Build anterior dice “minor performance tweaks”, no benchmark de esta build/hardware. Rendimiento actual: **NO DATA**.
-- Fuentes: [4.0.5](https://modrinth.com/mod/playerex-directors-cut/version/vELn14ZA), [3.7.0](https://modrinth.com/mod/playerex-directors-cut/version/3.7.0+1.20.1).
+- **Build citada:** `4.0.5+1.20.1`, Fabric/Quilt.
+- **Función:** atributos RPG. La ficha previa 3.7 contenía detalles de niveles/puntos que no se trasladan automáticamente a 4.0.5.
+- **Dependencias:** lista completa exacta de 4.0.5 **[SIN VERIFICAR]**.
+- **Solapamiento:** niveles, atributos y puntos propios; escoger un único propietario. Licencia MIT indicada, revisar licencia/avisos del artefacto.
+- **Fuente:** [build](https://modrinth.com/mod/playerex-directors-cut/version/vELn14ZA), [proyecto](https://modrinth.com/mod/playerex-directors-cut).
+- **Mediciones locales:** FPS **NO DATA**; frametime **NO DATA**; RAM **NO DATA**; CPU/GPU **NO DATA**; arranque/carga **NO DATA**; estabilidad/compatibilidad **NO DATA**.
 
 ### RPG Inventory
-- Build **1.8.0 Fabric 1.20.1**, cliente/servidor; añade espacios de equipo y mecánicas de inventario, no rarezas por sí mismo.
-- Trinkets y Cloth Config API obligatorias; Stamina Attributes y Food Overhaul opcionales según ficha. Posible solapamiento de espacios de accesorios. Licencia MIT indicada; redistribución conforme licencia/avisos, verificar archivo.
-- Adaptación a rarezas narrativas no verificada. Rendimiento: **NO DATA**.
-- Fuente: [1.8.0](https://modrinth.com/mod/rpg-inventory/version/1.8.0).
+- **Build:** `1.8.0`, Fabric 1.20.1, cliente/servidor.
+- **Función:** slots y mecánicas de inventario; no implementa rarezas.
+- **Dependencias/solapamiento:** Trinkets y Cloth Config API citados como requeridos; Stamina Attributes/Food Overhaul opcionales según evidencia. Posible solapamiento de slots.
+- **Licencia:** MIT indicada; comprobar artefacto/avisos.
+- **Fuente:** [build](https://modrinth.com/mod/rpg-inventory/version/1.8.0).
+- **Mediciones locales:** FPS **NO DATA**; frametime **NO DATA**; RAM **NO DATA**; CPU/GPU **NO DATA**; arranque/carga **NO DATA**; estabilidad/compatibilidad **NO DATA**.
 
 ### Reforged (formerly Tiered)
-- Build **1.20.1-1.0.9-Fabric**, Fabric/Quilt, cliente/servidor. Modificadores/tiers para equipo y configuración data-driven según ficha; no progresión por facción.
-- UnionLib obligatoria según build consultada. Puede solaparse con sistemas de estadísticas de objetos/rareza. MIT indicada; revisar archivo. Adaptación de datos del proyecto no comprobada.
-- Rendimiento: **NO DATA**.
-- Fuentes: [build](https://modrinth.com/mod/tiered/version/1.20.1-1.0.9-Fabric), [proyecto](https://modrinth.com/mod/tiered).
+- **Build:** `1.20.1-1.0.9-Fabric`.
+- **Función:** modificadores/tiers de equipo, configuración data-driven; no reputación ni progresión narrativa.
+- **Dependencias:** UnionLib indicada para build consultada; verificar en artefacto.
+- **Solapamiento/licencia:** se puede solapar con tiers/atributos de objetos; MIT indicada, verificar avisos. Adaptación de datos de campaña no probada.
+- **Fuente:** [build](https://modrinth.com/mod/tiered/version/1.20.1-1.0.9-Fabric), [proyecto](https://modrinth.com/mod/tiered).
+- **Mediciones locales:** FPS **NO DATA**; frametime **NO DATA**; RAM **NO DATA**; CPU/GPU **NO DATA**; arranque/carga **NO DATA**; estabilidad/compatibilidad **NO DATA**.
 
 ### Better Combat
-- Build **1.9.0+1.20.1-fabric**, cliente/servidor; sistema de combate cuerpo a cuerpo/animaciones, no fases narrativas del jefe final.
-- Dependencias nominales exactas de esta build: **[SIN VERIFICAR: la ficha consultada no las estableció]**. No inferir las de una build anterior. Solapamiento posible con otro reemplazo de ataques/daño; combinación completa no probada. ARR; permiso de redistribución no verificado.
-- Rendimiento: **NO DATA**.
-- Fuente: [build](https://modrinth.com/mod/better-combat/version/OtwNg4r4).
+- **Build citada:** `1.9.0+1.20.1-fabric`.
+- **Función:** combate cuerpo a cuerpo/animaciones; no fases narrativas de jefes.
+- **Dependencias:** exactas para esta build **[SIN VERIFICAR]** en ficha leída.
+- **Solapamiento/licencia:** posibles reemplazos de ataque/daño; combinación completa no probada. ARR indicada; redistribución no verificada.
+- **Fuente:** [build](https://modrinth.com/mod/better-combat/version/OtwNg4r4), [proyecto](https://modrinth.com/mod/better-combat).
+- **Mediciones locales:** FPS **NO DATA**; frametime **NO DATA**; RAM **NO DATA**; CPU/GPU **NO DATA**; arranque/carga **NO DATA**; estabilidad/compatibilidad **NO DATA**.
 
 ### Remnants | The Eclipsed Realm
-- Build exacta citada **3.0.0+fabric-1.20.1**. Jefes/arenas propios, diario, configuración; no son los seis encuentros de campaña. Añade dimensión/biomas, no requeridos por diseño.
-- GeckoLib, JAuml y Fabric API (Fabric) obligatorias según ficha. Posible conflicto con mods que reemplacen interfaz completa de barras; la ficha permite desactivar barras personalizadas. Sodium no verificado.
-- Apache-2.0 indicada; respetar licencia/avisos. No benchmark. Coste local: **NO DATA**.
-- Fuentes: [build](https://modrinth.com/mod/remnants-eclipsed-realm/version/3.0.0+fabric-1.20.1), [proyecto](https://modrinth.com/mod/remnants-eclipsed-realm).
+- **Build:** `3.0.0+fabric-1.20.1`.
+- **Función:** jefes/arenas propios, diario y configuración; añade dimensión/biomas, no requerido para los seis jefes de campaña.
+- **Dependencias:** GeckoLib, JAuML y Fabric API citadas; verificar artefacto.
+- **Solapamiento/licencia:** no sustituye elenco de campaña; posible conflicto con interfaces completas de barras. Apache-2.0 indicada, cumplir avisos.
+- **Fuente:** [build](https://modrinth.com/mod/remnants-eclipsed-realm/version/3.0.0+fabric-1.20.1), [proyecto](https://modrinth.com/mod/remnants-eclipsed-realm).
+- **Mediciones locales:** FPS **NO DATA**; frametime **NO DATA**; RAM **NO DATA**; CPU/GPU **NO DATA**; arranque/carga **NO DATA**; estabilidad/compatibilidad **NO DATA**.
 
 ### Bosses of Mass Destruction
-- Build **1.7.5-1.20.1 Fabric**, cuatro jefes genéricos, no los seis diseñados.
-- Dependencias citadas: Cloth Config API, GeckoLib, Fabric Language Kotlin, Fabric API, Cardinal Components API. Solapa con otros mods de jefes; no implementa arenas controladas de campaña. LGPL-3.0-only indicada; verificar obligaciones. Mantenimiento reciente no verificado.
-- Rendimiento: **NO DATA**.
-- Fuentes: [build](https://modrinth.com/mod/bosses-of-mass-destruction/version/yoCCX4Cc), [proyecto](https://modrinth.com/mod/bosses-of-mass-destruction).
+- **Build:** `1.7.5-1.20.1` Fabric.
+- **Función:** cuatro jefes genéricos distintos de los seis encuentros de campaña.
+- **Dependencias citadas:** Cloth Config API, GeckoLib, Fabric Language Kotlin, Fabric API, Cardinal Components API.
+- **Solapamiento/licencia:** no sustituye jefes/arenas narrativas; LGPL-3.0-only indicada, revisar obligaciones.
+- **Fuente:** [build](https://modrinth.com/mod/bosses-of-mass-destruction/version/yoCCX4Cc), [proyecto](https://modrinth.com/mod/bosses-of-mass-destruction).
+- **Mediciones locales:** FPS **NO DATA**; frametime **NO DATA**; RAM **NO DATA**; CPU/GPU **NO DATA**; arranque/carga **NO DATA**; estabilidad/compatibilidad **NO DATA**.
 
 ### Village Diplomacy
-- Build **1.4.0 Fabric 1.20.1**, reputación/relaciones con aldeas, no cuatro facciones narrativas.
-- Dependencias nominales obligatorias no suficientemente identificadas: **[SIN VERIFICAR]**. Solapamiento con reputación de aldeas; no acredita facciones personalizadas. ARR; redistribución no verificada.
-- Rendimiento: **NO DATA**.
-- Fuente: [build](https://modrinth.com/mod/village-diplomacy/version/xzUOqXuO).
+- **Build citada:** `1.4.0`, Fabric 1.20.1.
+- **Función:** relaciones/reputación de aldeas; no modela cuatro facciones narrativas.
+- **Dependencias:** exactas **[SIN VERIFICAR]**.
+- **Solapamiento/licencia:** solo apropiado para reputación de aldeas; ARR indicada, redistribución no verificada.
+- **Fuente:** [build](https://modrinth.com/mod/village-diplomacy/version/xzUOqXuO).
+- **Mediciones locales:** FPS **NO DATA**; frametime **NO DATA**; RAM **NO DATA**; CPU/GPU **NO DATA**; arranque/carga **NO DATA**; estabilidad/compatibilidad **NO DATA**.
 
 ### FTB Quests (Fabric)
-- Build **2001.4.22**, Fabric 1.20.1, sistema de misiones por equipos. Ramas exclusivas descritas en evidencia de build 2001.4.13; no atribuir automáticamente iguales funciones a 2001.4.22. No equivale a diálogo ramificado ni lógica física de rutas.
-- Suite con FTB Library/FTB Teams; páginas de Teams listan Architectury API y Fabric API. Versiones mínimas conjuntas no verificadas. Progreso individual divergente requiere verificar ámbito de equipo.
-- Alternativa solapada con Questlog; escoger uno. ARR según auditoría; no redistribuir JAR sin autorización expresa. “Lightweight” de página no es medición.
-- Impacto local: **NO DATA**.
-- Fuentes: [2001.4.22](https://www.curseforge.com/minecraft/mc-mods/ftb-quests-fabric/files/8078537), [ramas exclusivas 2001.4.13](https://www.curseforge.com/minecraft/mc-mods/ftb-quests-fabric/files/6431736), [Library](https://www.curseforge.com/minecraft/mc-mods/ftb-library-fabric), [Teams/dependencias](https://www.curseforge.com/minecraft/mc-mods/ftb-teams-fabric/relations/dependencies).
+- **Build citada:** `2001.4.22`, MC 1.20.1.
+- **Función:** misiones para equipo. Ramas exclusivas citadas con evidencia de build `2001.4.13`; no atribuir automáticamente igual funcionalidad a 2001.4.22. No equivale a diálogo ramificado o lógica física de rutas.
+- **Dependencias:** suite FTB Library/Teams; versiones mínimas exactas no verificadas.
+- **Solapamiento/licencia:** alternativa a Questlog; ARR según auditoría, no redistribuir JAR sin autorización expresa.
+- **Fuente:** [2001.4.22](https://www.curseforge.com/minecraft/mc-mods/ftb-quests-fabric/files/8078537), [build con evidencia de ramas](https://www.curseforge.com/minecraft/mc-mods/ftb-quests-fabric/files/6431736), [Library](https://www.curseforge.com/minecraft/mc-mods/ftb-library-fabric), [Teams/dependencias](https://www.curseforge.com/minecraft/mc-mods/ftb-teams-fabric/relations/dependencies).
+- **Mediciones locales:** FPS **NO DATA**; frametime **NO DATA**; RAM **NO DATA**; CPU/GPU **NO DATA**; arranque/carga **NO DATA**; estabilidad/compatibilidad **NO DATA**.
 
 ### Questlog
-- Build **3.3.2-1.20.1-fabric**, misiones tipo libro/lista y datos JSON; ficha atribuye prerrequisitos, objetivos, recompensas/globales en builds recientes. No acredita selección exclusiva equivalente a FTB Quests ni reputación/rutas integradas.
-- Dependencias nominales completas de esta build: **[SIN VERIFICAR]**; una ficha antigua cita Cloth Config, no asumir cadena completa. Alternativa solapada con FTB Quests. Apache-2.0 indicada; aplicar avisos/condiciones.
-- Rendimiento: **NO DATA**.
-- Fuentes: [build](https://modrinth.com/mod/questlog/version/qN2sUxYM), [proyecto/modelo](https://modrinth.com/mod/ufQYCY6N).
+- **Build:** `3.3.2-1.20.1-fabric`.
+- **Función:** misiones tipo libro/lista y datos JSON; no acredita ramas exclusivas ni reputación/rutas integradas.
+- **Dependencias:** lista exacta de esta build **[SIN VERIFICAR]**; no inferir desde build antigua.
+- **Solapamiento/licencia:** alternativa a FTB Quests; Apache-2.0 indicada, verificar avisos/archivo.
+- **Fuente:** [build](https://modrinth.com/mod/questlog/version/qN2sUxYM), [proyecto/modelo](https://modrinth.com/mod/ufQYCY6N).
+- **Mediciones locales:** FPS **NO DATA**; frametime **NO DATA**; RAM **NO DATA**; CPU/GPU **NO DATA**; arranque/carga **NO DATA**; estabilidad/compatibilidad **NO DATA**.
 
-## Medición local
+## Mediciones locales
 
-No hay ejecución ni benchmarks aportados para Athlon 5150, Radeon R3 y HDD. No se midió ninguna combinación RPG ni base de comparación.
-
-| Métrica | Resultado |
-|---|---|
-| FPS | **NO DATA — benchmark no ejecutado** |
-| Frametime | **NO DATA — no medido** |
-| RAM | **NO DATA — no medido** |
-| CPU/GPU | **NO DATA — no medido** |
-| Arranque | **NO DATA — no medido** |
-| Carga | **NO DATA — no medido** |
-| Compatibilidad/estabilidad del conjunto | **NO DATA — instancia no probada** |
-
-Un dato vacío no significa cero ni resultado favorable. Para completar mediciones se requiere instancia autorizada, escenario repetible y consentimiento; esta auditoría no instala ni redistribuye mods.
+No hubo ejecución ni benchmark aportado para Athlon 5150, Radeon R3 y HDD. No se midieron FPS, frametime, RAM, CPU/GPU, arranque, carga, estabilidad ni compatibilidad del conjunto. Cada resultado permanece **NO DATA**, no equivale a cero ni a resultado favorable. Requiere instancia autorizada, escenario repetible y consentimiento; esta auditoría no instala ni redistribuye mods.
