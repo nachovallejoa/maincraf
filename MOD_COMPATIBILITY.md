@@ -1,64 +1,55 @@
-# Compatibilidad de mods
+# Matriz de compatibilidad de mods
 
-## Estado
+**Estado:** borrador; ninguna combinación instalada ni probada. Manifiesto RPG: no disponible en el paquete revisado. Plataforma candidata: Minecraft 1.20.1 + Fabric; Forge solo si lo requiere el manifiesto.
 
-- Estado inicial recibido: repositorio sin manifiesto ni lista de mods RPG.
-- La consulta inicial de esta misión encontró raíz vacía; no hay mods del proyecto que probar.
-- `NO DATA: mods RPG del proyecto — árbol reportado vacío; README reportado 404; no hay manifiesto ni lista de mods.`
-- Compatibilidad de cualquier base candidata con un pack RPG concreto: **SIN VERIFICAR**.
-- No se ejecutó Minecraft; ninguna carga o función se marca como probada.
+## Estados
 
-## Estados válidos
-
-- No verificado
-- Carga probada
-- Función probada
-- Conflicto reproducido
-- No aplica
-
-La existencia de un archivo o declaración de su proyecto no equivale a prueba de carga/función.
+- **Candidato:** existe evidencia de versión/plataforma publicada; no prueba local.
+- **No verificado:** falta evidencia de combinación concreta.
+- **Carga probada / función probada:** solo tras registrar launcher, MC, loader, Java, mods/config exactos y resultado reproducible.
+- **Conflicto confirmado:** evidencia reproducible o aviso del autor aplicable al caso.
+- No mezclar JARs Fabric y Forge. Nunca subir JARs de terceros.
 
 ## Matriz candidata Fabric 1.20.1
 
-| Componente | Versión/archivo propuesto | Dependencia o nota comprobada | Pack RPG | Carga | Función | Evidencia |
-|---|---|---|---|---|---|---|
-| Minecraft | 1.20.1 | Java 17 recomendado por Fabric para 1.17–1.20.4 | No verificado | No verificado | No verificado | https://wiki.fabricmc.net/install |
-| Fabric Loader | Pendiente | Fijar tras conocer el pack | No verificado | No verificado | No verificado | — |
-| Fabric API | Versión pendiente | Dynamic FPS 3.9.5 la requiere; versión común exacta pendiente | No verificado | No verificado | No verificado | https://modrinth.com/mod/dynamic-fps/version/D9mrJwm0 |
-| Sodium | 0.5.13 Fabric | Indium ≥1.0.36 o Iris ≥1.7.6 solo si se usan; OpenGL 4.5 en driver actualizado para soporte oficial | No verificado; Radeon R3 sin verificación de API | No verificado | No verificado | https://modrinth.com/mod/sodium/version/mc1.20.1-0.5.13-fabric |
-| Lithium | 0.11.4 Fabric | Proyecto dice que Fabric API no es requerida | No verificado | No verificado | No verificado | https://www.curseforge.com/minecraft/mc-mods/lithium/files/7268114 |
-| FerriteCore | 6.0.1 Fabric | Hydrogen conflict [SIN VERIFICAR] | No verificado | No verificado | No verificado | https://modrinth.com/mod/ferrite-core/version/6.0.1 |
-| ModernFix | 5.25.2+mc1.20.1 Fabric | Compatibilidad específica pendiente | No verificado | No verificado | No verificado | https://www.curseforge.com/minecraft/mc-mods/modernfix/files/7306748 |
-| Entity Culling | 1.12.1 Fabric | Uso de CPU libre descrito por proyecto; revisar rendimiento con CPU cargada | No verificado | No verificado | No verificado | https://modrinth.com/mod/entityculling/version/xM6y5W1N |
-| ImmediatelyFast | 1.2.4 propuesto | Artefacto exacto [SIN VERIFICAR]; revisar OptiFine/OptiFabric y MemoryLeakFix antiguo | No verificado | No verificado | No verificado | https://modrinth.com/mod/immediatelyfast |
-| BadOptimizations | 2.2.3 (1.20.1) | Sin dependencia obligatoria según ficha consultada | No verificado | No verificado | No verificado | https://www.curseforge.com/minecraft/mc-mods/badoptimizations/files/6673591 |
-| Particle Core | 0.3.3+1.20.1 Fabric | Validar efectos personalizados | No verificado | No verificado | No verificado | https://www.curseforge.com/minecraft/mc-mods/particle-core/files/7581167 |
-| Dynamic FPS | 3.9.5 Fabric | Fabric API requerida; Cloth Config opcional | No verificado | No verificado | No verificado | https://modrinth.com/mod/dynamic-fps/version/D9mrJwm0 |
-| Mods RPG | NO DATA | Inventario/manifiesto no entregado | No verificable | No verificado | No verificado | Árbol reportado vacío; README 404 |
+| Mod | Build/alcance registrado | Pack RPG | Estado |
+|---|---|---|---|
+| Minecraft/Java | MC 1.20.1; Java 17 documentado/recomendado por Fabric para 1.17–1.20.4 | Manifiesto ausente | Java adecuado como referencia; configuración local no verificada. |
+| Fabric Loader/API | Versión exacta pendiente | Manifiesto ausente | No verificado; API solo si build requiere. |
+| Sodium | 0.5.13 Fabric 1.20.1 | Sin manifiesto | Candidato. OpenGL/controlador Radeon R3 [SIN VERIFICAR]; soporte oficial OpenGL 4.5+ no permite inferir fallo/éxito local. |
+| Lithium | 0.11.4 Fabric 1.20.1 | Sin manifiesto | Candidato; carga/función no probadas. |
+| FerriteCore | 6.0.1 Fabric, MC 1.20–1.20.2 | Sin manifiesto | Candidato. FerriteCore declara incompatibilidad con Hydrogen en 1.18+; no combinarlos en 1.20.1. |
+| ModernFix | 5.25.2+mc1.20.1 Fabric | Sin manifiesto | Candidato; configuración predeterminada inicialmente. |
+| ImmediatelyFast | 1.5.5+1.20.4 Fabric, rango declarado 1.20–1.20.4 | Sin manifiesto | Candidato; versión 1.20.1 dentro del rango publicado; integración completa no probada. |
+| Entity Culling | 1.12.1-1.20.1 (entrada recibida) | Sin manifiesto | Opcional, archivos exactos pendientes; probar entidades/NPCs y CPU. |
+| Particle Core | 0.2.5+1.20.1 (entrada recibida) | Sin manifiesto | Opcional, archivos exactos pendientes; comprobar solapamiento de partículas. |
+| Noisium | 2.3.0+mc1.20-1.20.1 (entrada recibida) | Sin manifiesto | Opcional, archivo/estado actuales por verificar; solo escenario de generación. |
+| Dynamic FPS | 3.9.5 (entrada recibida) | Sin manifiesto | Opcional para segundo plano; dependencias exactas pendientes, no candidato de FPS activo. |
+| LightSpeedRe | 2.0.7 Fabric 1.20.1 (entrada recibida) | Sin manifiesto | Experimental; dependencias/licencia pendientes; comparar individualmente con ModernFix. |
 
-## Matriz alternativa Forge 1.20.1
+## Alternativa Forge 1.20.1
 
-No mezclar con la matriz Fabric. Versiones candidatas recibidas, pendientes de validación integral:
+Embeddium, FerriteCore y ModernFix aparecen como candidatos recibidos. Versiones/builds completas, dependencias e integración RPG no verificadas. No combinar con matriz Fabric; elegir únicamente si el manifiesto exige Forge.
 
-| Componente | Propuesta | Estado |
+## Interacciones que requieren prueba
+
+| Relación | Evidencia/estado | Precaución |
 |---|---|---|
-| Minecraft / Java | 1.20.1 / Java 17 orientativo | Loader y perfil final pendientes |
-| Forge | Versión pendiente | No verificado |
-| Embeddium | 0.3.31+mc1.20.1 | Versión/compatibilidad [SIN VERIFICAR] |
-| Radium | 0.12.4 | No combinar con Canary según información recibida; archivo exacto pendiente |
-| FerriteCore / ModernFix | Versiones citadas en entrada | Compatibilidad RPG [SIN VERIFICAR] |
-| Entity Culling / ImmediatelyFast | Versiones citadas | Artefactos y compatibilidad completa [SIN VERIFICAR] |
-| Particle Core | 0.3.3+1.20.1+forge | Probar función RPG |
-| Dynamic FPS | 3.9.2 Forge propuesto | [SIN VERIFICAR] |
-| Mods RPG | NO DATA | Sin manifiesto |
+| Sodium + Radeon R3 | API/controlador local sin verificar. Sodium 0.5.13 publicado para MC 1.20.1; OpenGL 4.5+ para soporte oficial. | Probar primero Minecraft limpio; registrar API/controlador; comparar sin Sodium solo si falla. No asumir que Embeddium resuelve API. |
+| Sodium + ImmediatelyFast | No hay prueba con el pack. | Revisar arranque, render y logs. |
+| Sodium + Indium | Ficha Sodium indica 1.0.36+ si se usa. | No añadir sin dependencia explícita. |
+| Sodium + Iris | Ficha Sodium indica 1.7.6+ si se usa. | Shaders/Iris no forman parte de base propuesta. |
+| FerriteCore + Hydrogen | Incompatibilidad declarada por FerriteCore para MC 1.18+. | No combinar en 1.20.1. |
+| ModernFix dinámico | Falso por defecto según código consultado. | No añadir override inicial; generar config propia. |
+| Activar `mixin.perf.dynamic_resources` | Opción existente; pack no disponible para validación. | Solo en copia, con logs y revisión de recursos. |
+| ModernFix + LightSpeedRe | Solapamiento potencial, combinación sin verificar. | Ensayar individualmente. |
+| Entity Culling + NPCs RPG | Sin inventario de entidades. | Revisar visibilidad/función y exclusiones si se prueba. |
+| Particle Core + partículas nativas | Solapamiento posible. | Probar por separado. |
+| Noisium + mundo existente | No se acredita mejora de lectura de chunks existentes. | Separar generación nueva y mundo guardado. |
 
-## Reglas de prueba
+## Registro de pruebas (vacío: no se ejecutaron pruebas)
 
-1. Respaldar perfil y mundo.
-2. Registrar Minecraft, Java, loader, mods y dependencias con versiones exactas.
-3. Probar primero carga del pack RPG sin optimizadores.
-4. Añadir un mod/grupo cada vez, conservar logs y verificar funciones.
-5. No instalar simultáneamente pilas Fabric y Forge.
-6. No equiparar carga exitosa con compatibilidad funcional total.
-7. No retirar ni reemplazar mods sin autorización expresa.
-8. Medir solo después de estabilidad y con el protocolo de `PERFORMANCE.md`.
+| Fecha | MC/loader exactos | Java | Mods/versiones/hash local | Configuración/mundo | Carga | Función | Logs/errores | Estado |
+|---|---|---|---|---|---|---|---|---|
+| | | | | | | | | |
+| | | | | | | | | |
