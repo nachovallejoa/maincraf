@@ -1,12 +1,12 @@
 # Biblia narrativa
 
-> **Estado: PENDIENTE DE APROBACIÓN.** Historia propuesta para revisión; no constituye implementación de contenido ni aprobación técnica de mods.
+> **Estado: APROBADA por el usuario como base de la historia.** La aprobación no constituye implementación de contenido ni aprobación técnica de mods.
 
 ## Identidad elegida
 
 **La Marea de los Mil Soles**: aventura de fantasía oscura y misterio en un archipiélago de islas flotantes, con tensiones entre facciones y decisiones que tienen consecuencias. La Marea desplaza las corrientes y altera el acceso a las islas; los reflejos solares muestran escenas imposibles. La Cartografía de la Ceniza queda en reserva y no forma parte de esta propuesta.
 
-Toda región, personaje, clase, jefe, misión, evento, estado persistente y desenlace de este documento es una propuesta narrativa pendiente de aprobación e implementación. La historia no confirma compatibilidad con Minecraft ni con ningún mod.
+Toda región, personaje, clase, jefe, misión, evento, estado persistente y desenlace de este documento es una propuesta narrativa aprobada como base, pendiente de aprobación e implementación técnica. La historia no confirma compatibilidad con Minecraft ni con ningún mod.
 
 ## Alcance técnico conocido y límites
 
@@ -37,18 +37,18 @@ Después hubo una tregua: unos querían apagar la Trama, otros repararla y otros
 
 - **Liga del Lastre:** dirigida por la Maestra de Lastre **Tavia Renn**. Quiere detener las Mareas que amenazan comunidades y conservar rutas seguras, incluso cerrando otras. Ofrece refugio y suministros; sus medidas pueden convertirse en control y trasladar el riesgo a pueblos aislados.
 - **Cartógrafos del Prisma:** liderados por **Maela Orin**. Quieren comprender y controlar las Mareas mediante mapas y testimonios. Maela busca a su hermana Lena, desaparecida en una expedición no reconocida. El conocimiento puede convertirse en poder central.
-- **Hermandad del Vaivén:** comunidades móviles dirigidas por la piloto **Saira Nume**. Prefiere aprender a vivir con el ciclo, compartir rutas y respetar la decisión de marcharse o quedarse. La libertad no garantiza que todos sobrevivan.
+- **Hermandad del Vaivén:** comunidades móviles dirigidas por la piloto **Saira Nume**. Prefieren aprender a vivir con el ciclo, compartir rutas y respetar la decisión de marcharse o quedarse. La libertad no garantiza que todos sobrevivan.
 - **Flota Sumergida:** tripulaciones y comunidades de la Fosa, unidas de forma desigual a Veyr por lealtad, miedo o promesas de recuperar a los desaparecidos. No todos sus miembros son enemigos.
 
 El conflicto central es quién decide qué comunidades y recuerdos pueden ponerse en riesgo para proteger a otras. Las facciones no son bloques moralmente uniformes.
 
 ## Personajes y antagonista
 
-- **Caminante de Deriva (jugador):** superviviente de la caída inicial que distingue reflejos y rutas. La causa de su sensibilidad queda abierta: podría deberse a la Marea, a la Trama o a algo previo.
-- **Maela Orin:** cartógrafa meticulosa; debe distinguir comprender el cielo de creer que por ello tiene derecho a controlarlo.
+- **Caminante de Deriva (jugador):** superviviente de la caída inicial que distingue reflejos y rutas. El origen de su sensibilidad queda abierto: podría deberse a la Marea, a la Trama o a algo previo.
+- **Maela Orin:** cartógrafa meticulosa; debe distinguir entre comprender el cielo y creer que por ello tiene derecho a controlarlo.
 - **Saira Nume:** piloto y mediadora; rechaza sacrificar comunidades por la estabilidad de otras, sin idealizar el cambio.
 - **Tavia Renn:** líder que carga con las consecuencias de abrir o cerrar rutas; no es una antagonista secreta.
-- **Ilyan Veyr, el Almirante Sumergido:** superviviente de la Noche, alterado y ligado a la Trama. Pretende inmovilizar temporalmente las corrientes peligrosas para proteger comunidades. El mecanismo consume recuerdos cercanos a sus anclas: primero personales, después la capacidad colectiva de transmitir historia y elegir otro futuro. No busca gobernar por vanidad; cree que la libertad de movimiento ya no es sostenible.
+- **Ilyan Veyr, el Almirante Sumergido:** superviviente de la Noche, alterado y ligado a la Trama. Pretende inmovilizar temporalmente las corrientes peligrosas para proteger comunidades. El mecanismo consume recuerdos de quienes viven cerca de sus anclas: primero personales, después la capacidad colectiva de transmitir historia y elegir otro futuro. No busca gobernar por vanidad; cree que la libertad de movimiento ya no es sostenible.
 - **Comodoro Yara Kest, Mano del Naufragio:** dirige incursiones; cree que la paz impuesta evitará nuevas pérdidas, pero puede ser confrontada con el coste real del plan.
 - **Prior Edras Venn, Guardián de la Quilla:** custodia máquinas de la Fosa y conoce una ruta al núcleo; acepta el sacrificio de recuerdos.
 - **Piloto Senn, el Eco:** mensajero cuyos reflejos parecen adelantarse; teme que la flota quede atrapada si Veyr cae.
@@ -62,7 +62,7 @@ Estos encuentros son inventados para la historia; no se atribuyen a ningún mod.
 | Mastín de Lastre | Cabo de las Campanas | Custodia el faro y muestra que una máquina peligrosa no tiene que ser maligna. |
 | Madre de los Zarcillos Aéreos | Jardines de Oria | Protege raíces enlazadas al ancla que desvía corrientes. |
 | Custodio de Remaches | Dársena | Representa la seguridad absoluta de la Liga. |
-| Ballena de Lastre | Fosa | Criatura afectada por corrientes atrapadas, no subordinada de Veyr. |
+| Ballena de Lastre | Fosa | Criatura afectada por corrientes atrapadas, no subordinada a Veyr. |
 | Corista Ciego | Nimbo | Custodia registros que muestran que las visiones no son certezas. |
 | Almirante Sumergido | Corona | Antagonista final; pretende fijar el mundo en una sola versión. |
 
@@ -84,53 +84,47 @@ Los cultivos de Oria reaccionan de maneras opuestas a la luz. La investigación 
 
 ### Acto II — El precio de un ancla
 
-En la Dársena, Tavia admite reparaciones secretas. Los mapas indican que estas coinciden con reflejos más intensos; las corrientes de escape desaparecen. La Trama no crea toda la Marea, pero desplaza parte del riesgo. El Custodio de Remaches interpreta la investigación como sabotaje y protege planos.
+En la Dársena, Tavia admite reparaciones secretas. Los mapas indican que coinciden con reflejos más intensos; las corrientes de escape desaparecen. La Trama no crea toda la Marea, pero desplaza parte del riesgo. El Custodio interpreta la investigación como sabotaje y protege planos.
 
-**Principales:** *La Dársena cerrada* (acceso a archivos); *El mapa de las ausencias* (identificar regiones afectadas); *Un refugio con dos dueños* (evitar violencia por el astillero); *El Custodio de Remaches* (desactivar guardián y obtener planos); *La deuda de la Liga* (publicar pruebas o negociar primero). **Secundarias:** *La grúa de nadie* (priorizar entre dos rescates); *Una pieza, dos promesas* (componente para nave médica o defensa); *Los nombres del registro* (revelar tripulación borrada). **Consecuencias:** la Dársena ofrece refugio y comercio; los planos habilitan opciones en la Fosa y los nodos; publicar mejora confianza de comunidades afectadas, negociar preserva canal con Tavia pero demora la difusión. El estado del astillero cambia reparaciones o suministros.
+**Principales:** *La Dársena cerrada* (acceso a archivos); *El mapa de las ausencias* (identificar regiones afectadas); *Un refugio con dos dueños* (evitar violencia por el astillero); *El Custodio de Remaches* (desactivar guardián y obtener planos); *La deuda de la Liga* (publicar pruebas o negociar primero). **Secundarias:** *La grúa de nadie* (priorizar entre dos rescates); *Una pieza, dos promesas* (componente para nave médica o defensa); *Los nombres del registro* (revelar tripulación borrada). **Consecuencias:** la Dársena ofrece refugio y comercio; los planos habilitan opciones en la Fosa y los nodos; publicar mejora confianza de comunidades afectadas, negociar preserva canal con Tavia pero demora difusión. El estado del astillero cambia reparaciones o suministros.
 
 ### Acto III — Bajo el Mar de Nubes
 
-La Fosa contiene barrios habitados por descendientes de quienes la superficie dio por muertos. Veyr conserva fragmentos de tripulación mediante la Trama, pero cada reaparición cuesta recuerdos a quienes viven cerca. La Ballena de Lastre, hecha al acumular restos y corrientes atrapadas, no sirve al Almirante.
+La Fosa contiene barrios habitados por descendientes de quienes la superficie dio por muertos. Veyr conserva fragmentos de tripulación mediante la Trama, pero cada reaparición cuesta recuerdos a quienes viven cerca. La Ballena de Lastre acumula restos y corrientes atrapadas; no sirve al Almirante.
 
-**Principales:** *Descenso sin faro* (llegar a la Fosa); *Los que no cayeron* (ayudar a la comunidad ignorada); *La Ballena de Lastre* (abrir o evitar el paso); *La tripulación que recuerda* (escuchar versiones de la flota); *El diario de Veyr* (reconstruir la Noche); *Una orden imposible* (decidir si revelar el coste del plan). **Secundarias:** *El nombre del barco* (reconstruir registro); *El precio del oxígeno* (repartir suministros); *La puerta que sube* (rescatar personas a costa de carga). **Consecuencias:** se abren refugios locales y testimonios; ayudar a la comunidad permite comerciar y acceder a misiones de flota; ahuyentar a la Ballena reduce peligro, dejarla exige una ruta más larga; pruebas pueden permitir negociar con Yara. Encuentros y rutas controlados, sin enjambres.
+**Principales:** *Descenso sin faro* (llegar a la Fosa); *Los que no cayeron* (ayudar a la comunidad ignorada); *La Ballena de Lastre* (abrir o evitar el paso); *La tripulación que recuerda* (escuchar versiones de la flota); *El diario de Veyr* (reconstruir la Noche); *Una orden imposible* (decidir si revelar el coste del plan). **Secundarias:** *El nombre del barco* (reconstruir registro); *El precio del oxígeno* (repartir suministros); *La puerta que sube* (rescatar personas a costa de carga). **Consecuencias:** se abren refugios locales y testimonios; ayudar permite comerciar y acceder a misiones de flota; ahuyentar a la Ballena reduce peligro, dejarla exige una ruta más larga; las pruebas pueden permitir negociar con Yara. Encuentros y rutas controlados, sin enjambres.
 
 ### Acto IV — Los cielos que se contradicen
 
-En el Nimbo, los reflejos presentan versiones incompatibles. Maela descubre que Lena participó en una expedición oculta. Veyr busca sus registros para activar la Trama sin interrupciones. Las visiones son futuros posibles, no predicciones seguras. El Corista Ciego protege los cristales de Lena.
+En el Nimbo, los reflejos presentan versiones incompatibles. Maela descubre que Lena participó en una expedición oculta. Veyr busca sus registros para activar la Trama sin interrupciones. Las visiones son futuros posibles, no predicciones seguras. El Corista Ciego protege cristales de Lena.
 
-**Principales:** *El bosque de los cielos repetidos* (hallar ruta real); *La hermana de Maela* (descubrir por qué se ocultó la expedición); *El Corista Ciego* (recuperar registros); *Tres futuros, ninguna promesa* (comparar visiones); *La verdad que se comparte* (decidir quién recibe hallazgos). **Secundarias:** *El árbol que recuerda mal* (distinguir recuerdo y reflejo); *La expedición incompleta* (recoger relatos contradictorios); *Un mapa para todos* (sopesar publicar una ruta segura que también podría ayudar a la Flota). **Consecuencias:** los registros apoyan negociación; compartir favorece deliberación, pero informa a Veyr; reservarlos protege temporalmente, pero reduce transparencia. Ninguna visión se vuelve inevitable.
+**Principales:** *El bosque de los cielos repetidos* (hallar ruta real); *La hermana de Maela* (descubrir por qué se ocultó la expedición); *El Corista Ciego* (recuperar registros); *Tres futuros, ninguna promesa* (comparar visiones); *La verdad que se comparte* (decidir quién recibe hallazgos). **Secundarias:** *El árbol que recuerda mal* (distinguir recuerdo y reflejo); *La expedición incompleta* (recoger relatos contradictorios); *Un mapa para todos* (sopesar publicar una ruta que también podría ayudar a la Flota). **Consecuencias:** los registros apoyan negociaciones; compartir favorece deliberación pero informa a Veyr; reservar protege temporalmente, pero reduce transparencia. Ninguna visión es inevitable.
 
 ### Acto V — La Corona de los Mil Soles
 
-La Marea culmina con reflejos por todo el cielo. En el Atrio del Primer Reflejo, Veyr enlaza los nodos. Los mil soles son reflejos de una misma luz atravesando lentes y corrientes; la Trama redistribuye tensiones, no las borra. El ciclo natural y la amplificación tecnológica concurren. El jugador puede alcanzar la Corona con menos aliados; ciertos desenlaces negociados requieren pruebas y participación de comunidades.
+La Marea culmina con reflejos por el cielo. En el Atrio del Primer Reflejo, Veyr enlaza los nodos. Los mil soles son reflejos de una misma luz atravesando lentes y corrientes; la Trama redistribuye tensiones, no las borra. El ciclo natural y la amplificación tecnológica concurren. El jugador puede llegar a la Corona con menos aliados; algunos desenlaces negociados requieren pruebas y participación de comunidades.
 
-**Principales:** *La última ruta abierta* (acordar llegada conjunta o hallar alternativa); *Los nodos despiertos* (activar, desviar o destruir); *El Atrio del Primer Reflejo* (comprender la red); *La Noche vista desde dentro* (reconstruir el sacrificio); *El Almirante Sumergido* (detenerlo); *Qué cielo dejamos* (decidir el futuro). El combate final tiene arena delimitada y fases de mando, vínculo con la Fosa y reflejos de la tripulación; la cantidad simultánea de enemigos no escala. Tras vencer, según pruebas y decisiones, se puede matar a Veyr, apartarlo del núcleo o persuadirlo de soltar la Trama.
+**Principales:** *La última ruta abierta* (acordar llegada conjunta o hallar alternativa); *Los nodos despiertos* (activar, desviar o destruir); *El Atrio del Primer Reflejo* (comprender la red); *La Noche vista desde dentro* (reconstruir el sacrificio); *El Almirante Sumergido* (detenerlo); *Qué cielo dejamos* (decidir el futuro). El combate final tiene arena delimitada y fases de mando, vínculo con la Fosa y reflejos de tripulación; enemigos simultáneos acotados. Tras vencer, según pruebas y decisiones, se puede matar a Veyr, apartarlo del núcleo o persuadirlo de soltar la Trama.
 
 ## Misiones de facción
 
-- **Liga:** *Cierre de emergencia* (cumplir, negociar evacuación o probar alternativa); *La cuenta de las anclas* (identificar quién cargó con corrientes); *Una guardia sin relevos* (ayudar a patrulla expuesta a un nodo). Pueden abrir rutas estables, suministros y apoyo.
+- **Liga:** *Cierre de emergencia* (cumplir, negociar evacuación o probar alternativa); *La cuenta de las anclas* (identificar quién cargó con corrientes); *Una guardia sin relevos* (ayudar a patrulla expuesta a un nodo). Puede abrir rutas estables, suministros y apoyo.
 - **Cartógrafos:** *Tres mapas para una ruta* (comparar sin imponer una sola versión); *La luz de Lena* (decidir quién recibe notas privadas); *Lo que el cristal no predice* (probar límites de una visión). Aportan información, rutas y pruebas.
 - **Hermandad:** *El convoy que no espera* (trasladar sin abandonar a quienes no pueden viajar); *Refugio de paso* (negociar acogida); *La ruta del regreso* (explorar retorno voluntario). Aportan refugios, rutas alternativas y evacuación.
-- **Flota Sumergida:** *Una orden desobedecida* (ayudar a tripulación disidente); *Los que Veyr prometió salvar* (averiguar qué puede recuperarse); *La última guardia de Kest* (confrontar a Yara con pruebas). Puede abrir testimonios y reducir oposición.
+- **Flota Sumergida:** *Una orden desobedecida* (ayudar a tripulación disidente); *Los que Veyr prometió salvar* (averiguar qué puede recuperarse); *La última guardia de Kest* (confrontar a Yara con pruebas). Pueden abrir testimonios y reducir oposición.
 
-Las misiones de facción no son requisito para acabar la campaña. Reputación, refugios y apoyos persistentes son estados propuestos; su implementación no está confirmada.
-
-## Perfiles, progresión y dificultad
-
-Perfiles narrativos opcionales: **Guardacorrientes** (resistencia y protección), **Vigía del Prisma** (observación y rutas), **Rompeanclas** (combate e intervención en mecanismos). Ninguno debe ser requisito para misiones principales. Clases definidas, niveles/estadísticas y árboles/builds son objetivos de diseño, sin cifras ni reglas fijadas. Exploración importante, combate equilibrado y supervivencia de riesgo moderado son preferencias, no resultados probados.
-
-Skill Tree/RPG Series, Tierify, RPG Inventory, Questlog y FTB Quests están **[SIN VERIFICAR]**. Si no ofrecen estados narrativos necesarios, podrían requerirse sistemas propios, también pendientes de diseño e implementación.
+Las misiones de facción no son requisito para acabar la campaña. Reputación, refugios y apoyos persistentes son estados propuestos, sin implementación confirmada.
 
 ## Eventos narrativos
 
-No son clima dinámico ni cambios automáticos del mundo. *La Marea de ascenso* vuelve inaccesibles algunas rutas y revela otras; *La Marea de retorno* lleva restos de la Fosa a la superficie; *La Lluvia de reflejos* orienta o confunde; *La Noche sin sombra* permite a Veyr activar nodos mientras las facciones disputan qué rutas proteger. Su representación técnica está pendiente.
+No son clima dinámico ni cambios automáticos del mundo. **La Marea de ascenso** vuelve inaccesibles algunas rutas y revela otras; **la Marea de retorno** lleva restos de la Fosa a la superficie; **la Lluvia de reflejos** orienta o confunde; **la Noche sin sombra** permite a Veyr activar nodos mientras las facciones disputan qué rutas proteger. Su representación técnica está pendiente.
 
 ## Desenlaces
 
-1. **El cielo inmóvil:** la Liga fija rutas; baja el riesgo inmediato, pero se aíslan comunidades fuera de la red y se pierden recuerdos. Más rutas principales y servicios de Liga, menos rutas secundarias.
-2. **El cielo medido:** los Cartógrafos activan una Trama limitada; rutas previsibles, pero control concentrado. Compartir pruebas puede repartir la gestión; sin acuerdos se forma un nuevo poder central. Servicios y rutas principales de Cartógrafos.
-3. **El cielo libre:** se rompen nodos; la corriente natural vuelve, algunas comunidades pierden hogares y otras se reencuentran. Veyr puede partir con seguidores o la flota fragmentarse. Menos accesos controlados y más rutas/refugios móviles.
-4. **La Marea pactada:** requiere testimonios, pruebas compartidas y participación de comunidades afectadas. Se separan nodos que trasladan peligro y quedan mecanismos locales voluntarios. Nadie es usado en secreto para estabilizar a otro; no desaparece el peligro. Requiere decisiones de varios actos; condiciones técnicas pendientes.
+1. **El cielo inmóvil:** la Liga fija rutas; baja el riesgo inmediato, pero comunidades quedan aisladas y se pierden recuerdos. Más rutas principales y servicios de la Liga, menos rutas secundarias.
+2. **El cielo medido:** los Cartógrafos activan una Trama limitada; rutas previsibles, pero control concentrado. Compartir pruebas puede repartir gestión; sin acuerdos emerge un nuevo poder central.
+3. **El cielo libre:** se rompen nodos; vuelve la corriente natural, algunas comunidades pierden hogares y otras se reencuentran. Menos accesos controlados y más rutas/refugios móviles.
+4. **La Marea pactada:** requiere testimonios, pruebas compartidas y participación de comunidades afectadas. Se separan nodos que trasladan peligro y quedan mecanismos locales voluntarios. Nadie estabiliza a otra comunidad en secreto; el riesgo no desaparece. Requiere decisiones de varios actos y condiciones técnicas pendientes.
 
 ## Tema central
 
@@ -138,4 +132,8 @@ No son clima dinámico ni cambios automáticos del mundo. *La Marea de ascenso* 
 
 ## Verificación y originalidad
 
-La revisión consultó fuentes oficiales de Prominence II y referencias secundarias. Los rasgos generales de campaña RPG, misiones, jefes y progresión no son exclusivos; la combinación de Marea, Trama de Anclas, comunidades borradas, coste de recuerdos y deliberación del riesgo constituye la identidad propuesta. No se demuestra originalidad absoluta. No se atribuyen aquí a Prominence II detalles técnicos más allá de las fuentes citadas en la revisión. Comparación, mods, compatibilidad, versiones, loader y rendimiento permanecen sujetos a verificación.
+La revisión consultó fuentes oficiales de Prominence II y referencias secundarias. Los rasgos generales de campaña RPG, misiones, jefes y progresión no son exclusivos; la combinación de Marea, Trama de Anclas, comunidades borradas, coste de recuerdos y deliberación del riesgo constituye la identidad propuesta. No se demuestra originalidad absoluta. No se atribuyen a Prominence II detalles técnicos más allá de las fuentes citadas en la revisión. Comparación, mods, compatibilidad, versiones, loader y rendimiento siguen sujetos a verificación.
+
+## Cambios pedidos por el usuario
+
+El usuario aprobó la historia general tal como está (pregunta 1A) y eligió mantener, sin cambios, la caracterización de Veyr y las facciones/personajes, los seis jefes propuestos y los cuatro desenlaces (preguntas 2A, 3A, 4A y 5A). Eligió un peso medio para las misiones secundarias: algunas desbloquean rutas, recursos, testimonios o apoyos para el final (pregunta 6B). No solicitó reescrituras ni otros ajustes narrativos.
