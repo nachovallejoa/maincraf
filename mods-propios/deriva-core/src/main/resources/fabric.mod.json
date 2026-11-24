@@ -1,0 +1,18 @@
+{
+  "schemaVersion": 1,
+  "id": "deriva_core",
+  "version": "1.0.0",
+  "name": "Deriva Core",
+  "description": "Estado persistente y API común para la campaña Deriva.",
+  "environment": "*",
+  "entrypoints": {
+    "main": [
+      "es.deriva.core.DerivaCore"
+    ]
+  },
+  "depends": {
+    "fabricloader": ">=0.20.1",
+    "minecraft": "1.20.1",
+    "java": ">=17"
+  }
+}
