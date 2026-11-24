@@ -1,17 +1,6 @@
 {
-  "mardenuves_decisiones.faction.liga_del_lastre": "Liga del Lastre",
-  "mardenuves_decisiones.faction.cartografos_del_prisma": "Cartógrafos del Prisma",
-  "mardenuves_decisiones.faction.hermandad_del_vaiven": "Hermandad del Vaivén",
-  "mardenuves_decisiones.faction.flota_sumergida": "Flota Sumergida",
-  "mardenuves_decisiones.decision.route": "Decisión de ruta",
-  "mardenuves_decisiones.decision.protect": "Qué proteger",
-  "mardenuves_decisiones.decision.reflections": "Contrastar los reflejos",
-  "mardenuves_decisiones.dialogue.maela": "Busco a mi hermana Lena.",
-  "mardenuves_decisiones.dialogue.saira": "Escuchemos a las comunidades antes de decidir.",
-  "mardenuves_decisiones.dialogue.tavia": "Abrir o cerrar una ruta también deja consecuencias.",
-  "mardenuves_decisiones.dialogue.veyr": "La Trama de Anclas está ligada a la Fosa.",
-  "mardenuves_decisiones.outcome.sky_still": "Cielo inmóvil",
-  "mardenuves_decisiones.outcome.sky_measured": "Cielo medido",
-  "mardenuves_decisiones.outcome.sky_free": "Cielo libre",
-  "mardenuves_decisiones.outcome.tide_pact": "Marea pactada"
+  "campaign.mardenuves_decisiones.prologue.title": "El faro y la evacuación",
+  "campaign.mardenuves_decisiones.prologue.description": "El Caminante de Deriva llega cuando el faro reclama atención y la evacuación necesita manos.",
+  "campaign.mardenuves_decisiones.prologue.dialogue.opening": "El faro no puede esperar. Ayuda a poner a salvo a quienes aún siguen aquí.",
+  "campaign.mardenuves_decisiones.prologue.dialogue.recorded": "La evacuación queda registrada. El siguiente paso se revelará cuando llegue el momento."
 }
