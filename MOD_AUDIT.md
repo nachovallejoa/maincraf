@@ -1,66 +1,46 @@
 # Auditoría de mods
 
-## Estado y alcance
+**Estado:** borrador de investigación; ninguna combinación aprobada ni instalada. No se suben JARs de terceros.
+**Plataforma candidata:** Minecraft 1.20.1 + Fabric. **Alternativa:** Forge 1.20.1 solo si lo requiere el manifiesto.
+**Hardware declarado:** Athlon 5150, Radeon R3, 12 GB RAM (~9,9 GB utilizables declarados), HDD, Windows, 1280×720; no verificado independientemente. GPU/controlador/OpenGL local: [SIN VERIFICAR].
 
-- Estado inicial recibido: repositorio vacío, sin manifiesto ni mods confirmados en el proyecto.
-- La consulta de esta misión encontró el árbol de raíz vacío antes de documentar; el único archivo previo creado es el contexto de esta misión.
-- `INCOMPLETE: 0 archivos revisados; árbol del repositorio y README, because el repositorio está vacío y no tiene commits (el README devolvió 404).`
-- Los siguientes son candidatos externos, no mods instalados ni auditados en un pack real.
-- No se ejecutó Minecraft ni se midieron FPS, frametimes, memoria, CPU/GPU ni tiempos.
+## Alcance y criterios
 
-## Criterios
-
-- Clasificación de candidatos: **Pendiente de clasificación** hasta recibir manifiesto y pruebas.
-- Una ficha de descarga o que el proyecto anuncie optimizaciones no prueba rendimiento en este equipo.
-- Registrar versión/archivo, Minecraft, loader, licencia, dependencias e incompatibilidades.
-- No retirar/reemplazar mods de un pack real sin autorización y comparación de compatibilidad, rendimiento, mantenimiento y calidad.
-- Revisar licencia de artefacto antes de redistribuir. No subir JARs de terceros.
+- El paquete revisado no incluye manifiesto/inventario RPG, JARs ni logs. No hay mediciones de FPS, frametimes, RAM, CPU/GPU, inicio o generación.
+- Disponibilidad de una build no demuestra compatibilidad integral ni rendimiento en el pack o en el equipo objetivo.
+- **Imprescindible:** requisito demostrado por manifiesto aprobado. **Recomendado:** necesidad confirmada y evidencia adecuada; no basta una expectativa de rendimiento. **Opcional:** función no esencial. **Reemplazable:** alternativa sujeta a autorización y comparación. **Prescindible:** necesidad evaluada y descartada. **Incompatible:** fuente técnica aplicable o prueba reproducible para esa combinación.
+- Compatibilidad pendiente no significa incompatibilidad. Ningún candidato está aprobado.
+- Revisar términos, dependencias y avisos antes de distribuir cualquier binario; la licencia citada no autoriza automáticamente la redistribución. Nunca incluir JARs.
 
 ## Candidatos Fabric 1.20.1
 
-| Mod | Archivo propuesto | Licencia indicada | Datos verificados en la revisión recibida | Estado |
-|---|---|---|---|---|
-| Sodium | 0.5.13 Fabric 1.20.1 | Polyform Shield 1.0.0 | Archivo existente. Indium ≥1.0.36 e Iris ≥1.7.6 si se usan. Soporte oficial exige driver compatible con OpenGL 4.5; GPU concreta sin verificar. https://modrinth.com/mod/sodium/version/mc1.20.1-0.5.13-fabric | Candidato; carga y rendimiento pendientes |
-| Lithium | mc1.20.1-0.11.4 Fabric | LGPLv3 | Archivo existente; proyecto declara que no requiere Fabric API. https://www.curseforge.com/minecraft/mc-mods/lithium/files/7268114 | Candidato |
-| FerriteCore | 6.0.1 Fabric | MIT | Archivo Fabric/Quilt para 1.20–1.20.2. Conflicto Hydrogen [SIN VERIFICAR]. https://modrinth.com/mod/ferrite-core/version/6.0.1 | Candidato |
-| ModernFix | 5.25.2+mc1.20.1 Fabric | LGPLv3 | Archivo catalogado para Fabric. https://www.curseforge.com/minecraft/mc-mods/modernfix/files/7306748 | Candidato |
-| Entity Culling | 1.12.1 Fabric 1.20.1 | tr7zw Protective License | Archivo existente; “Required content: Any compatible version”, no acredita Fabric API requerida. Puede usar CPU libre y conviene cautela con CPU saturada. https://modrinth.com/mod/entityculling/version/xM6y5W1N | Opcional; probar on/off. No redistribuir JAR fuera de lo permitido |
-| ImmediatelyFast | 1.2.4+1.20.1 propuesto | LGPL indicada por proyecto | Versión exacta propuesta no validada; proyecto documenta incompatibilidades pertinentes con OptiFine/OptiFabric y MemoryLeakFix ≤1.1.1. https://modrinth.com/mod/immediatelyfast | Pendiente de validar archivo exacto |
-| BadOptimizations | 2.2.3 (1.20.1) | MIT | Archivo existente, sin dependencias obligatorias declaradas; optimizaciones cliente descritas. https://www.curseforge.com/minecraft/mc-mods/badoptimizations/files/6673591 | Opcional; probar |
-| Particle Core | 0.3.3+1.20.1 Fabric | MIT | Archivo Fabric existente. No confundir con artefacto Forge `+forge`. https://www.curseforge.com/minecraft/mc-mods/particle-core/files/7581167 | Opcional; validar partículas RPG |
-| Dynamic FPS | 3.9.5 Fabric | MIT | Fabric API requerida, Cloth Config opcional; foco en segundo plano/inactividad, no FPS activos. https://modrinth.com/mod/dynamic-fps/version/D9mrJwm0 | Opcional por inactividad |
+| Mod | Versión candidata | Evidencia y licencia declarada | Estado/cautela |
+|---|---|---|---|
+| Sodium | 0.5.13 Fabric, Minecraft 1.20.1 | [Ficha](https://modrinth.com/mod/sodium/version/mc1.20.1-0.5.13-fabric); Polyform Shield 1.0.0. | Candidato de renderizado; soporte oficial requiere drivers OpenGL 4.5+, pero hardware antiguo puede funcionar sin garantía. Radeon R3/API local [SIN VERIFICAR]. Indium 1.0.36+ solo si se requiere; Iris 1.7.6+ si se usa, no parte de base. |
+| Lithium | 0.11.4 Fabric 1.20.1 | [Archivo](https://www.curseforge.com/minecraft/mc-mods/lithium/files/7268114); LGPLv3. | Candidato; pack y efecto local sin verificar. |
+| FerriteCore | 6.0.1 Fabric, Minecraft 1.20–1.20.2 | [Ficha](https://modrinth.com/ferrite-core/version/6.0.1); MIT. | Candidato. No combinar con Hydrogen para 1.20.1: el proyecto declara incompatibilidad en 1.18+. |
+| ModernFix | 5.25.2+mc1.20.1 Fabric | [Ficha](https://modrinth.com/mod/modernfix/version/5.25.2%2Bmc1.20.1); LGPL-3.0-only. | Candidato; predeterminados al inicio. `mixin.perf.dynamic_resources` se deja sin override (falso por defecto según código consultado). |
+| ImmediatelyFast | 1.5.5+1.20.4 Fabric; rango publicado 1.20–1.20.4 | [Ficha](https://modrinth.com/mod/immediatelyfast/version/1.5.5%2B1.20.4-fabric); LGPL-3.0-or-later. | Candidato; 1.20.1 está en el rango, pero compatibilidad con el pack sin verificar. |
+| Entity Culling | 1.12.1-1.20.1 Fabric (registro recibido) | Archivo/dependencias/licencia exactos en esta revisión: [SIN VERIFICAR]. | Opcional; medir y comprobar entidades/NPCs del pack, posible carga CPU. |
+| Particle Core | 0.2.5+1.20.1 Fabric (registro recibido) | Archivo/dependencias/licencia exactos: [SIN VERIFICAR]. | Opcional; valorar solapamiento con partículas nativas. |
+| Noisium | 2.3.0+mc1.20-1.20.1 Fabric (registro recibido) | Archivo/licencia/estado exactos: [SIN VERIFICAR]. | Opcional, ensayo aislado de generación; no atribuir mejora a chunks existentes o arranque. |
+| Dynamic FPS | 3.9.5 Fabric (registro recibido) | Dependencias/licencia exactas [SIN VERIFICAR]; registro recibido indica Fabric API requerida y Cloth Config opcional. | Opcional para inactividad/segundo plano; no presentarlo como FPS de primer plano. |
+| LightSpeedRe | 2.0.7.fabric.1.20.1 (registro recibido) | Build, dependencia y licencia exactas [SIN VERIFICAR]. | Ensayo experimental individual frente a ModernFix; no apilar inicialmente. |
 
-**Estrategia de prueba propuesta, no aprobada:** base mínima Sodium + Lithium + FerriteCore; sumar ModernFix y luego otros grupos, midiendo. La Radeon R3/OpenGL de esta instalación sigue sin verificar.
+## Forge y exclusiones
 
-## Alternativa Forge 1.20.1 (no mezclar con Fabric)
+Embeddium, FerriteCore y ModernFix para Forge 1.20.1 aparecen como candidatos en el material recibido; la pila exacta, dependencias, licencias y compatibilidad completa con RPG requieren nueva verificación. Forge solo si el manifiesto lo exige. No mezclar JARs Fabric/Forge.
 
-| Candidato recibido | Estado |
-|---|---|
-| Embeddium 0.3.31+mc1.20.1 | Versión, licencia, compatibilidad y conflictos detallados [SIN VERIFICAR] en esta revisión |
-| Radium 0.12.4 | Archivo exacto pendiente; no combinar con Canary según la información recibida |
-| FerriteCore 6.0.1 Forge; ModernFix 5.26.2+mc1.20.1 Forge | Candidatos; compatibilidad del pack pendiente |
-| Entity Culling, ImmediatelyFast, BadOptimizations | Archivos/compatibilidad completa de esta pila pendientes |
-| Particle Core 0.3.3+1.20.1+forge | Archivo citado para Forge/NeoForge; probar función |
-| Dynamic FPS 3.9.2 Forge | [SIN VERIFICAR] |
+Excluidos de la base inicial: C2ME (build Alpha/riesgos sin resolver), Starlight/Phosphor (cuello de botella no observado), shaders/texturas HD/cosméticos (no necesarios para objetivo inicial), OptiFine/OptiFabric, Hydrogen junto a FerriteCore, e Indium sin dependencia demostrada. Reconsiderar si el manifiesto lo requiere.
 
-## Exclusiones iniciales propuestas
+## Base propuesta y campos pendientes
 
-C2ME, Starlight/Phosphor, Noisium (sin artefacto exacto identificado), Canary junto con Radium, OptiFine/OptiFabric, Indium sin dependencia demostrada, shaders, texturas HD y cosméticos. Esto no autoriza borrar contenido de un pack.
+Base de primer ensayo, no aprobada: Sodium + Lithium + FerriteCore + ModernFix + ImmediatelyFast, tras validar archivos, launcher, Java y GPU/API. Fabric API únicamente si una build elegida la requiere.
 
-## Ficha para completar
+Para completar por mod: necesidad en pack; loader/MC/archivo exactos; URL y fecha; autor/licencia; dependencias e incompatibilidades; hash del JAR local (sin subirlo); prueba de arranque/mundo; mediciones; alternativas; mantenimiento/calidad; autorización y decisión final.
 
-### [Nombre]
-- Estado / clasificación: candidato; pendiente de clasificación.
-- Minecraft / archivo exacto / loader / URL:
-- Licencia del artefacto y redistribución:
-- Dependencias / incompatibilidades:
-- Compatibilidad RPG:
-- FPS / 1% low / frametimes / memoria / CPU / GPU:
-- Pruebas y evidencia/log:
-- Decisión autorizada por / fecha:
+## Registro de cambios/autorización
 
-## Registro de mediciones
-
-| Mod/grupo | Archivo exacto | Compatibilidad | FPS medio | 1% low | Frametime | Heap/RAM | CPU | GPU | Evidencia |
-|---|---|---|---|---|---|---|---|---|---|
-| | | | | | | | | | |
+| Fecha | Añadir/quitar/reemplazar | Motivo | Evidencia comparativa | Mantenimiento | Compatibilidad comprobada | Calidad afectada | Autorización | Decisión |
+|---|---|---|---|---|---|---|---|---|
+| | | | | | | | | |
