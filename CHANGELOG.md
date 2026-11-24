@@ -6,7 +6,7 @@
 - Registradas las 13 etapas secuenciales; la misión permanece en revisión y no equivale a validación técnica final.
 - Actualizada la comparativa: Minecraft 1.20.1 + Fabric como candidata documental principal; Forge 1.20.1 condicionado al manifiesto. Ninguna decisión está aprobada.
 - Corregidas cautelas y estados de licencias/builds candidatos; los datos no verificados siguen explícitamente pendientes.
-- Registrada discrepancia de versiones previa de Entity Culling e ImmediatelyFast; resolver con manifiesto/JARs, no por intuición.
+- Registrada discrepancia previa de versiones de Entity Culling e ImmediatelyFast; resolver con manifiesto/JARs, no por intuición.
 - Conservados criterios prudentes para configuración: sin JSON manual/preset completo de Sodium ni overrides no validados.
 - Mediciones y pruebas vacías: Minecraft no se ejecutó y no hay resultados locales.
 - Reforzada la regla de no subir JARs/binarios de mods de terceros y revisar términos antes de redistribuir.
@@ -26,17 +26,18 @@
 
 ## 2026-11-24 — Etapa de identidad RPG: elección registrada
 
-- Registrada en `STORY_BIBLE.md` la elección D: base de **La Marea de los Mil Soles**, con el océano sustituido por el cielo, combinada con elementos/mods candidatos de A. B queda elegida como base; A queda como reserva/fuente de candidatos y C no elegida. La identidad no se desarrolló como historia completa en esa etapa.
-- Actualizado `GAME_DESIGN.md` con preferencias elegidas: tono de misterio/aventura y más oscuro/peligroso; enfoque en combate y exploración; progresión con árboles/builds, niveles/estadísticas y clases definidas; dificultad equilibrada.
-- Añadida a `PROJECT_CONTEXT.md` la sección «Decisiones de la etapa de identidad RPG», con respuestas 1–6 y autorización explícita de Historia.
+- Registrada en `STORY_BIBLE.md` la elección D: base de **La Marea de los Mil Soles**, trasladada del océano al cielo, combinada con elementos/candidatos RPG de A; B como base, A como reserva/fuente de candidatos y C no elegida. No desarrolla la historia completa.
+- Actualizado `GAME_DESIGN.md` con las preferencias elegidas: misterio/aventura más oscuro/peligroso; combate y exploración; progresión con árboles/builds, niveles/estadísticas y clases definidas; dificultad equilibrada.
+- Añadida a `PROJECT_CONTEXT.md` la sección “Decisiones de la etapa de identidad RPG”, con respuestas 1–6 y autorización explícita para desarrollar Historia.
 - Actualizado `ROADMAP.md`: identidad RPG marcada completada; Historia pendiente y autorizada para más adelante, sin iniciarla entonces.
-- Mods y combinaciones permanecen candidatos: no se verifica disponibilidad, dependencia, licencia, compatibilidad, rendimiento ni mecánicas narrativas/técnicas.
-- No se fusionó ninguna rama ni se inició una etapa nueva en esos cambios.
+- Mods y combinaciones permanecen como candidatos: no se verifica disponibilidad, dependencia, licencia, compatibilidad, rendimiento ni mecánicas narrativas/técnicas.
+- No se fusionó ninguna rama ni se inició otra etapa durante esos cambios.
 
-## 2026-11-24 — Etapa 7: Historia en revisión
+## 2026-11-24 — Etapa 7: historia aprobada por el usuario
 
-- Actualizado `STORY_BIBLE.md` con la propuesta completa de **La Marea de los Mil Soles**: universo y regiones, trasfondo, facciones, personajes, antagonista, jefes, actos, misiones principales y secundarias, eventos y desenlaces.
-- La historia queda marcada **pendiente de aprobación**; sus regiones, sistemas, estados y encuentros son propuestas, no contenido implementado ni compatibilidad confirmada.
-- Añadido a `GAME_DESIGN.md` «Impacto de la historia en el juego», con efectos previstos por elemento, candidatos de mods y posibles sistemas propios pendientes.
-- Actualizado `ROADMAP.md`: etapa 7 Historia en revisión, pendiente de aprobación; no se declara aprobada ni técnicamente validada.
-- Minecraft 1.20.1 + Fabric y todos los mods candidatos siguen **[SIN VERIFICAR]**; no hay manifiesto ni benchmarks locales. No se subieron archivos de mods de terceros ni se tocó la rama principal.
+- `STORY_BIBLE.md`: registrada la aprobación expresa de la historia general como base, tal como estaba, y las elecciones 2A, 3A, 4A, 5A y 6B. No se pidieron ajustes de contenido.
+- `GAME_DESIGN.md`: anotadas las decisiones con impacto jugable: mantener los cuatro desenlaces, mantener los seis jefes y dar peso medio a algunas misiones secundarias (rutas, recursos, testimonios o apoyos para el final).
+- `PROJECT_CONTEXT.md`: añadida la sección “Decisiones de la etapa de Historia”, con cada pregunta, respuesta y autorizaciones/aplazamientos.
+- `ROADMAP.md`: Historia marcada completada y aprobada sin cambios; Mecánicas continúa pendiente de ejecución y consta autorizada por 7A para diseñar clases, niveles, estadísticas, habilidades/builds, combate y progresión como propuestas.
+- La autorización no significa implementación, compatibilidad confirmada, fusión de ramas ni inicio automático de una etapa nueva. Minecraft 1.20.1 + Fabric y los mods candidatos siguen **[SIN VERIFICAR]**; no hay benchmarks locales.
+- Sin fusión: cambios registrados exclusivamente en `etapa-4-historia`.
