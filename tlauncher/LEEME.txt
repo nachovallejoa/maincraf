@@ -1,4 +1,4 @@
-Descomprime el ZIP completo en una carpeta.
-Haz doble clic en INSTALAR.bat.
-El instalador usa %APPDATA%\.minecraft; puedes pasar otra carpeta como parametro.
-Despues abre TLauncher y elige la version Fabric instalada.
+Descarga el archivo que termina en -tlauncher.zip desde Releases o Actions.
+Extrae TODO el ZIP antes de usarlo: clic derecho > Extraer todo.
+No ejecutes INSTALAR.bat suelto ni desde dentro del ZIP.
+Abre la carpeta extraida y haz doble clic en INSTALAR.bat.
