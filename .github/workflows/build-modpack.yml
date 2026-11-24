@@ -1,4 +1,4 @@
-name: Build modpack
+name: Build Modpack
 
 on:
   push:
@@ -10,70 +10,77 @@ permissions:
   contents: write
 
 jobs:
-  build-modpack:
+  build:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
         uses: actions/checkout@v6
 
-      - name: Read Minecraft version
+      - name: Read modpack metadata
         id: pack
-        shell: bash
+        shell: python
         run: |
-          python3 - <<'PY' >> "$GITHUB_OUTPUT"
           import json
+          import os
           from pathlib import Path
 
           manifest = json.loads(Path("pack/mods.json").read_text(encoding="utf-8"))
-          version = manifest["minecraft_version"]
-          parts = tuple(int(part) for part in version.split("."))
-          java = "21" if parts >= (1, 20, 5) else "17"
-          print(f"java-version={java}")
-          PY
+          minecraft = manifest["minecraft_version"]
+          major, minor, patch = (int(part) for part in minecraft.split("."))
+          java = "17" if (major, minor, patch) <= (1, 20, 4) else "21"
+
+          with open(os.environ["GITHUB_OUTPUT"], "a", encoding="utf-8") as output:
+              output.write(f"java={java}\n")
 
       - name: Set up Java
         uses: actions/setup-java@v6
         with:
           distribution: temurin
-          java-version: ${{ steps.pack.outputs.java-version }}
+          java-version: ${{ steps.pack.outputs.java }}
+
+      - name: Check Loom version and configure Gradle
+        if: ${{ hashFiles('mods-propios/settings.gradle') != '' }}
+        shell: bash
+        run: |
+          set -euo pipefail
+          files=(mods-propios/settings.gradle mods-propios/build.gradle)
+          found="$(grep -hEo "fabric-loom[^[:space:]]*[[:space:]]+version[[:space:]]+['\"][^'\"]+['\"]|fabric-loom[^[:space:]]*:[^[:space:]'\"]+" "${files[@]}" 2>/dev/null | head -n 1 || true)"
+          if [[ -z "$found" ]]; then
+            echo "::error::No se pudo identificar la versión de Fabric Loom en mods-propios/settings.gradle o build.gradle; no es seguro fijar Gradle sin ese dato."
+            exit 1
+          fi
+          echo "Declaración de Loom detectada: $found"
+          if [[ "$found" != *"1.6"* ]]; then
+            echo "::error::Este workflow configura Gradle 8.7, documentado para Loom 1.6. Ajusta gradle-version al requisito de la versión de Loom detectada."
+            exit 1
+          fi
 
       - name: Set up Gradle
+        if: ${{ hashFiles('mods-propios/settings.gradle') != '' }}
         uses: gradle/actions/setup-gradle@v6
         with:
-          gradle-version: '8.10.1'
+          gradle-version: '8.7'
 
-      - name: Build own mods when a Gradle project exists
+      - name: Build own mods
         if: ${{ hashFiles('mods-propios/settings.gradle') != '' }}
-        working-directory: mods-propios
         run: gradle build
+        working-directory: mods-propios
 
       - name: Build Modrinth pack
         run: python3 scripts/build_mrpack.py
 
-      - name: Resolve package filename
-        id: artifact
-        shell: bash
-        run: |
-          python3 - <<'PY' >> "$GITHUB_OUTPUT"
-          import json
-          from pathlib import Path
-
-          manifest = json.loads(Path("pack/mods.json").read_text(encoding="utf-8"))
-          print(f"file={manifest['name']}-{manifest['version']}.mrpack")
-          PY
-
-      - name: Upload package artifact
+      - name: Upload .mrpack artifact
         uses: actions/upload-artifact@v7
         with:
-          name: modrinth-modpack
-          path: ${{ steps.artifact.outputs.file }}
+          name: mrpack
+          path: '*.mrpack'
           if-no-files-found: error
-          retention-days: 14
 
       - name: Publish GitHub Release
         uses: softprops/action-gh-release@v3
         with:
           tag_name: modpack-${{ github.run_number }}
           name: Modpack build ${{ github.run_number }}
-          files: ${{ steps.artifact.outputs.file }}
+          files: '*.mrpack'
           fail_on_unmatched_files: true
+          make_latest: false
