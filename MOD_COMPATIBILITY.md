@@ -1,121 +1,123 @@
-# Matriz de compatibilidad de mods
+# Matriz de compatibilidad de mods — segunda etapa
 
 ## Estado y alcance
 
-- Registro documental, no certificación de compatibilidad.
-- Propuesta principal provisional: Fabric 1.20.1; Forge 1.20.1 solo como alternativa condicional al manifiesto.
-- Manifiesto y JARs de la instalación no recibidos; el juego no se ejecutó en el equipo.
-- No marcar compatible hasta validar versiones exactas, dependencias, arranque, mundo, logs y sistemas relevantes del pack. Compatibilidad no equivale a rendimiento aprobado.
-- No subir JARs de terceros.
+- Este documento registra compatibilidad documentada, no certificación de una instancia concreta.
+- Propuesta provisional: Fabric 1.20.1; Forge 1.20.1 únicamente si lo exige el manifiesto.
+- No se recibió manifiesto ni JARs; Minecraft no se ejecutó en el equipo.
+- No marcar compatible/incompatible sin builds exactas, dependencias, arranque, mundo, logs y sistemas relevantes.
+- No subir JARs de terceros. No instalar ni modificar sin autorización.
 
-## Entorno por completar
+## Entorno pendiente de completar
 
 | Campo | Valor |
 |---|---|
-| Identificador de instancia / fecha / responsable |  |
-| Sistema operativo y build |  |
-| CPU / núcleos / hilos |  |
-| RAM instalada/utilizable |  |
-| GPU / memoria compartida |  |
-| Driver y versión |  |
-| OpenGL/Vulkan reportado |  |
-| Resolución/Hz |  |
-| Minecraft |  |
-| Java: distribución/versión/arquitectura |  |
-| Loader y versión |  |
-| Launcher y versión |  |
-| Manifiesto y hash |  |
-| Heap y argumentos JVM |  |
-| `latest.log` y hash |  |
+| Identificador de instancia / fecha / responsable | NO DATA |
+| Sistema operativo y build | NO DATA |
+| CPU / núcleos / hilos | NO DATA |
+| RAM instalada/utilizable | NO DATA |
+| GPU / memoria compartida | Radeon R3 indicada; modelo y datos locales SIN VERIFICAR |
+| Driver y versión | NO DATA |
+| OpenGL / Vulkan reportado | NO DATA |
+| Resolución / Hz | NO DATA |
+| Minecraft / Java (distribución, versión, arquitectura) | NO DATA |
+| Loader / versión | NO DATA |
+| Launcher / versión | NO DATA |
+| Manifiesto / hash | NO DATA — manifiesto no recibido |
+| Heap y argumentos JVM | NO DATA |
+| `latest.log` y hash | NO DATA — no se ejecutó prueba |
 
-## Estados
+## Significado de estados
 
 | Estado | Significado |
 |---|---|
 | Pendiente | No probado o faltan datos esenciales. |
-| Compatible en prueba | Solo casos registrados en esa instancia concreta superados. |
-| Compatible con limitaciones | Funciona con incidencia/limitación documentada. |
-| Incompatible | Falla reproducible en combinación exacta con evidencia. |
-| No evaluado | No corresponde probar aún o no está seleccionado. |
+| Compatible en prueba | Solo los casos registrados en esa instancia concreta superaron los criterios. |
+| Compatible con limitaciones | Funciona con incidencia o limitación documentada. |
+| Incompatible | Falla reproducible con evidencia en la combinación exacta. |
+| No evaluado | No corresponde probar aún o no seleccionado. |
 
 ## Inventario por completar
 
 | Componente | Versión declarada | Archivo instalado | SHA-256 local | Fuente | Dependencias verificadas | Estado |
 |---|---|---|---|---|---|---|
-| Minecraft | 1.20.1 candidata |  |  |  |  | Pendiente |
-| Java | 17 asociado documentalmente a MC 1.20.1 |  |  |  |  | Pendiente |
-| Loader | Fabric candidato / Forge condicional |  |  |  |  | Pendiente |
-| Modpack/manifiesto | No disponible en inventario recibido |  |  |  |  | Pendiente |
-| Driver gráfico | No disponible |  |  |  |  | Pendiente |
+| Minecraft | 1.20.1 candidata | NO DATA | NO DATA | Propuesta recibida | NO DATA | Pendiente |
+| Java | 17 asociada documentalmente a MC 1.20.1 | NO DATA | NO DATA | Propuesta recibida | NO DATA | Pendiente |
+| Loader | Fabric candidato / Forge condicional | NO DATA | NO DATA | Propuesta recibida | NO DATA | Pendiente |
+| Modpack/manifiesto | No disponible; manifiesto no recibido | NO DATA | NO DATA | NO DATA | NO DATA | Pendiente |
+| Driver gráfico | No disponible | NO DATA | NO DATA | NO DATA | NO DATA | Pendiente |
 
 ## Candidatos Fabric 1.20.1
 
-| Mod | Build candidata documental | Condición conocida | Estado |
+Los enlaces y versiones describen artefactos candidatos de la propuesta; no prueban instalación ni coexistencia. Las dependencias por verificar se mantienen como pendientes.
+
+| Mod | Versión candidata | Compatibilidad / condición documentada | Estado conjunto |
 |---|---|---|---|
-| Sodium | `0.5.13` **[SIN VERIFICAR: build exacta]** | GPU R3/driver y pack sin verificar. La guía oficial indica que Indium puede ser necesario para compatibilidad con otros mods en Sodium 0.5.x con Minecraft 1.20 o anterior. No están verificados aquí los mínimos atribuidos a esa build. | Pendiente |
-| Lithium | `0.11.4` **[SIN VERIFICAR: detalles de build]** | Dependencias y compatibilidad del pack pendientes. | Pendiente |
-| ModernFix | `5.25.2+mc1.20.1` | No aplicar `mixin.perf.dynamic_resources=false`; clave no verificada para build exacta. Pack no probado. | Pendiente |
-| FerriteCore | `6.0.1` | Pack pendiente. Supuesto conflicto con Hydrogen mencionado previamente, no verificado en esta revisión. | Pendiente |
-| Entity Culling | `1.12.1-1.20.1` | Cliente. Coste/beneficio CPU y compatibilidad visual no probados; alertas específicas **[SIN VERIFICAR]**. | Pendiente |
-| ImmediatelyFast | `1.2.1+1.20.1` | La ficha declara incompatibilidad con MemoryLeakFix `<=1.1.1`; comprobar manifiesto/JAR exacto. | Pendiente |
-| BadOptimizations | `2.1.4` | El ID suministrado `GydKiUd0` corresponde a 2.1.4 (1.20.1), no 2.4.1. | Pendiente |
-| Sodium Extra | `0.5.9` | Ficha consultada requiere Sodium y Fabric API; compatibilidad conjunta no comprobada. | Pendiente |
-| Dynamic FPS | `3.9.5` | Requiere Fabric API según ficha; Cloth Config opcional. No inferir aceleración en primer plano. | Pendiente |
-| Fabric API | `0.92.6+1.20.1` **[SIN VERIFICAR]** | Añadir solo si dependencia confirmada; build/licencia no verificadas en esta revisión. | Pendiente |
-| Indium | No fijada | La guía de Sodium menciona posible necesidad con Sodium 0.5.x para compatibilidad; no es requisito universal verificado para esta combinación. | No evaluado |
-| Iris | No fijada | No se valida el mínimo 1.7.6+ que se había atribuido a Sodium 0.5.13. Añadir solo si se requiere. | No evaluado |
-| Reese’s Sodium Options | No fijada | Opcional en ficha de Sodium Extra consultada; necesidad/build de instancia pendientes. | No evaluado |
-| Cloth Config API | No fijada | Opcional en ficha de Dynamic FPS; necesidad/build exactas pendientes. | No evaluado |
+| Sodium | `0.5.13` | Ficha candidata para Fabric 1.20.1. Radeon R3/driver, OpenGL y pack sin probar. La guía indica posible necesidad de Indium con mods que usen Fabric Rendering API en Sodium 0.5.x; no es necesidad universal. | Pendiente |
+| Lithium | `0.11.4` | Artefacto consultado para 1.20.1; dependencias y compatibilidad del pack por cotejar. | Pendiente |
+| FerriteCore | `6.0.1` | Ficha consultada indica Fabric/Quilt y MC 1.20–1.20.2. Pack no probado. | Pendiente |
+| ModernFix | `5.25.2+mc1.20.1` | Ficha consultada para Fabric 1.20.1. No aplicar `mixin.perf.dynamic_resources=false`: clave y valor no verificados. | Pendiente |
+| Sodium Extra | `0.5.9` | Ficha consultada para versión candidata; dependencia/compatibilidad conjunta no comprobadas aquí. | Pendiente |
+| ImmediatelyFast | `1.2.21+1.20.1` | Proyecto consultado advierte incompatibilidad conocida con OptiFine/OptiFabric; artefacto exacto, dependencias y coexistencia pendientes. | Pendiente |
+| BadOptimizations | `2.4.1` propuesta | Build exacta indicada en propuesta; cotejo de artefacto y compatibilidad pendientes. | Pendiente |
+| Dynamic FPS | `3.9.5` | Ficha consultada para Fabric 1.20–1.20.1; dependencia requerida Fabric API no acreditada: SIN VERIFICAR. Función de segundo plano, no aumento de FPS enfocado. | Pendiente |
+| Fabric API | `0.92.6+1.20.1` condicional | Añadir solo si manifiesto/mod elegido lo requiere; necesidad exacta pendiente. | No evaluado |
+| Indium | `1.0.36` o posterior condicional | Solo si un mod requiere Fabric Rendering API con Sodium 0.5.x; requiere Fabric API; no compatible con Sodium 0.6.0+. Versión/licencia exactas pendientes. | No evaluado |
 
-## Candidatos Forge 1.20.1
+## Hechos e incompatibilidades documentados (alcance limitado)
 
-Forge solo si el manifiesto lo exige. No combinar renderizadores equivalentes.
+- Indium es necesario solo en el caso condicional de mods que requieran Fabric Rendering API con Sodium anterior a 0.6; no es compatible con Sodium 0.6.0 o posterior. Cotejar artefactos exactos antes de elegir. Fuente: [Indium](https://modrinth.com/mod/indium).
+- La documentación de Sodium declara soporte oficial para tarjetas con controladores actualizados compatibles con OpenGL 4.5 o superior. GPU más antiguas pueden funcionar sin garantía ni soporte. OpenGL expuesto por Radeon R3 local: **[SIN VERIFICAR]**. Esto es límite de soporte oficial, no prueba de imposibilidad de ejecución. Fuente: [Sodium](https://github.com/CaffeineMC/sodium).
+- ImmediatelyFast declara incompatibilidades conocidas con OptiFine/OptiFabric en la página consultada. No se confirmó que estén presentes en el pack. Fuente: [ImmediatelyFast](https://modrinth.com/mod/immediatelyfast).
+- Sodium Extra 0.5.9: su ficha consultada confirma versión/licencia y compatibilidad Minecraft, pero no se cotejaron en esta revisión todas las dependencias del artefacto. No cerrar Fabric API como requisito del conjunto sin manifiesto.
+- No hay evidencia para declarar incompatibilidad de FerriteCore/ModernFix, Sodium Extra/Particle Core, More Culling/Entity Culling, C2ME u otros pares candidatos. Solapamiento de función o hipótesis no equivale a conflicto demostrado.
+- No se probó compatibilidad conjunta de ningún candidato con el pack ni con el equipo.
 
-| Mod | Versión de entrada previa | Estado documental en esta revisión |
+## Candidatos Forge 1.20.1, solo si manifiesto lo exige
+
+No combinar renderizadores equivalentes. Las referencias previas no se verifican como conjunto ni para el hardware local.
+
+| Mod | Versión indicada previamente | Estado |
 |---|---|---|
-| Embeddium | `0.3.31+mc1.20.1` | Candidato Forge; driver Radeon R3 y rendimiento local sin probar. Licencia exacta del archivo no verificada aquí. |
-| Radium | `0.12.4` | Build y compatibilidad citadas deben verificarse contra archivos exactos. No afirmar incompatibilidad con Canary sin fuente/build concreta. |
-| ModernFix | `5.28.0+mc1.20.1` | Candidato distinto del Fabric; build/licencia exactas no verificadas aquí. No asumir Dynamic Resources. |
-| FerriteCore | `6.0.1` | MIT indicado para ficha consultada; pack no probado. |
-| Entity Culling | `1.12.1-1.20.1` | Licencia personalizada; no redistribuir fuera de términos aplicables. Compatibilidad no probada. |
-| ImmediatelyFast | `1.5.5` | Archivo y versión exactos pendientes de verificar. |
-| Dynamic FPS | `3.7.7` | Archivo/dependencias exactas pendientes de verificar. |
-| Particle Core | `0.3.3+1.20.1+forge` | Opcional; no incluir en núcleo. Build/licencia exactas pendientes. |
+| Embeddium | `0.3.31+mc1.20.1` | Candidato Forge; Radeon R3 y rendimiento sin probar; licencia del archivo exacto pendiente. |
+| Radium | `0.12.4` | Build y compatibilidad se deben cotejar contra artefacto exacto. |
+| ModernFix | `5.28.0+mc1.20.1` | Candidato distinto de Fabric; build/licencia y configuración exactas pendientes. |
+| FerriteCore | `6.0.1` | MIT según ficha citada; pack no probado. |
+| Entity Culling / ImmediatelyFast / Dynamic FPS / Particle Core | Builds previas citadas | Archivo, dependencias y compatibilidad exacta pendientes; no formar base inicial. |
 
-## Combinaciones y hechos de compatibilidad documentados
+## Candidatos pospuestos
 
-- Sodium 0.5.x en Minecraft 1.20 o anterior: la guía oficial dice que Indium puede ser necesario para compatibilidad con otros mods; no confirma un mínimo exacto para Sodium `0.5.13` en este pack. Desde Sodium 0.6.x Indium deja de ser necesario según la guía.
-- ImmediatelyFast `1.2.1+1.20.1`: la ficha consultada declara incompatibilidad con MemoryLeakFix `<=1.1.1`; confirmar si esa build está en la instalación.
-- Sodium Extra `0.5.9`: su ficha consultada requiere Sodium y Fabric API; Reese’s Sodium Options e Iris se enumeran como opcionales.
-- Dynamic FPS `3.9.5`: su ficha consultada requiere Fabric API y enumera Cloth Config API como opcional.
-- No se ha probado compatibilidad conjunta entre estos candidatos, pack, driver ni JARs locales.
-- No afirmar conflicto FerriteCore/Hydrogen, solapamiento Particle Core/Sodium Extra, ni incompatibilidades de More Culling, C2ME, Noisium/Noisiumed o LazyDFU: las razones citadas previamente siguen **[SIN VERIFICAR]** en esta revisión.
-- Prominence II lista Entity Culling en el contenido actual según el material recibido, pero no prueba que cualquier versión candidata sea compatible con una instancia concreta. Pack ARR: no redistribuir sin autorización.
-- No se ha demostrado incompatibilidad local de Sodium con Radeon R3 ni el OpenGL efectivo. Sodium documenta soporte oficial con drivers compatibles con OpenGL 4.5+ y referencia Radeon HD 7000 o posteriores; la GPU indicada no cae dentro de la referencia, pero esto no demuestra fallo de arranque. Driver/OpenGL pendientes.
+- Entity Culling: costo CPU/beneficio y advertencias concretas de la propuesta recibida **[SIN VERIFICAR]**; licencia personalizada pendiente.
+- Particle Core junto a Sodium Extra: posible solapamiento, no conflicto probado; versión/dependencias exactas pendientes.
+- More Culling, C2ME, Noisium/Noisiumed y LazyDFU: compatibilidad/razones previas **[SIN VERIFICAR]** para los archivos exactos.
+- Hydrogen/FerriteCore: no afirmar incompatibilidad sin fuente aplicable y prueba.
+- ScalableLux: release Fabric 1.20.1 no comprobada.
 
-## Casos de prueba (sin resultados aún)
+## Protocolo de prueba pendiente
 
-Guardar logs, crash reports, versiones y hashes localmente; no publicar binarios.
+Solo tras autorización expresa y en instancia aislada con respaldo: registrar versiones y hashes localmente; probar primero loader/base; verificar dependencias confirmadas; añadir un candidato a la vez. Guardar logs/crash reports localmente, no publicar binarios. Probar arranque, menú, mundo existente, chunks, generación, contenido RPG, cambio de dimensión y cierre normal. Comparar rendimiento por separado en condiciones reproducibles; los resultados corresponden en `PERFORMANCE.md`.
 
-| ID | Caso | Resultado | Evidencia/log | Incidencias |
-|---|---|---|---|---|
-| C-01 | Arranque con loader, sin optimizadores | Pendiente |  |  |
-| C-02 | Arranque con dependencias mínimas aprobadas | Pendiente |  |  |
-| C-03 | Llegada al menú sin errores bloqueantes | Pendiente |  |  |
-| C-04 | Crear/cargar mundo de prueba | Pendiente |  |  |
-| C-05 | Recorrido de chunks existentes | Pendiente |  |  |
-| C-06 | Generación de chunks nuevos | Pendiente |  |  |
-| C-07 | Modelos, recursos, entidades y contenido RPG | Pendiente |  |  |
-| C-08 | Cambio de dimensión, si aplica | Pendiente |  |  |
-| C-09 | Reinicio y segunda carga | Pendiente |  |  |
-| C-10 | Cierre normal | Pendiente |  |  |
+| ID | Caso | Resultado | Evidencia / incidencias |
+|---|---|---|---|
+| C-01 | Arranque con loader, sin optimizadores | Pendiente | NO DATA |
+| C-02 | Arranque con dependencias mínimas aprobadas | Pendiente | NO DATA |
+| C-03 | Llegada al menú sin error bloqueante | Pendiente | NO DATA |
+| C-04 | Crear/cargar mundo de prueba | Pendiente | NO DATA |
+| C-05 | Recorrido de chunks existentes | Pendiente | NO DATA |
+| C-06 | Generación de chunks nuevos | Pendiente | NO DATA |
+| C-07 | Modelos, recursos, entidades y contenido RPG | Pendiente | NO DATA |
+| C-08 | Cambio de dimensión, si aplica | Pendiente | NO DATA |
+| C-09 | Reinicio y segunda carga | Pendiente | NO DATA |
+| C-10 | Cierre normal | Pendiente | NO DATA |
 
-## Incidencias
+## Registro de incompatibilidades
+
+No hay incompatibilidades locales reproducidas en esta revisión.
 
 | ID | Fecha | Archivos exactos | Síntoma reproducible | Pasos | Log | Mitigación probada | Estado |
 |---|---|---|---|---|---|---|---|
-|  |  |  |  |  |  |  |  |
+| | | | | | | | |
 
 ## Criterio de compatibilidad
 
-Marcar “Compatible en prueba” solo después de registrar Minecraft, Java, loader y archivos exactos; dependencias verificadas; arranque al menú y carga de mundo sin fallo bloqueante; sistemas relevantes del pack; incidencias y logs. Evaluar rendimiento por separado en `PERFORMANCE.md`. Todos los resultados actuales son **NO DATA**.
+Marcar “Compatible en prueba” solo después de registrar Minecraft, Java, loader, archivos exactos, dependencias, arranque hasta menú, carga de mundo y contenido relevante sin falla bloqueante, además de logs e incidencias. Evaluar rendimiento por separado en `PERFORMANCE.md`. Estado actual de todos los candidatos: **Pendiente / NO DATA**.
