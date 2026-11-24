@@ -1,0 +1,15 @@
+# Fragmento propuesto para options.txt de Minecraft 1.20.1.
+# NO es un archivo completo. No reemplazar el options.txt generado por Minecraft con este fragmento.
+# Fusionar las claves cuidadosamente en una instancia aislada y confirmar los valores dentro del juego.
+# Los valores son propuestas, no ajustes medidos para este equipo.
+renderDistance:4
+simulationDistance:5
+particles:2
+renderClouds:false
+entityShadows:false
+mipmapLevels:0
+graphicsMode:0
+enableVsync:false
+maxFps:260
+
+# Referencia de opciones/rangos: https://minecraft.wiki/w/Options.txt_(Java_Edition)
