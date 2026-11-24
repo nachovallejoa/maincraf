@@ -2,55 +2,52 @@
 
 ## Requisitos
 
-- Minecraft 1.20.1.
+- Minecraft Java Edition 1.20.1.
 - Prism Launcher o Modrinth App, actualizado a una versión que permita importar archivos `.mrpack`.
-- Java 17 para Minecraft 1.20.1. Los launchers suelen gestionar Java automáticamente; si se configura manualmente, selecciona Java 17.
-- Conexión a Internet durante la instalación para descargar los archivos necesarios.
-
-El paquete no fija una versión exacta de Fabric Loader. No consideres la instancia validada ni fuerces una versión manual de Loader.
+- Conexión a internet para que el launcher descargue los componentes requeridos durante la instalación.
+- Java 17 para ejecutar Minecraft 1.20.1. Los launchers suelen gestionar Java automáticamente; si se configura manualmente, selecciona Java 17.
+- La memoria recomendada depende de la memoria disponible en el equipo. No hay especificaciones de hardware confirmadas para fijar un valor único.
 
 ## Descargar el paquete
 
 ### Desde Releases
 
-1. Abre la sección **Releases** del repositorio en GitHub.
-2. En la publicación más reciente, descarga el archivo `.mrpack` adjunto.
+1. Abre la sección **Releases** del repositorio.
+2. En el Release más reciente, descarga el archivo `.mrpack`.
 
 ### Desde Actions
 
 1. Abre la pestaña **Actions** del repositorio.
-2. Selecciona una ejecución completada de **Build modpack**.
-3. En **Artifacts**, descarga `modrinth-modpack`.
-4. Si GitHub lo descarga como ZIP, extrae ese ZIP para obtener el archivo `.mrpack`. No importes el ZIP del artefacto.
+2. Entra en la ejecución completada más reciente del workflow **Build Modpack**.
+3. En **Artifacts**, descarga el artefacto `mrpack`.
+4. Si el artefacto se descarga como ZIP, extráelo para obtener el archivo `.mrpack`.
 
 ## Importar en Prism Launcher
 
 1. Abre Prism Launcher.
-2. Elige **Add Instance** y después **Import**.
-3. Selecciona el archivo `.mrpack` descargado.
-4. Confirma la importación y espera a que el launcher descargue los archivos.
-5. Inicia la instancia desde Prism Launcher.
+2. Selecciona **Add Instance** y después **Import**.
+3. Elige el archivo `.mrpack` descargado.
+4. Confirma la instalación y espera a que termine la descarga de archivos.
+5. Inicia la instancia creada.
 
 ## Importar en Modrinth App
 
 1. Abre Modrinth App.
-2. Ve a **Library** y usa la opción para importar un modpack o archivo.
-3. Selecciona el archivo `.mrpack` descargado.
-4. Espera a que termine la instalación y luego inicia la instancia.
-
-Los nombres de las opciones pueden variar ligeramente entre versiones del launcher.
+2. Ve a la biblioteca de instancias y selecciona la opción para importar un modpack o archivo.
+3. Selecciona el `.mrpack` descargado.
+4. Espera a que termine la importación y la descarga de archivos.
+5. Inicia la instancia.
 
 ## Memoria y argumentos JVM
 
-- Heap máximo recomendado como punto de partida: `-Xmx6G`, condicionado a disponer de aproximadamente 10 GB de memoria total disponible. No es una medición del consumo del paquete.
-- No se recomienda añadir un valor para `-Xms`.
-- Conserva los argumentos JVM predeterminados del launcher; no añadas opciones de GC no verificadas.
+La memoria y los argumentos JVM recomendados no están fijados en los datos recibidos para este paquete. Conserva los valores predeterminados del launcher mientras no se conozcan las especificaciones del equipo y no agregues argumentos JVM avanzados sin pruebas.
 
 ## Si el juego no arranca
 
-1. Comprueba que la versión de Minecraft seleccionada sea 1.20.1 y que el launcher haya terminado de descargar la instancia.
-2. Revisa el registro de la instancia:
-   - **Prism Launcher:** abre la instancia y usa **Minecraft Log** o **View Logs**.
-   - **Modrinth App:** abre la instancia y usa la opción para ver los registros/logs.
-3. Si el launcher ofrece un registro de instalación, consúltalo también. En Minecraft, los registros suelen estar dentro de la carpeta de la instancia, en `logs/latest.log`.
-4. Guarda el registro desde el inicio del error y compártelo al pedir ayuda. Oculta cualquier dato personal o token que pudiera aparecer.
+1. Confirma que estás iniciando la instancia importada y que el launcher terminó las descargas.
+2. Revisa que la instancia esté usando Minecraft 1.20.1 y Java 17.
+3. Consulta los registros de la instancia:
+   - En Prism Launcher, abre la instancia y usa **Minecraft Log** o **View Folder** para encontrar `logs/latest.log`.
+   - En Modrinth App, abre la instancia y usa la opción de abrir su carpeta; busca `logs/latest.log`.
+4. Si existe un informe de fallo, busca también la carpeta `crash-reports`.
+5. Guarda el registro completo del intento de inicio y compártelo al solicitar ayuda. No publiques datos privados que el launcher pueda incluir en los registros.
