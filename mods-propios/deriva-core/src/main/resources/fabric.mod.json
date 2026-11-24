@@ -1,9 +1,9 @@
 {
   "schemaVersion": 1,
   "id": "deriva_core",
-  "version": "1.0.0",
-  "name": "Deriva Core",
-  "description": "Estado persistente y API común para la campaña Deriva.",
+  "version": "${version}",
+  "name": "Mar de Nubes: Núcleo de Deriva",
+  "description": "API y estado persistente de campaña para Mar de Nubes.",
   "environment": "*",
   "entrypoints": {
     "main": [
@@ -13,6 +13,7 @@
   "depends": {
     "fabricloader": ">=0.20.1",
     "minecraft": "1.20.1",
-    "java": ">=17"
+    "java": ">=17",
+    "fabric-api": "0.92.5+1.20.1"
   }
 }
