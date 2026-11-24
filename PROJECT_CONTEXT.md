@@ -1,6 +1,6 @@
 # Contexto del proyecto
 
-> **Misión 1 — investigación inicial. Estado: revisión.** Paquete corregido recibido el 2026-11-24. La documentación no implica inspección ni ejecución independiente de Minecraft. No modificar la rama principal.
+> Misión 1 — investigación inicial. Estado: revisión. Paquete corregido recibido el 2026-11-24. La documentación no implica inspección ni ejecución independiente de Minecraft. No modificar la rama principal.
 
 ## Objetivo y filosofía
 
@@ -8,50 +8,30 @@ Documentar una base técnica para evaluar Minecraft con contenido RPG y optimiza
 
 ## Hardware declarado y no verificado independientemente
 
-El usuario comunicó para esta revisión que tiene **10 GB de RAM disponibles** y que el sistema operativo usa **500 MB**. Es información declarada por el usuario, no una medición o verificación independiente. Sistema operativo, configuración completa, RAM física total y benchmarks siguen pendientes. La información anterior del perfil no se sustituye por una inferencia sobre el total instalado.
+El usuario comunicó para esta revisión que tiene **12 GB de RAM instalados**, con **unos 10 GB disponibles**, y que **Windows usa unos 500 MB**. Es información declarada por el usuario, no una medición o verificación independiente. Sistema operativo, configuración completa, RAM física total y benchmarks siguen pendientes.
 
-## Autonomía controlada y autorización
+## Modo autónomo
 
-- Se permite investigar, documentar y proponer; una propuesta no es decisión aprobada.
-- El usuario pidió dejar de recibir cuestionarios, que el asistente tome decisiones creativas usando prioridades ya expresadas y que mantenga en secreto el contenido narrativo futuro para que pueda descubrirlo al jugar. Evitar spoilers en futuras comunicaciones; no divulgar giros o contenido sorpresa.
-- La solicitud de tener el modpack hecho en la próxima interacción expresa una expectativa, no certifica que el pack esté construido ni elimina verificaciones de instancia, mods, licencias o dependencias.
-- No instalar, retirar, sustituir, modificar ni redistribuir mods sin autorización expresa y revisión de archivo, loader, compatibilidad y licencia. No inventar manifiestos, dependencias, métricas ni resultados.
-- Mantener ramas aisladas; no escribir en `main`, no fusionar ni iniciar etapa nueva por defecto.
-- No subir JARs ni binarios de mods de terceros.
+El usuario aprobó todo, delegó todas las decisiones al equipo y no quiere cuestionarios ni conocer el contenido del modpack. El equipo debe tomar las decisiones necesarias, mantener en secreto las sorpresas narrativas y entregar el modpack para que el usuario lo descubra jugando. Esta autonomía no permite inventar datos de compatibilidad, dependencias, licencias, resultados de pruebas o mediciones. No instalar, retirar, sustituir, modificar ni redistribuir archivos de mods de terceros; tampoco subir sus JARs al repositorio.
 
-## Equipo y responsabilidades
+## Límites y responsabilidades
 
-- **Director del proyecto:** coordina alcance, trazabilidad y aprobaciones.
-- **Diseñador RPG:** recopila requisitos; no diseña contenido sin autorización de etapa.
-- **Guionista:** registra definiciones narrativas autorizadas; preservar confidencialidad y no crear lore por iniciativa ajena al alcance vigente.
-- **Programador Java:** revisa requisitos técnicos/dependencias; no programa mods sin autorización.
-- **Especialista Minecraft:** documenta versiones, loaders y datos de instalación pendientes.
-- **Optimizador:** define mediciones; no declara rendimiento sin pruebas.
-- **Auditor de mods:** registra versiones, licencias, dependencias y riesgos como candidatos, no aprobados.
-- **Tester:** prepara pruebas reproducibles; no ejecuta juego ni benchmarks aquí.
+- Mantener ramas aisladas; no escribir en `main` ni alterar ramas de etapas anteriores.
+- No declarar una compilación, prueba de lanzamiento o compatibilidad efectiva sin evidencia.
+- Registrar `NO DATA`, `INCOMPLETE` y `[SIN VERIFICAR]` como pendientes indicando qué fuente no proporcionó los datos.
+- No subir JARs de terceros. Los artefactos solo pueden descargarse desde sus fuentes autorizadas durante el build.
+- La versión exacta de Fabric Loader para el paquete queda pendiente; el manifiesto mantiene `null` y la instancia no se declara validada.
 
-## Decisiones de la etapa de Mecánicas
+## Registro conservador de decisiones previas
 
-El usuario respondió: «apruebo todo, pero quiero que dejes de hacerme cuestionarios y hagas vos la historia, no quiero saber yo lo que va a tener el modpack, quiero vivirlo sin saberlo e ir descubriendo cosas asi que toma decisiones por vos mismo, ya sabes mis prioridades. mi pc tiene 10gb de ram disponibles y el sistema operativo usa 500mb nada mas. todo lo demas hacelo vos, procesa todo lo necesario. quiero que la proxima vez tengas el modpack hecho ya».
+Las propuestas de historia y mecánicas aprobadas se mantienen según los documentos de diseño existentes. La selección RPG opcional y los módulos propios planificados continúan sujetos a revisión técnica. La revisión no los declara incompatibles ni autoriza por sí sola implementación de código propio.
 
-Registro conservador de las preguntas del cuestionario único:
+## Decisiones de la etapa de modpack
 
-1. **Diseño general revisado — aprobado** por «apruebo todo», respetando pendientes y límites indicados.
-2. **Clases — aprobadas** las tres propuestas: Guardacorriente, Vigía del Prisma y Rompeanclas.
-3. **Árboles/builds — aprobado** el esquema de tres ramas y cinco nodos, coste de 3 puntos como parámetro inicial de prueba; no es balance validado.
-4. **Niveles/estadísticas — aprobada como base de pruebas** la propuesta nivel 30, curva, 15 puntos de atributo y 29 de habilidad; efectos cuantificados siguen pendientes.
-5. **Equipo/rareza — aprobadas** cuatro rarezas y recompensas fijas, sin ranuras adicionales por ahora.
-6. **Combate — aprobado** el enfoque de señales legibles, grupos compactos y respuestas viables para todas las clases.
-7. **Jefes — aprobados como propuestas sujetas a pruebas** los seis encuentros nombrados en `GAME_DESIGN.md`.
-8. **Reputación — aprobadas** las cuatro facciones y escala propuesta −2 a +2, sin que reputación decida rutas/finales por sí sola.
-9. **Candidatos de mods RPG — sin selección individual registrada.** «Apruebo todo» no identifica opciones de auditoría, retiros o adiciones de la pregunta 9. Ningún candidato se marca como aceptado, quitado o añadido por decisión del usuario; siguen candidatos sin verificación.
-10. **Módulos propios — sin clasificación individual registrada.** La pregunta 10 requería aprobar/aplazar/descartar cada módulo. La respuesta general no especificó estados por módulo. Todos permanecen sin clasificación explícita en `ARCHITECTURE.md`.
-11. **Desarrollo de mods propios — no autorizado explícitamente.** No hubo respuesta específica a la pregunta 11. El pedido de procesar todo y tener el modpack hecho no se convierte en autorización inequívoca para iniciar una etapa nueva.
+Minecraft 1.20.1 se conserva como base. La selección mínima incluye Sodium, Lithium, FerriteCore y ModernFix, según los IDs y archivos de versión de Modrinth proporcionados en los hallazgos. No se agrega Fabric API porque las respuestas consultadas no declaran dependencias obligatorias para las versiones seleccionadas. Sodium es solo cliente y los otros tres mods funcionan en cliente y servidor.
 
-**Decisiones aplazadas o no determinadas:** clasificación de cada módulo propio; selección individual de mods candidatos; valores/balance y pruebas; compatibilidad, versiones, APIs, licencias, configuración y rendimiento. No se registran como aprobados ni rechazados los puntos no contestados de forma específica.
+La configuración permanece por defecto, sin overrides. El heap máximo sugerido `-Xmx6G` es solo un punto de partida condicionado a la memoria disponible; no constituye medición del consumo del pack. No se añaden `-Xms` ni argumentos de GC adicionales. La compilación del `.mrpack` queda pendiente de fijar Fabric Loader: el script debe detenerse expresamente si el valor continúa en `null`.
 
-La petición de tomar decisiones creativas se registra como preferencia para la dirección narrativa futura, sin revelar al usuario las sorpresas. No cambia por sí sola el estado formal de aprobaciones técnicas ni altera la historia independiente ya aprobada.
+Los módulos propios planificados son núcleo de campaña y persistencia; clases, atributos, niveles y builds; decisiones, facciones y accesos; encuentros y jefes; rarezas, recompensas y equipo; adaptador opcional de misiones. No hay código entregado, autorización explícita documentada para implementarlo ni proyecto Gradle que permita afirmar que compile.
 
-## Decisiones de la etapa de Mecánicas
-
-Las decisiones detalladas de aprobación de mecánicas, clasificación pendiente de candidatos, estado de autorización y contexto de hardware están registradas arriba. El diseño sigue aislado en `etapa-5-mecanicas`; no iniciar ni fusionar otra etapa por defecto.
+Los candidatos RPG y opcionales de rendimiento no incluidos quedan fuera por auditoría insuficiente, no por incompatibilidad demostrada.
