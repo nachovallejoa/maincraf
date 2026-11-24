@@ -2,9 +2,9 @@
 
 ## Etapa 7 — Modpack
 
-- Se reemplaza el manifiesto por el paquete documental de Minecraft 1.20.1 y Fabric Loader 0.20.1, con los ids de versión aportados en los hallazgos.
-- Se incluyen los módulos propios `nucleo-campana` y `decisiones-campana`, además de documentación de instalación, constructores para mrpack/TLauncher e instalador Windows.
-- Los mods de terceros se resuelven desde Modrinth al construir/instalar; sus JAR no se incorporan al repositorio.
-- Se registra el modo autónomo, las decisiones del director, el inventario documental de mods y el estado de roadmap.
-- El paquete sigue siendo una reconstrucción documental y no una instancia probada. Dependencias completas, compatibilidad global, compilación integral y prueba real en juego permanecen pendientes o [SIN VERIFICAR].
-- La revisión no devolvió una lista completa de JAR ni la línea de conteo/`INCOMPLETE` completa; se mantiene esa limitación documentada.
+- Se actualizó el manifiesto con Minecraft 1.20.1, Fabric Loader 0.20.1 y `mods: []`, respetando la decisión de no instalar candidatos sin validar compatibilidad conjunta ni incluir JAR de terceros.
+- Se incorporaron opciones de vídeo documentadas, con la limitación de prueba `[SIN VERIFICAR]` conservada.
+- Se copiaron los cuatro módulos propios entregados (deriva-core, deriva-progression, nucleo-campana y decisiones-campana), las herramientas de construcción `.mrpack`/TLauncher, instalador Windows y documentación.
+- Se actualizaron contexto autónomo, decisiones técnicas, manifiesto documental de candidatos y hoja de ruta.
+- **Pendiente:** build de Gradle y paquetes en GitHub Actions; después, instalación y prueba de juego por el usuario. No se declara compilación ni ejecución exitosa.
+- La revisión no devolvió la lista completa de JAR ni el conteo completo (`INCOMPLETE`); esa limitación documental se conserva.
