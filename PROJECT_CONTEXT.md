@@ -1,78 +1,57 @@
 # Contexto del proyecto
 
-> **Misión 1 — investigación inicial. Estado: revisión.** Paquete corregido recibido el 2026-11-24. Esta actualización documental no implica inspección ni ejecución independiente de Minecraft. No modificar la rama principal.
+> **Misión 1 — investigación inicial. Estado: revisión.** Paquete corregido recibido el 2026-11-24. La documentación no implica inspección ni ejecución independiente de Minecraft. No modificar la rama principal.
 
 ## Objetivo y filosofía
 
-Documentar una base técnica para evaluar Minecraft con contenido RPG y optimización en el equipo declarado, sin sacrificar mods requeridos. Mantener trazabilidad entre fuentes, builds, propuestas, decisiones autorizadas y datos pendientes. Separar hechos comprobados documentalmente, propuestas, decisiones aprobadas y pendientes. Las secciones sin datos deben indicar la fuente que no los proporcionó; no completar huecos con estimaciones. No crear contenido RPG técnico fuera del alcance autorizado.
+Documentar una base técnica para evaluar Minecraft con contenido RPG y optimización en el equipo declarado, manteniendo trazabilidad entre fuentes, builds, propuestas, decisiones autorizadas y datos pendientes. No completar vacíos con estimaciones. No crear contenido RPG técnico fuera del alcance autorizado. Las decisiones narrativas aprobadas se conservan; las mecánicas no deben alterarlas.
 
-## Hardware declarado (no verificado independientemente)
+## Hardware declarado y no verificado independientemente
 
-| Componente | Dato recibido | Estado |
-|---|---|---|
-| CPU | AMD Athlon 5150 | No verificado |
-| Gráficos | Radeon R3 integrada | Controlador, API y OpenGL local pendientes |
-| RAM | 12 GB instalados; ~9,9 GB utilizables declarados | No verificado |
-| Almacenamiento | HDD | No verificado |
-| Sistema | Windows, versión/build no indicada | Pendiente |
-| Resolución | 1280×720 declarada | No verificada |
-| Java/launcher | Sin datos | Pendiente |
+El usuario comunicó para esta revisión que tiene **10 GB de RAM disponibles** y que el sistema operativo usa **500 MB**. Es información declarada por el usuario, no una medición o verificación independiente. Sistema operativo, configuración completa, RAM física total y benchmarks siguen pendientes. La información anterior del perfil no se sustituye por una inferencia sobre el total instalado.
 
 ## Autonomía controlada y autorización
 
 - Se permite investigar, documentar y proponer; una propuesta no es decisión aprobada.
-- No instalar, retirar, sustituir, modificar ni redistribuir mods sin autorización expresa y revisión del archivo, loader, compatibilidad y licencia.
-- No inventar manifiestos, dependencias, métricas ni resultados; registrar «NO DATA» y la fuente que no entregó los datos.
-- No ejecutar benchmarks ficticios ni extrapolar FPS de otros equipos.
-- Mantener ramas/perfiles aislados: no escribir en `main`, no sobrescribir trabajo ajeno y no fusionar sin autorización.
-- Nunca subir JARs ni otros binarios de mods de terceros.
-- El flujo de etapas se ejecuta secuencialmente; una autorización no implica fusionar ramas ni iniciar automáticamente otra etapa.
-- La licencia de un mod no implica por sí sola permiso universal de redistribución.
+- El usuario pidió dejar de recibir cuestionarios, que el asistente tome decisiones creativas usando prioridades ya expresadas y que mantenga en secreto el contenido narrativo futuro para que pueda descubrirlo al jugar. Evitar spoilers en futuras comunicaciones; no divulgar giros o contenido sorpresa.
+- La solicitud de tener el modpack hecho en la próxima interacción expresa una expectativa, no certifica que el pack esté construido ni elimina verificaciones de instancia, mods, licencias o dependencias.
+- No instalar, retirar, sustituir, modificar ni redistribuir mods sin autorización expresa y revisión de archivo, loader, compatibilidad y licencia. No inventar manifiestos, dependencias, métricas ni resultados.
+- Mantener ramas aisladas; no escribir en `main`, no fusionar ni iniciar etapa nueva por defecto.
+- No subir JARs ni binarios de mods de terceros.
 
 ## Equipo y responsabilidades
 
 - **Director del proyecto:** coordina alcance, trazabilidad y aprobaciones.
-- **Diseñador RPG:** recopila requisitos pendientes; no diseña contenido RPG sin autorización de etapa.
-- **Guionista:** registra definiciones narrativas autorizadas; no crea lore/trama por iniciativa propia.
-- **Programador Java:** revisa requisitos técnicos/dependencias; no programa mods.
+- **Diseñador RPG:** recopila requisitos; no diseña contenido sin autorización de etapa.
+- **Guionista:** registra definiciones narrativas autorizadas; preservar confidencialidad y no crear lore por iniciativa ajena al alcance vigente.
+- **Programador Java:** revisa requisitos técnicos/dependencias; no programa mods sin autorización.
 - **Especialista Minecraft:** documenta versiones, loaders y datos de instalación pendientes.
 - **Optimizador:** define mediciones; no declara rendimiento sin pruebas.
-- **Auditor de mods:** registra versiones, licencias, dependencias y riesgos como candidatos, no como aprobados.
+- **Auditor de mods:** registra versiones, licencias, dependencias y riesgos como candidatos, no aprobados.
 - **Tester:** prepara pruebas reproducibles; no ejecuta juego ni benchmarks aquí.
-- **Revisor independiente:** contrasta evidencia, límites y estados de aprobación.
-- **Especialistas adicionales:** no se identifican como necesarios ahora.
 
-## Estado documental y propuestas
+## Decisiones de la etapa de Mecánicas
 
-La rama de misión contiene documentación de investigación. Según el inventario recibido, el manifiesto y los JARs no se encontraron; las listas de mods son candidaturas documentales y hay discrepancias de versiones por resolver. `README` no aparece en las estructuras consultadas y su lectura devolvió 404; no se inventa ni crea su contenido en esta entrada.
+El usuario respondió: «apruebo todo, pero quiero que dejes de hacerme cuestionarios y hagas vos la historia, no quiero saber yo lo que va a tener el modpack, quiero vivirlo sin saberlo e ir descubriendo cosas asi que toma decisiones por vos mismo, ya sabes mis prioridades. mi pc tiene 10gb de ram disponibles y el sistema operativo usa 500mb nada mas. todo lo demas hacelo vos, procesa todo lo necesario. quiero que la proxima vez tengas el modpack hecho ya».
 
-**Ninguna decisión técnica final está aprobada.** Candidata principal técnica: Minecraft 1.20.1 + Fabric, condicionada al manifiesto, driver y pruebas. Forge 1.20.1 es alternativa solo si el manifiesto lo exige. No hay instalación ni configuración probada.
+Registro conservador de las preguntas del cuestionario único:
 
-La revisión recibida confirma documentalmente ciertos metadatos de candidatos (incluidos Sodium 0.5.13, Lithium 0.11.4, ImmediatelyFast 1.2.21 y Entity Culling 1.12.1-1.20.1), con límites y licencias anotados en `MOD_AUDIT.md`. Otras versiones exactas siguen marcadas sin verificar. Entity Culling tiene licencia personalizada: no redistribuir su JAR fuera de los términos aplicables. No subir binarios.
+1. **Diseño general revisado — aprobado** por «apruebo todo», respetando pendientes y límites indicados.
+2. **Clases — aprobadas** las tres propuestas: Guardacorriente, Vigía del Prisma y Rompeanclas.
+3. **Árboles/builds — aprobado** el esquema de tres ramas y cinco nodos, coste de 3 puntos como parámetro inicial de prueba; no es balance validado.
+4. **Niveles/estadísticas — aprobada como base de pruebas** la propuesta nivel 30, curva, 15 puntos de atributo y 29 de habilidad; efectos cuantificados siguen pendientes.
+5. **Equipo/rareza — aprobadas** cuatro rarezas y recompensas fijas, sin ranuras adicionales por ahora.
+6. **Combate — aprobado** el enfoque de señales legibles, grupos compactos y respuestas viables para todas las clases.
+7. **Jefes — aprobados como propuestas sujetas a pruebas** los seis encuentros nombrados en `GAME_DESIGN.md`.
+8. **Reputación — aprobadas** las cuatro facciones y escala propuesta −2 a +2, sin que reputación decida rutas/finales por sí sola.
+9. **Candidatos de mods RPG — sin selección individual registrada.** «Apruebo todo» no identifica opciones de auditoría, retiros o adiciones de la pregunta 9. Ningún candidato se marca como aceptado, quitado o añadido por decisión del usuario; siguen candidatos sin verificación.
+10. **Módulos propios — sin clasificación individual registrada.** La pregunta 10 requería aprobar/aplazar/descartar cada módulo. La respuesta general no especificó estados por módulo. Todos permanecen sin clasificación explícita en `ARCHITECTURE.md`.
+11. **Desarrollo de mods propios — no autorizado explícitamente.** No hubo respuesta específica a la pregunta 11. El pedido de procesar todo y tener el modpack hecho no se convierte en autorización inequívoca para iniciar una etapa nueva.
 
-## Decisiones de la etapa de identidad RPG
+**Decisiones aplazadas o no determinadas:** clasificación de cada módulo propio; selección individual de mods candidatos; valores/balance y pruebas; compatibilidad, versiones, APIs, licencias, configuración y rendimiento. No se registran como aprobados ni rechazados los puntos no contestados de forma específica.
 
-Respuestas expresas del usuario al cuestionario, registradas en la rama etapa 3. La identidad se registra como preferencia narrativa/RPG; no desarrolla la historia completa ni aprueba técnicamente mods.
+La petición de tomar decisiones creativas se registra como preferencia para la dirección narrativa futura, sin revelar al usuario las sorpresas. No cambia por sí sola el estado formal de aprobaciones técnicas ni altera la historia independiente ya aprobada.
 
-1. **Propuesta elegida — D, mezcla:** La Marea de los Mil Soles como base (B) con mods candidatos de B y A. No es lista de mods aprobada ni instalada.
-2. **Tono — B y D:** misterio y aventura, tono más oscuro y peligroso.
-3. **Enfoque principal — A y B:** combate y exploración.
-4. **Progresión/clases — B, C y D:** árboles/builds, niveles y estadísticas como ejes; clases definidas.
-5. **Dificultad — B:** equilibrada, reto moderado en combate y supervivencia.
-6. **Autorización — A:** autorizó desarrollar la historia completa de la propuesta elegida en la etapa de Historia. Esa autorización queda registrada; no iniciaba por sí misma esa etapa.
+## Decisiones de la etapa de Mecánicas
 
-**Decisiones aplazadas:** ninguna marcada `después`. Los detalles concretos de historia, mundo y reglas quedaron para desarrollo; verificación de mods, versiones, dependencias, licencias, compatibilidad y rendimiento no forma parte de ese cuestionario y sigue pendiente.
-
-## Decisiones de la etapa de Historia
-
-Respuestas expresas del usuario al cuestionario de aprobación y ajustes. La historia general quedó aprobada tal como estaba; no se solicitaron cambios narrativos. Las elecciones registradas son decisiones sobre la historia, no confirmaciones técnicas ni implementación.
-
-1. **Aprobación general — 1A:** aprueba la historia general como base del proyecto, tal como está.
-2. **Almirante Veyr — 2A:** mantenerlo como antagonista trágico convencido de que sacrificar recuerdos evitará más catástrofes.
-3. **Facciones y personajes — 3A:** mantenerlos como están.
-4. **Desenlaces — 4A:** mantener los cuatro; el pactado es una opción más exigente, no un final perfecto.
-5. **Jefes — 5A:** mantener los seis propuestos.
-6. **Misiones secundarias — 6B:** peso medio; algunas desbloquean rutas, recursos, testimonios o apoyos para el final.
-7. **Etapa de Mecánicas — 7A:** autorizó avanzar con clases, niveles, estadísticas, habilidades/builds, combate y progresión como propuestas de diseño. Esta autorización habilita el diseño de la etapa, pero no implica compatibilidad con mods, implementación, fusión de ramas ni inicio automático de una etapa nueva.
-
-**Decisiones aplazadas:** ninguna pregunta se dejó pendiente explícitamente. Los datos técnicos no verificados (perfil, mods, compatibilidad, implementación y rendimiento) continúan en estado pendiente; no se convierten en aprobaciones por la aprobación de la historia.
+Las decisiones detalladas de aprobación de mecánicas, clasificación pendiente de candidatos, estado de autorización y contexto de hardware están registradas arriba. El diseño sigue aislado en `etapa-5-mecanicas`; no iniciar ni fusionar otra etapa por defecto.
