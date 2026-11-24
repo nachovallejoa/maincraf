@@ -1,56 +1,63 @@
 # Contexto del proyecto
 
-> Misión 1: documentación de investigación inicial. Estado: **en revisión**; propuestas técnicas pendientes de aprobación. La información de hardware procede de la entrada recibida y no se midió independientemente.
+> **Misión 1 — investigación inicial. Estado: revisión.** Paquete corregido recibido el 2026-11-24. Esta actualización documental no implica inspección ni ejecución independiente de Minecraft. No modificar la rama principal.
 
 ## Objetivo y filosofía
 
-Documentar una base técnica para evaluar Minecraft con contenido RPG y optimización en el equipo declarado, sin afirmar compatibilidad o rendimiento no medidos. Mantener trazabilidad de fuentes, versiones y decisiones; separar propuestas de hechos y preservar los datos ausentes como pendientes. No diseñar contenido RPG en esta etapa.
+Documentar una base técnica para evaluar Minecraft con contenido RPG y optimización en el equipo declarado, sin sacrificar mods requeridos. Mantener trazabilidad entre fuentes, builds, propuestas, decisiones autorizadas y datos pendientes. Separar hechos comprobados documentalmente, propuestas, decisiones aprobadas y pendientes. Las secciones sin datos deben indicar la fuente que no los proporcionó; no completar huecos con estimaciones. No crear contenido RPG en esta etapa.
 
-## Hardware declarado
+## Hardware declarado (no verificado independientemente)
 
 | Componente | Dato recibido | Estado |
 |---|---|---|
-| CPU | AMD Athlon 5150, 4 núcleos, 1,6 GHz | No verificado independientemente |
-| Gráficos | Radeon R3 integrada; hasta 2 GB compartidos según la entrada | No verificado; memoria compartida no equivale a VRAM dedicada |
+| CPU | AMD Athlon 5150 | No verificado |
+| Gráficos | Radeon R3 integrada | Controlador, API y OpenGL local pendientes |
 | RAM | 12 GB instalados; ~9,9 GB utilizables declarados | No verificado |
 | Almacenamiento | HDD | No verificado |
+| Sistema | Windows, versión/build no indicada | Pendiente |
 | Resolución | 1280×720 declarada | No verificada |
-| Sistema operativo | Windows; versión/build no indicada | Pendiente |
-| Driver y API gráfica | No indicados | Pendiente; OpenGL/Vulkan no verificados |
+| Java/launcher | Sin datos | Pendiente |
 
-AMD clasifica la familia Athlon con Radeon R3 como legacy y no planea nuevos drivers para ella. Esto no establece la API gráfica expuesta por esta instalación. Fuente: https://www.amd.com/en/resources/support-articles/faqs/GPU-630.html
+## Autonomía controlada y autorización
 
-## Reglas de autonomía controlada y autorización
+- Se permite investigar, documentar y proponer; una propuesta no es decisión aprobada.
+- No instalar, retirar, sustituir, modificar ni redistribuir mods sin autorización expresa y revisión del archivo, loader, compatibilidad y licencia.
+- No inventar manifiestos, dependencias, métricas ni resultados; registrar `NO DATA` y la fuente que no entregó los datos.
+- No ejecutar benchmarks ficticios ni extrapolar FPS de otros equipos.
+- Mantener ramas/perfiles aislados: no escribir en `main`, no sobrescribir trabajo ajeno y no fusionar sin autorización.
+- Nunca subir JARs ni otros archivos binarios de mods de terceros.
+- El flujo de esta misión se ejecuta secuencialmente, no en paralelo.
+- La licencia de un mod no implica por sí sola permiso universal de redistribución.
 
-- Se permite investigar, documentar y proponer; no se considera una propuesta como decisión aprobada.
-- No instalar, quitar, sustituir ni redistribuir mods sin autorización expresa y verificación de archivo, loader, compatibilidad y licencia.
-- No inventar valores, mediciones, manifiestos, dependencias, resultados ni contenido cuando una fuente no devolvió datos; registrar `NO DATA` y qué fuente faltó.
-- No ejecutar benchmarks ficticios ni extrapolar FPS. Conservar logs y condiciones al probar.
-- Mantener loaders y ramas de prueba aislados; no mezclar Fabric y Forge.
-- Nunca subir JARs de mods de terceros.
-- No sobrescribir trabajo ajeno: esta misión se documenta en una rama propia, sin cambios en `main`.
+## Equipo y responsabilidades
 
-## Estado recibido del repositorio
+- **Director del proyecto:** coordina alcance, trazabilidad y aprobaciones.
+- **Diseñador RPG:** recopila requisitos pendientes; no diseña contenido RPG en esta misión.
+- **Guionista:** registra definiciones narrativas pendientes; no crea lore ni trama.
+- **Programador Java:** revisa requisitos técnicos/dependencias; no programa mods.
+- **Especialista Minecraft:** documenta versiones, loaders y datos de instalación pendientes.
+- **Optimizador:** define mediciones; no declara rendimiento sin pruebas.
+- **Auditor de mods:** registra versiones, licencias, dependencias y riesgos como candidatos, no como aprobados.
+- **Tester:** prepara pruebas reproducibles; no ejecuta juego ni benchmarks aquí.
+- **Revisor independiente:** contrasta evidencia, límites y estados de aprobación.
+- **Especialistas adicionales:** no se identifican como necesarios ahora.
 
-La investigación entregada informó rama por defecto `main`, repositorio vacío y sin commits, árbol raíz vacío y README 404. En esta misión se consultó GitHub: repositorio `nachovallejoa/maincraf`, rama por defecto `main`; lista de ramas vacía y contenido de raíz vacío. El contenido sigue sin archivos previos. La revisión original reporta: `INCOMPLETE: 0 archivos revisados; árbol del repositorio y README, because el repositorio está vacío y no tiene commits (el README devolvió 404).`
+## Estado documental y propuestas
 
-## Decisiones propuestas
+La rama de misión contiene la documentación de investigación. Según el inventario recibido, el manifiesto y los JARs no se encontraron; las listas de mods son candidatas documentales y hay discrepancias de versiones por resolver. `README` no aparece en las estructuras consultadas y su lectura devolvió 404; no se inventa ni se crea su contenido. La descripción del inventario no equivale a verificación independiente de esos archivos.
 
-- Probar primero Minecraft 1.20.1 + Fabric en instancia aislada: propuesta de investigación, no decisión aprobada ni superioridad de FPS demostrada.
-- Java 17 es la recomendación de Fabric para Minecraft 1.17–1.20.4: https://wiki.fabricmc.net/install
-- Base mínima candidata para ensayar: Sodium 0.5.13 + Lithium 0.11.4 + FerriteCore 6.0.1; compatibilidad con el pack y Radeon R3 pendiente de pruebas. Sodium exige oficialmente driver compatible con OpenGL 4.5: https://modrinth.com/mod/sodium
-- Alternativa 1.20.1 + Forge solo si el manifiesto RPG lo requiere. No mezclar pilas.
-- `-Xmx4G` es un valor inicial propuesto, no medido ni aprobado.
-- No hay FPS, 1% low, frametimes, RAM, CPU/GPU ni tiempos de carga disponibles.
+**Ninguna decisión técnica final está aprobada.** Candidata principal: Minecraft 1.20.1 + Fabric, condicionada al manifiesto, driver y pruebas. Forge 1.20.1 es alternativa solo si el manifiesto lo exige. No hay instalación ni configuración probada. ModernFix `dynamic_resources=false` es un override documental propuesto; Lithium puede quedarse sin overrides. No precargar `options.txt` ni JSON de Sodium sin esquema verificado. No hay benchmarks; las tablas permanecen vacías.
 
-## Pendientes de aprobación y datos
+La revisión recibida confirma documentalmente ciertos metadatos de candidatos (incluidos Sodium 0.5.13, Lithium 0.11.4, ImmediatelyFast 1.2.21 y Entity Culling 1.12.1-1.20.1), con los límites y licencias anotados en `MOD_AUDIT.md`. Otras versiones exactas siguen marcadas sin verificar. Entity Culling tiene licencia personalizada: no redistribuir su JAR fuera de los términos aplicables. No subir binarios de mods.
 
-1. Aprobar o rechazar 1.20.1 + Fabric.
-2. Entregar manifiesto exacto del pack RPG y sus requisitos de loader.
-3. Confirmar launcher, Windows/build, driver AMD y OpenGL/Vulkan expuestos.
-4. Aprobar mods y archivos exactos tras verificar dependencias/licencias.
-5. Ejecutar pruebas funcionales y benchmarks controlados en el equipo real.
-6. Definir objetivo prioritario: FPS, estabilidad/frametimes, memoria o equilibrio.
-7. Autorizar explícitamente cualquier incorporación, retirada o sustitución de mods.
+## Decisiones pendientes
 
-Ver también `ROADMAP.md`, `MOD_AUDIT.md`, `MOD_COMPATIBILITY.md`, `PERFORMANCE.md` y `TECH_DECISIONS.md`.
+- Obtener/seleccionar manifiesto RPG y JARs exactos; resolver discrepancias de versiones y loader mediante dependencias reales.
+- Confirmar launcher, Java local y arquitectura, Windows/build, driver Radeon y APIs gráficas expuestas.
+- Aprobar candidatos para instancia aislada y política/plataforma de distribución; revisar licencia por archivo.
+- Ejecutar pruebas funcionales y benchmarks reproducibles con autorización; conservar logs, capturas y hashes locales, sin subir JARs.
+- Aprobar/rechazar la base técnica tras revisar la evidencia.
+- README: pendiente; fuente consultada devolvió 404.
+- Benchmarks y compatibilidad local: pendientes; no se entregaron resultados.
+
+No se ha descrito fusión a `main`; esta actualización pertenece exclusivamente a `mision-1-investigacion`.
