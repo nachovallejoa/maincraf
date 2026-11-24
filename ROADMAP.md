@@ -2,25 +2,26 @@
 
 ## Etapas y estado
 
-Las etapas previas permanecen en sus ramas aisladas. Esta rama registra la integración del modpack y su entrega documental; no implica validación técnica final.
+Las etapas previas permanecen en sus ramas aisladas. Esta rama registra la integración documental del modpack; no implica que haya superado pruebas técnicas.
 
 | Área | Estado | Pendiente / criterio |
 |---|---|---|
-| Selección y manifiesto | Documentalmente actualizado | Dos mods verificados incluidos: Sodium y BadOptimizations. Loader `0.20.1` indicado según Fabric Meta. |
-| Integración | En revisión | Revisar el manifiesto, el constructor y el workflow tras la compilación automática. |
-| Entrega | En revisión | Instrucciones y proceso de empaquetado documentados; no llamar al paquete probado o listo antes de comprobar la build. |
-| Mods propios | Sin implementación en esta entrega | No se recibieron fuentes de código ni detalle técnico suficiente; no se inventaron módulos. |
-| Pruebas | Pendiente | Esperar compilación automática en GitHub y que el usuario importe, inicie y juegue. Registrar logs/resultados; no afirmar pruebas por adelantado. |
-| Rendimiento | Pendiente | No hay benchmark ni mediciones locales. Las opciones son una propuesta de configuración, no una ganancia comprobada. |
-| Licencias | Pendiente | La entrada no proporcionó licencias confirmadas para los mods; verificar antes de redistribución. |
+| Selección y manifiesto | Documentada con pendientes | Minecraft documental 1.20.1 y Fabric Loader 0.20.1. La selección recibida incluye versiones/IDs nulos y dependencias obligatorias sin versiones verificadas. |
+| Integración | En revisión | Revisar manifiesto y constructor; la entrada advierte que faltan IDs, artefactos y dependencias verificadas. No publicar como paquete instalable mientras existan esos bloqueos. |
+| Entrega | En revisión | Instrucciones y proceso documentados como provisionales; no afirmar que el paquete esté completo, probado ni listo para instalar. La ruta TLauncher sigue [SIN VERIFICAR]. |
+| Mods propios | Revisión de fuentes pendiente | El código proporcionado refiere a `mareas-core`, mientras el árbol del repositorio tiene el módulo `venas-core`; no se inventa código ni se declara compilación. |
+| Pruebas | Pendiente | Esperar la compilación automática de GitHub y que el usuario importe, inicie y juegue. Registrar resultados y logs cuando existan; no anticiparlos. |
+| Rendimiento | Pendiente | No hay mediciones en el equipo. Los datos declarados de hardware no equivalen a benchmark. |
+| Licencias | Pendiente | Las fuentes recibidas no proporcionaron licencias verificadas para los mods listados. Comprobar fuentes oficiales antes de cualquier redistribución pertinente. |
 
-## Pendientes por fuente no verificada
+## Pendientes por fuente no concluyente
 
-INCOMPLETE: las consultas disponibles no devolvieron metadatos de proyecto y dependencias obligatorias suficientes para Lithium, FerriteCore, ModernFix, Sodium Extra, ImmediatelyFast, Simply Skills y Better Combat. Tampoco quedó verificada la identificación de FTB Quests y del Remnants propuesto. No incorporarlos al manifiesto ni inferir incompatibilidad mientras no haya datos.
+Las consultas recibidas no devolvieron suficientes metadatos y dependencias obligatorias para Sodium, Remnants, Village Diplomacy y FTB Quests; también quedaron sin cerrar dependencias de Better Combat y Bosses of Mass Destruction. Para Better Combat se marcó INCOMPLETE el proyecto `gedNE4y2`: slug, versión compatible, artefacto y licencia no fueron verificados. No completar estos huecos por inferencia.
 
 ## Próximos hitos
 
-1. La compilación automática de GitHub debe ejecutarse al guardar el workflow y su resultado debe revisarse.
-2. Resolver cualquier error de build sin incorporar versiones o código no verificados.
-3. El usuario importa la instancia, la inicia y juega; registrar el resultado solo cuando ocurra.
-4. Mantener pruebas de compatibilidad, rendimiento y licencias como pendientes hasta obtener evidencia.
+1. La compilación automática debe ejecutarse al guardar el workflow; revisar el resultado real.
+2. Completar únicamente los metadatos y dependencias que puedan confirmarse en fuentes autorizadas, sin introducir JARs de terceros en Git.
+3. Resolver errores de build usando evidencia, sin inventar versiones o código.
+4. El usuario importa e inicia la instancia y juega; registrar el resultado solo después de ocurrir.
+5. Mantener compatibilidad, rendimiento y licencias como pendientes hasta tener evidencia.
