@@ -1,5 +1,5 @@
 {
-  "name": "La Marea de los Mil Soles",
+  "name": "Deriva — Fabric 1.20.1",
   "version": "1.0.0",
   "minecraft_version": "1.20.1",
   "fabric_loader_version": "0.20.1",
@@ -33,39 +33,18 @@
       "env": "both"
     },
     {
-      "slug": "sodium-extra",
-      "version_id": "mDbF0LZT",
-      "version_number": "mc1.20.1-0.5.9",
-      "file_name": "sodium-extra-0.5.9+mc1.20.1.jar",
-      "env": "client"
-    },
-    {
       "slug": "immediatelyfast",
-      "version_id": "[SIN VERIFICAR]",
-      "version_number": "1.2.21+1.20.1",
-      "file_name": "ImmediatelyFast-Fabric-1.2.21+1.20.1.jar",
-      "env": "client"
-    },
-    {
-      "slug": "badoptimizations",
-      "version_id": "DIugITgU",
-      "version_number": "2.4.1",
-      "file_name": "BadOptimizations-2.4.1-1.20.1.jar",
+      "version_id": "txcO4lNF",
+      "version_number": "1.2.1+1.20.1",
+      "file_name": "ImmediatelyFast-1.2.1+1.20.1.jar",
       "env": "client"
     },
     {
       "slug": "dynamic-fps",
-      "version_id": "D9mrJwm0",
-      "version_number": "3.9.5",
-      "file_name": "dynamic-fps-3.9.5+minecraft-1.20.0-fabric.jar",
+      "version_id": "LLIcc8aO",
+      "version_number": "3.9.0",
+      "file_name": "dynamic-fps-3.9.0+minecraft-1.20.0-fabric.jar",
       "env": "client"
-    },
-    {
-      "slug": "fabric-api",
-      "version_id": "[SIN VERIFICAR]",
-      "version_number": "0.92.12+1.20.1",
-      "file_name": "fabric-api-0.92.12+1.20.1.jar",
-      "env": "both"
     }
   ]
 }
