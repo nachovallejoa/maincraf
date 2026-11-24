@@ -1,10 +1,10 @@
 # Contexto del proyecto
 
-> **Misión 1 — investigación inicial. Estado: revisión.** Este documento registra el paquete corregido recibido el 2026-11-24. No se inspeccionó Minecraft ni se ejecutaron pruebas durante esta misión. No se modificará la rama principal.
+> **Misión 1 — investigación inicial. Estado: revisión.** Paquete corregido recibido el 2026-11-24. Esta actualización documental no implica inspección ni ejecución independiente de Minecraft. No modificar la rama principal.
 
 ## Objetivo y filosofía
 
-Documentar una base técnica para evaluar Minecraft con contenido RPG y optimización en el equipo declarado, sin sacrificar mods requeridos. Mantener trazabilidad de fuentes/versiones y separar hechos comprobados, propuestas, decisiones autorizadas y datos pendientes. No crear contenido RPG en esta etapa. Las secciones sin datos se mantienen expresamente pendientes, sin estimaciones inventadas.
+Documentar una base técnica para evaluar Minecraft con contenido RPG y optimización en el equipo declarado, sin sacrificar mods requeridos. Mantener trazabilidad entre fuentes, builds, propuestas, decisiones autorizadas y datos pendientes. Separar hechos comprobados documentalmente, propuestas, decisiones aprobadas y pendientes. Las secciones sin datos deben indicar la fuente que no los proporcionó; no completar huecos con estimaciones. No crear contenido RPG en esta etapa.
 
 ## Hardware declarado (no verificado independientemente)
 
@@ -21,50 +21,43 @@ Documentar una base técnica para evaluar Minecraft con contenido RPG y optimiza
 ## Autonomía controlada y autorización
 
 - Se permite investigar, documentar y proponer; una propuesta no es decisión aprobada.
-- No instalar, retirar, sustituir ni redistribuir mods sin autorización expresa y revisión de archivo, loader, compatibilidad y licencia.
-- No inventar manifiestos, dependencias, métricas ni resultados. Registrar `NO DATA` junto a la fuente que no entregó el dato.
+- No instalar, retirar, sustituir, modificar ni redistribuir mods sin autorización expresa y revisión del archivo, loader, compatibilidad y licencia.
+- No inventar manifiestos, dependencias, métricas ni resultados; registrar `NO DATA` y la fuente que no entregó los datos.
 - No ejecutar benchmarks ficticios ni extrapolar FPS de otros equipos.
-- Mantener ramas y perfiles aislados; no escribir en `main` ni sobrescribir trabajo ajeno.
-- Nunca subir JARs u otros archivos de mods de terceros.
-- La investigación recibida prescribe ejecución secuencial de pasos, no paralela.
-- La licencia de un mod no garantiza por sí sola permiso de redistribución.
+- Mantener ramas/perfiles aislados: no escribir en `main`, no sobrescribir trabajo ajeno y no fusionar sin autorización.
+- Nunca subir JARs ni otros archivos binarios de mods de terceros.
+- El flujo de esta misión se ejecuta secuencialmente, no en paralelo.
+- La licencia de un mod no implica por sí sola permiso universal de redistribución.
 
 ## Equipo y responsabilidades
 
 - **Director del proyecto:** coordina alcance, trazabilidad y aprobaciones.
-- **Diseñador RPG:** identifica requisitos pendientes; no diseña contenido en esta misión.
-- **Guionista:** registra definiciones narrativas faltantes; no crea lore ni trama.
-- **Programador Java:** revisa requisitos técnicos; no programa mods.
-- **Especialista Minecraft:** documenta versiones/loaders y pendientes de instalación.
-- **Optimizador:** prepara criterios de medición; no afirma rendimiento sin pruebas.
-- **Auditor de mods:** registra versiones, licencias, dependencias y riesgos como candidatos.
-- **Tester:** define pruebas reproducibles; no ejecuta juego ni benchmarks aquí.
-- **Revisor independiente:** comprueba evidencia, límites y estado de aprobación.
+- **Diseñador RPG:** recopila requisitos pendientes; no diseña contenido RPG en esta misión.
+- **Guionista:** registra definiciones narrativas pendientes; no crea lore ni trama.
+- **Programador Java:** revisa requisitos técnicos/dependencias; no programa mods.
+- **Especialista Minecraft:** documenta versiones, loaders y datos de instalación pendientes.
+- **Optimizador:** define mediciones; no declara rendimiento sin pruebas.
+- **Auditor de mods:** registra versiones, licencias, dependencias y riesgos como candidatos, no como aprobados.
+- **Tester:** prepara pruebas reproducibles; no ejecuta juego ni benchmarks aquí.
+- **Revisor independiente:** contrasta evidencia, límites y estados de aprobación.
+- **Especialistas adicionales:** no se identifican como necesarios ahora.
 
-No se requiere equipo adicional para esta investigación inicial según la información disponible.
+## Estado documental y propuestas
 
-## Decisiones/propuestas registradas
+La rama de misión contiene la documentación de investigación. Según el inventario recibido, el manifiesto y los JARs no se encontraron; las listas de mods son candidatas documentales y hay discrepancias de versiones por resolver. `README` no aparece en las estructuras consultadas y su lectura devolvió 404; no se inventa ni se crea su contenido. La descripción del inventario no equivale a verificación independiente de esos archivos.
 
-No hay decisiones técnicas finales aprobadas. Propuestas pendientes:
+**Ninguna decisión técnica final está aprobada.** Candidata principal: Minecraft 1.20.1 + Fabric, condicionada al manifiesto, driver y pruebas. Forge 1.20.1 es alternativa solo si el manifiesto lo exige. No hay instalación ni configuración probada. ModernFix `dynamic_resources=false` es un override documental propuesto; Lithium puede quedarse sin overrides. No precargar `options.txt` ni JSON de Sodium sin esquema verificado. No hay benchmarks; las tablas permanecen vacías.
 
-1. Evaluar primero Minecraft 1.20.1 + Fabric por la evidencia documental más directa, sujeto al manifiesto del pack y autorización.
-2. Considerar Forge 1.20.1 solo si el manifiesto lo exige; Embeddium aparece publicado para Forge/NeoForge, sin demostrar compatibilidad local.
-3. No afirmar rendimiento hasta ejecutar pruebas reproducibles en el equipo.
-4. Mantener ModernFix Dynamic Resources en `false` hasta auditar el pack.
-5. No precargar Sodium JSON ni fragmento vanilla `options.txt` como configuración probada; el esquema/valores exactos no quedaron verificados para el propósito.
-6. Mantener candidatos condicionales fuera de la base hasta identificar necesidad y obtener autorización.
-7. No redistribuir archivos binarios sin revisar términos y método de distribución.
+La revisión recibida confirma documentalmente ciertos metadatos de candidatos (incluidos Sodium 0.5.13, Lithium 0.11.4, ImmediatelyFast 1.2.21 y Entity Culling 1.12.1-1.20.1), con los límites y licencias anotados en `MOD_AUDIT.md`. Otras versiones exactas siguen marcadas sin verificar. Entity Culling tiene licencia personalizada: no redistribuir su JAR fuera de los términos aplicables. No subir binarios de mods.
 
-## Decisiones y datos pendientes
+## Decisiones pendientes
 
-- Modpack RPG exacto, manifiesto, loader y versión.
-- Lista real de JARs y hashes (sin subir los JARs).
-- Java Runtime, launcher, Windows/build, controlador Radeon y OpenGL local.
-- Requisitos RPG imprescindibles y autorización para probar en instancia de respaldo.
-- Autorización de benchmarks y cambios visuales.
-- Política de uso privado/redistribución y revisión de licencias.
-- Aprobación o rechazo de la base técnica propuesta.
+- Obtener/seleccionar manifiesto RPG y JARs exactos; resolver discrepancias de versiones y loader mediante dependencias reales.
+- Confirmar launcher, Java local y arquitectura, Windows/build, driver Radeon y APIs gráficas expuestas.
+- Aprobar candidatos para instancia aislada y política/plataforma de distribución; revisar licencia por archivo.
+- Ejecutar pruebas funcionales y benchmarks reproducibles con autorización; conservar logs, capturas y hashes locales, sin subir JARs.
+- Aprobar/rechazar la base técnica tras revisar la evidencia.
+- README: pendiente; fuente consultada devolvió 404.
+- Benchmarks y compatibilidad local: pendientes; no se entregaron resultados.
 
-## Estado del repositorio
-
-Según el inventario aportado (no reinspección integral): `main` es la rama por defecto; la documentación de investigación vive en `mision-1-investigacion`. README no se encontró en el inventario descrito. No se registra fusión. La presente actualización se realiza exclusivamente en `mision-1-investigacion`.
+No se ha descrito fusión a `main`; esta actualización pertenece exclusivamente a `mision-1-investigacion`.
