@@ -1,0 +1,14 @@
+{
+  "deriva_progression.status": "Campaña — %1$s · Nivel %2$s · XP %3$s/%4$s · Puntos de atributo: %5$s · Puntos de habilidad: %6$s",
+  "deriva_progression.class.none": "Sin clase",
+  "deriva_progression.class.selection_disabled": "La selección de clase está desactivada en la configuración.",
+  "deriva_progression.class.selected": "Clase seleccionada: %s",
+  "deriva_progression.class.guardacorriente.name": "Guardacorriente",
+  "deriva_progression.class.guardacorriente.description": "Defensa y control del espacio.",
+  "deriva_progression.class.vigia_del_prisma.name": "Vigía del Prisma",
+  "deriva_progression.class.vigia_del_prisma.description": "Observación y agilidad.",
+  "deriva_progression.class.rompeanclas.name": "Rompeanclas",
+  "deriva_progression.class.rompeanclas.description": "Presión sobre guardianes y mecanismos.",
+  "command.deriva.estado": "Consulta tu estado de campaña.",
+  "command.deriva.clase": "Elige Guardacorriente, Vigía del Prisma o Rompeanclas."
+}
