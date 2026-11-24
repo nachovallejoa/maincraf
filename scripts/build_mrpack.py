@@ -1,7 +1,5 @@
 #!/usr/bin/env python3
-"""Build a Modrinth .mrpack from pack/mods.json and project overrides."""
-
-from __future__ import annotations
+"""Build a Modrinth .mrpack from pack/mods.json and optional project overrides."""
 
 import hashlib
 import json
@@ -15,269 +13,187 @@ from pathlib import Path, PurePosixPath
 
 
 ROOT = Path(__file__).resolve().parent.parent
-MANIFEST = ROOT / "pack" / "mods.json"
-OVERRIDES = ROOT / "pack" / "overrides"
-OWN_MODS = ROOT / "mods-propios"
-INDEX_PATH = "modrinth.index.json"
+MANIFEST_PATH = ROOT / "pack" / "mods.json"
+OVERRIDES_SOURCE = ROOT / "pack" / "overrides"
+OWN_MODS_SOURCE = ROOT / "mods-propios" / "build" / "libs"
+MODRINTH_API = "https://api.modrinth.com/v2/version/"
 
 
-class BuildError(Exception):
-    """Expected input or download error."""
+def fail(message):
+    raise RuntimeError(message)
 
 
-def read_json(path: Path) -> dict:
-    try:
-        with path.open("r", encoding="utf-8") as stream:
-            value = json.load(stream)
-    except (OSError, json.JSONDecodeError) as exc:
-        raise BuildError(f"No se pudo leer {path.relative_to(ROOT)}: {exc}") from exc
-    if not isinstance(value, dict):
-        raise BuildError(f"{path.relative_to(ROOT)} debe contener un objeto JSON.")
-    return value
+def fetch_version(mod):
+    version_id = mod.get("version_id")
+    label = mod.get("slug", version_id or "<mod sin ID>")
 
+    if not isinstance(version_id, str) or not version_id:
+        fail(f"No se puede obtener la versión de {label}: falta version_id.")
 
-def checked_relative_path(value: str, description: str) -> str:
-    if not isinstance(value, str) or not value:
-        raise BuildError(f"Ruta no válida para {description}: {value!r}")
-    path = PurePosixPath(value)
-    if path.is_absolute() or any(part in ("", ".", "..") for part in path.parts):
-        raise BuildError(f"Ruta no segura para {description}: {value!r}")
-    return path.as_posix()
-
-
-def get_version(version_id: str, slug: str) -> dict:
-    url = f"https://api.modrinth.com/v2/version/{version_id}"
     request = urllib.request.Request(
-        url,
-        headers={"User-Agent": "LaMareaDeLosMilSoles-ModpackBuilder/1.0"},
+        MODRINTH_API + version_id,
+        headers={"User-Agent": "LaMareaDeLosMilSoles-modpack-builder/1.0"},
     )
     try:
         with urllib.request.urlopen(request, timeout=30) as response:
-            data = json.loads(response.read().decode("utf-8"))
-    except (urllib.error.URLError, TimeoutError, OSError, UnicodeDecodeError,
-            json.JSONDecodeError) as exc:
-        raise BuildError(
-            f"No se pudieron obtener los datos de Modrinth para {slug} "
-            f"(version_id {version_id}): {exc}"
-        ) from exc
+            data = json.load(response)
+    except (urllib.error.URLError, TimeoutError, json.JSONDecodeError) as exc:
+        fail(f"No se pueden obtener los datos de Modrinth para {label} ({version_id}): {exc}")
 
-    if not isinstance(data, dict):
-        raise BuildError(f"Respuesta inválida de Modrinth para {slug} ({version_id}).")
-    return data
+    if data.get("id") != version_id:
+        fail(f"Modrinth devolvió un ID inesperado para {label} ({version_id}).")
 
-
-def get_primary_file(data: dict, slug: str, version_id: str) -> dict:
     files = data.get("files")
     if not isinstance(files, list) or not files:
-        raise BuildError(f"Modrinth no devolvió archivos para {slug} ({version_id}).")
+        fail(f"La versión de {label} ({version_id}) no contiene archivos.")
 
-    primary = next(
-        (item for item in files if isinstance(item, dict) and item.get("primary") is True),
-        None,
-    )
-    if primary is None and len(files) == 1 and isinstance(files[0], dict):
-        primary = files[0]
+    primary = next((item for item in files if item.get("primary") is True), None)
     if primary is None:
-        raise BuildError(
-            f"No se encontró un archivo principal único para {slug} ({version_id})."
+        fail(f"La versión de {label} ({version_id}) no declara archivo principal.")
+
+    filename = mod.get("file_name")
+    hashes = primary.get("hashes") or {}
+    for field, value in (
+        ("file_name", filename),
+        ("url", primary.get("url")),
+        ("sha1", hashes.get("sha1")),
+        ("sha512", hashes.get("sha512")),
+        ("size", primary.get("size")),
+    ):
+        if value is None or value == "":
+            fail(f"Falta {field} en los datos de Modrinth para {label} ({version_id}).")
+
+    if not isinstance(filename, str) or not filename.endswith(".jar"):
+        fail(f"file_name inválido para {label} ({version_id}): se esperaba un nombre .jar.")
+
+    if primary.get("filename") != filename:
+        fail(
+            f"El file_name del manifiesto no coincide con el archivo principal de Modrinth "
+            f"para {label} ({version_id}): {filename!r} != {primary.get('filename')!r}."
         )
 
-    hashes = primary.get("hashes")
-    if not isinstance(hashes, dict):
-        raise BuildError(f"Faltan hashes del archivo principal de {slug} ({version_id}).")
+    if not isinstance(primary["size"], int) or primary["size"] < 0:
+        fail(f"Tamaño de archivo inválido en Modrinth para {label} ({version_id}).")
 
-    required = ("sha1", "sha512")
-    for name in required:
-        if not isinstance(hashes.get(name), str) or not hashes[name]:
-            raise BuildError(
-                f"Falta el hash {name} del archivo principal de {slug} ({version_id})."
-            )
-
-    if not isinstance(primary.get("url"), str) or not primary["url"]:
-        raise BuildError(f"Falta la URL del archivo principal de {slug} ({version_id}).")
-    if not isinstance(primary.get("size"), int) or primary["size"] < 0:
-        raise BuildError(f"Falta el tamaño del archivo principal de {slug} ({version_id}).")
+    if mod.get("version_number") and data.get("version_number") != mod["version_number"]:
+        fail(
+            f"version_number no coincide para {label} ({version_id}): "
+            f"{mod['version_number']!r} != {data.get('version_number')!r}."
+        )
 
     return primary
 
 
-def copy_overrides(destination: Path) -> None:
-    if not OVERRIDES.exists():
-        return
-    if not OVERRIDES.is_dir():
-        raise BuildError("pack/overrides existe, pero no es un directorio.")
+def validate_manifest(manifest):
+    for field in ("name", "version", "minecraft_version", "fabric_loader_version", "mods"):
+        if field not in manifest:
+            fail(f"Falta el campo {field!r} en {MANIFEST_PATH.relative_to(ROOT)}.")
 
-    for source in sorted(OVERRIDES.rglob("*")):
-        relative = source.relative_to(OVERRIDES)
-        target = destination / relative
-        if source.is_symlink():
-            raise BuildError(f"No se admiten enlaces simbólicos en overrides: {relative}")
-        if source.is_dir():
-            target.mkdir(parents=True, exist_ok=True)
-        elif source.is_file():
-            target.parent.mkdir(parents=True, exist_ok=True)
-            shutil.copy2(source, target)
+    if not isinstance(manifest["mods"], list):
+        fail("'mods' debe ser una lista en pack/mods.json.")
+
+    for mod in manifest["mods"]:
+        for field in ("slug", "version_id", "version_number", "file_name", "env"):
+            if field not in mod:
+                fail(f"Falta el campo {field!r} en una entrada de mods.json.")
+        if mod["env"] not in ("client", "both"):
+            fail(f"env inválido para {mod['slug']}: debe ser 'client' o 'both'.")
 
 
-def own_mod_jars() -> list[Path]:
-    if not OWN_MODS.exists():
-        return []
-    return sorted(
-        path
-        for path in OWN_MODS.glob("**/build/libs/*.jar")
-        if path.is_file()
-        and not path.name.endswith("-sources.jar")
-        and not path.name.endswith("-dev.jar")
-    )
+def copy_overrides(destination):
+    if OVERRIDES_SOURCE.is_dir():
+        for item in OVERRIDES_SOURCE.iterdir():
+            target = destination / item.name
+            if item.is_dir():
+                shutil.copytree(item, target, dirs_exist_ok=True)
+            else:
+                shutil.copy2(item, target)
+
+    own_jars = []
+    if OWN_MODS_SOURCE.is_dir():
+        own_jars = sorted(
+            path
+            for path in OWN_MODS_SOURCE.glob("*.jar")
+            if not path.name.endswith("-sources.jar")
+            and not path.name.endswith("-dev.jar")
+        )
+
+    if own_jars:
+        mods_dir = destination / "mods"
+        mods_dir.mkdir(parents=True, exist_ok=True)
+        for jar in own_jars:
+            shutil.copy2(jar, mods_dir / jar.name)
 
 
-def sha256_file(path: Path) -> str:
-    digest = hashlib.sha256()
-    with path.open("rb") as stream:
-        for chunk in iter(lambda: stream.read(1024 * 1024), b""):
-            digest.update(chunk)
-    return digest.hexdigest()
-
-
-def main() -> int:
+def build():
     try:
-        manifest = read_json(MANIFEST)
-        name = manifest.get("name")
-        version = manifest.get("version")
-        minecraft_version = manifest.get("minecraft_version")
-        loader_version = manifest.get("fabric_loader_version")
-        mods = manifest.get("mods")
+        manifest = json.loads(MANIFEST_PATH.read_text(encoding="utf-8"))
+    except FileNotFoundError:
+        fail(f"No se encontró {MANIFEST_PATH.relative_to(ROOT)}.")
+    except json.JSONDecodeError as exc:
+        fail(f"JSON inválido en {MANIFEST_PATH.relative_to(ROOT)}: {exc}")
 
-        if not isinstance(name, str) or not name.strip():
-            raise BuildError("pack/mods.json debe especificar un name no vacío.")
-        if not isinstance(version, str) or not version.strip():
-            raise BuildError("pack/mods.json debe especificar un version no vacío.")
-        if not isinstance(minecraft_version, str) or not minecraft_version.strip():
-            raise BuildError("pack/mods.json debe especificar minecraft_version.")
-        if not isinstance(loader_version, str) or not loader_version.strip():
-            raise BuildError(
-                "fabric_loader_version es null; no se puede generar la dependencia "
-                "fabric-loader requerida en modrinth.index.json."
-            )
-        if not isinstance(mods, list):
-            raise BuildError("pack/mods.json debe contener mods como una lista.")
+    validate_manifest(manifest)
 
-        index_files = []
-        seen_paths = set()
+    index_files = []
+    for mod in manifest["mods"]:
+        primary = fetch_version(mod)
+        env = {"client": "required", "server": "unsupported"}
+        if mod["env"] == "both":
+            env = {"client": "required", "server": "required"}
 
-        for mod in mods:
-            if not isinstance(mod, dict):
-                raise BuildError("Cada entrada de mods debe ser un objeto JSON.")
-            slug = mod.get("slug")
-            version_id = mod.get("version_id")
-            file_name = mod.get("file_name")
-            env = mod.get("env")
-
-            if not isinstance(slug, str) or not slug:
-                raise BuildError(f"Entrada de mod con slug no válido: {mod!r}")
-            if not isinstance(version_id, str) or not version_id:
-                raise BuildError(f"Falta version_id para {slug}.")
-            if not isinstance(mod.get("version_number"), str):
-                raise BuildError(f"Falta version_number para {slug}.")
-            if env not in ("client", "both"):
-                raise BuildError(
-                    f"env no admitido para {slug}: {env!r}; se esperaba client o both."
-                )
-
-            safe_file_name = checked_relative_path(file_name, slug)
-            if "/" in safe_file_name:
-                raise BuildError(f"file_name debe ser solo un nombre de archivo para {slug}.")
-            mod_path = f"mods/{safe_file_name}"
-            if mod_path in seen_paths:
-                raise BuildError(f"Ruta de mod duplicada en el manifiesto: {mod_path}")
-            seen_paths.add(mod_path)
-
-            data = get_version(version_id, slug)
-            primary = get_primary_file(data, slug, version_id)
-
-            if data.get("id") != version_id:
-                raise BuildError(
-                    f"Modrinth devolvió un ID de versión distinto para {slug} "
-                    f"(solicitado {version_id})."
-                )
-            if data.get("version_number") != mod["version_number"]:
-                raise BuildError(
-                    f"version_number de Modrinth no coincide para {slug} "
-                    f"(version_id {version_id})."
-                )
-            if primary.get("filename") != safe_file_name:
-                raise BuildError(
-                    f"El nombre del archivo principal de Modrinth no coincide para "
-                    f"{slug}: {primary.get('filename')!r}."
-                )
-
-            index_files.append({
-                "path": mod_path,
+        index_files.append(
+            {
+                "path": f"mods/{mod['file_name']}",
                 "hashes": {
                     "sha1": primary["hashes"]["sha1"],
                     "sha512": primary["hashes"]["sha512"],
                 },
-                "env": {
-                    "client": "required",
-                    "server": "required" if env == "both" else "unsupported",
-                },
+                "env": env,
                 "downloads": [primary["url"]],
                 "fileSize": primary["size"],
-            })
-
-        own_jars = own_mod_jars()
-
-        with tempfile.TemporaryDirectory(prefix="mrpack-build-") as temp_dir:
-            staging = Path(temp_dir)
-            copy_overrides(staging / "overrides")
-
-            if own_jars:
-                own_destination = staging / "overrides" / "mods"
-                own_destination.mkdir(parents=True, exist_ok=True)
-                for jar in own_jars:
-                    target = own_destination / jar.name
-                    if target.exists():
-                        raise BuildError(
-                            f"Nombre duplicado en overrides/mods: {jar.name}"
-                        )
-                    shutil.copy2(jar, target)
-
-            index = {
-                "formatVersion": 1,
-                "game": "minecraft",
-                "versionId": version,
-                "name": name,
-                "files": index_files,
-                "dependencies": {
-                    "minecraft": minecraft_version,
-                    "fabric-loader": loader_version,
-                },
             }
-            (staging / INDEX_PATH).write_text(
-                json.dumps(index, ensure_ascii=False, indent=2) + "\n",
-                encoding="utf-8",
-            )
+        )
 
-            output = ROOT / f"{name}-{version}.mrpack"
-            with zipfile.ZipFile(output, "w", compression=zipfile.ZIP_DEFLATED) as archive:
-                archive.write(staging / INDEX_PATH, INDEX_PATH)
-                overrides_dir = staging / "overrides"
-                if overrides_dir.exists():
-                    for file_path in sorted(overrides_dir.rglob("*")):
-                        if file_path.is_file():
-                            archive.write(
-                                file_path,
-                                file_path.relative_to(staging).as_posix(),
-                            )
+    index = {
+        "formatVersion": 1,
+        "game": "minecraft",
+        "versionId": manifest["version"],
+        "name": manifest["name"],
+        "files": index_files,
+        "dependencies": {
+            "minecraft": manifest["minecraft_version"],
+            "fabric-loader": manifest["fabric_loader_version"],
+        },
+    }
 
-        print(f"Paquete creado: {output.relative_to(ROOT)}")
-        print(f"SHA-256: {sha256_file(output)}")
-        return 0
+    archive_name = f"{manifest['name']}-{manifest['version']}.mrpack"
+    archive_path = ROOT / archive_name
 
-    except BuildError as exc:
-        print(f"ERROR: {exc}", file=sys.stderr)
-        return 1
+    with tempfile.TemporaryDirectory(prefix="mrpack-build-") as temp_name:
+        temp = Path(temp_name)
+        (temp / "modrinth.index.json").write_text(
+            json.dumps(index, ensure_ascii=False, indent=2) + "\n",
+            encoding="utf-8",
+        )
+        overrides = temp / "overrides"
+        overrides.mkdir()
+        copy_overrides(overrides)
+
+        with zipfile.ZipFile(
+            archive_path, "w", compression=zipfile.ZIP_DEFLATED, compresslevel=9
+        ) as archive:
+            archive.write(temp / "modrinth.index.json", "modrinth.index.json")
+            for path in sorted(overrides.rglob("*")):
+                if path.is_file():
+                    archive.write(path, PurePosixPath("overrides") / path.relative_to(overrides))
+
+    print(archive_path)
 
 
 if __name__ == "__main__":
-    raise SystemExit(main())
+    try:
+        build()
+    except RuntimeError as exc:
+        print(f"ERROR: {exc}", file=sys.stderr)
+        sys.exit(1)
