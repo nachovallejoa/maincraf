@@ -1,22 +1,22 @@
 @echo off
 setlocal
 
-set "PAQUETE_INCOMPLETO=Este instalador no funciona suelto. Descarga de Releases el archivo que termina en -tlauncher.zip, descomprimelo COMPLETO (clic derecho, Extraer todo) y haz doble clic en INSTALAR.bat dentro de esa carpeta extraida. No lo bajes solo desde el repositorio ni lo ejecutes desde dentro del .zip."
+set "AVISO=El instalador no funciona suelto ni desde la carpeta tlauncher del repositorio. Descarga de Releases el archivo que termina en -tlauncher.zip, extraelo COMPLETO (clic derecho, Extraer todo) y haz doble clic en INSTALAR.bat dentro de esa carpeta extraida. Nunca lo bajes solo desde el repositorio ni lo ejecutes desde dentro del .zip sin extraer."
 
 if not exist "%~dp0instalar.ps1" (
-    echo %PAQUETE_INCOMPLETO%
+    echo %AVISO%
     pause
     exit /b 1
 )
 
 if not exist "%~dp0mods-terceros.json" (
-    echo %PAQUETE_INCOMPLETO%
+    echo %AVISO%
     pause
     exit /b 1
 )
 
 if not exist "%~dp0versions\" (
-    echo %PAQUETE_INCOMPLETO%
+    echo %AVISO%
     pause
     exit /b 1
 )
