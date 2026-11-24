@@ -1,70 +1,51 @@
-# Protocolo de rendimiento
+# Protocolo de rendimiento reproducible
 
-## Estado de datos
+**Estado:** protocolo; no contiene resultados. No se instaló ni ejecutó Minecraft y no se realizaron benchmarks en esta misión. Las tablas de medición siguen vacías.
+**Hardware declarado:** Athlon 5150, Radeon R3, 12 GB RAM (~9,9 GB utilizables declarados), HDD, Windows, 1280×720; no verificado independientemente. API/controlador gráfico local: [SIN VERIFICAR].
 
-- No hay capturas ni resultados disponibles; no se ejecutó Minecraft ni benchmark.
-- No se informan FPS estimados ni ganancias atribuidas.
-- El hardware siguiente es declarado en la entrada, no medido independientemente.
-- Sensores OpenGL/Vulkan, GPU y memoria gráfica disponibles en esta instalación: **SIN VERIFICAR**.
+## Objetivo y casos
 
-## Equipo declarado
+Comparar Minecraft 1.20.1 limpio, base candidata, candidatos incrementales y —cuando se disponga— el pack RPG real. No reemplazar la etapa del pack por uno hipotético.
 
-| Dato | Valor recibido | Estado |
-|---|---|---|
-| CPU | AMD Athlon 5150, 4 núcleos, 1,6 GHz | No verificado |
-| RAM | 12 GB instalados; ~9,9 GB utilizables declarados | No verificado |
-| GPU | Radeon R3 integrada | No verificado |
-| Memoria gráfica | Hasta 2 GB compartidos según entrada | Sensor no verificado; no equivale a VRAM dedicada |
-| Disco | HDD | No verificado |
-| Resolución | 1280×720 | Declarada, no verificada |
-| Windows/build | Pendiente | No informado |
-| Driver/API gráfica | Pendiente | No informado |
-| Java/Minecraft/loader | Pendiente | Aún no se fijó perfil |
+1. Instancia limpia sin optimizadores ni contenido RPG.
+2. Base candidata Fabric, builds exactas verificadas previamente: Sodium 0.5.13, Lithium 0.11.4, FerriteCore 6.0.1, ModernFix 5.25.2+mc1.20.1, ImmediatelyFast 1.5.5+1.20.4-fabric (rango publicado 1.20–1.20.4).
+3. Comparar cada candidato por separado con la base; opcionales nunca todos juntos al inicio.
+4. Pack RPG completo solo con manifiesto real. Sin manifiesto, declarar etapa pendiente.
 
-## Comparaciones separadas
+## Condiciones y procedimiento
 
-1. Minecraft limpio.
-2. Base optimizada mínima.
-3. Grupos añadidos uno a uno.
-4. Pack RPG final con manifiesto real.
+- Crear perfiles aislados y respaldar mundos; registrar MC, loader, Java, argumentos, mods exactos, configuraciones, hashes locales si disponibles y logs. No subir binarios de mods.
+- Confirmar GPU/controlador/API local antes de atribuir un resultado a Sodium.
+- Mantener constantes mundo/semilla, ruta, orientación, resolución, ajustes, launcher, Java, energía, procesos de fondo y duración. Registrar herramientas/versiones.
+- Separar chunks existentes y nuevos. Para generación nueva, restaurar la misma copia/estado inicial; no confundir con lectura de regiones ya generadas.
+- Medir arranque, menú, entrada/carga del mundo y generación como eventos separados; distinguir caché fría de caliente.
+- ModernFix en predeterminados en la base; cualquier override solo en perfil copia.
+- Usar una herramienta principal de frametimes en toda la serie. Guardar CSV/logs/capturas originales. No ejecutar capturadores concurrentes.
+- Objetivo: cinco repeticiones válidas por caso; anotar número real y exclusiones. No cambiar mods y ajustes gráficos a la vez.
+- FPS medio, frametimes y 1% low deben incluir método/definición; registrar RAM del juego/sistema, CPU, GPU, disco, inicio y carga. Si un sensor no está disponible, marcar “no disponible”, no estimar.
+- CapFrameX/PresentMon, RTSS, HWiNFO, AMD Software o PerfMon son herramientas candidatas, no resultados; comprobar disponibilidad local.
 
-Si no se proporciona manifiesto, la etapa 4 queda pendiente; no se sustituye por un pack hipotético.
+## Tabla por repetición (sin datos; ninguna medición recibida)
 
-## Condiciones controladas
+| Caso/ID | Escenario | Repetición | MC/loader/Java | Mods exactos | FPS medio | 1% low y método | Frametime | CPU | RAM juego/sistema | GPU/disco | Inicio/mundo/generación | Incidencias/archivo |
+|---|---|---:|---|---|---|---|---|---|---|---|---|---|
+| | | | | | | | | | | | | |
+| | | | | | | | | | | | | |
+| | | | | | | | | | | | | |
+| | | | | | | | | | | | | |
+| | | | | | | | | | | | | |
 
-Registrar y mantener constantes versión de juego, loader, Java, heap/flags, resolución, modo de pantalla, ajustes de vídeo, mundo/semilla, posición y recorrido, duración, aplicaciones en segundo plano y estado de energía. Anotar herramienta y versión.
+## Resumen (pendiente de mediciones)
 
-Separar escenarios de chunks generados y chunks nuevos; restaurar una copia del mundo antes de cada repetición de generación. Medir inicio y carga de mundo por separado, no como FPS.
+| Caso | Escenario | Repeticiones válidas | FPS/frametimes | RAM/CPU/GPU/disco | Compatibilidad | Conclusión autorizada |
+|---|---|---:|---|---|---|---|
+| | | | | | | |
+| | | | | | | |
 
-## Procedimiento
+## Límites
 
-- Confirmar inicio, entrada al mundo y funciones relevantes antes de medir.
-- Usar una sola herramienta principal de frametimes en toda la serie.
-- Guardar CSV/logs originales y versiones de herramientas.
-- Objetivo: cinco repeticiones válidas por escenario; registrar exclusiones y motivo.
-- Mantener idénticos recorrido y duración.
-- Sensores no disponibles: marcar “No disponible”; no estimar.
-- No cambiar mods y ajustes gráficos a la vez.
-- No interpretar ausencia de un escenario activador como efecto cero.
-
-## Herramientas candidatas, pendientes de validar
-
-CapFrameX, PresentMon, HWiNFO, AMD Software o PerfMon. Registrar versión y disponibilidad efectiva; las métricas OpenGL/sensores de esta Radeon R3 siguen sin verificar. No ejecutar capturadores PresentMon concurrentes.
-
-## Tabla de mediciones (vacía: aún no hay datos)
-
-| Configuración | Escenario | Repetición | FPS medio | 1% low | Frametime | Heap/RAM | CPU | GPU/memoria | Inicio | Carga | Captura/log |
-|---|---|---:|---:|---:|---|---|---|---|---|---|---|
-| | Chunks existentes | | | | | | | | | | |
-| | Chunks nuevos | | | | | | | | | | |
-
-## Conclusiones posteriores (pendientes)
-
-- Mejor en chunks existentes:
-- Mejor generando chunks:
-- Diferencias medidas y método:
-- Sensores no disponibles:
-- Conflictos/logs:
-- Limitaciones:
-- Decisión del usuario:
-- Evidencia adjunta:
+- Un resultado de una escena no demuestra mejora universal ni permite extrapolar a la Radeon R3 sin medición local.
+- Separar generación de chunks nuevos de lectura de chunks guardados.
+- No inferir rendimiento desde textos promocionales o benchmarks de otros equipos.
+- No retirar/reemplazar mods solo por FPS; considerar compatibilidad, mantenimiento, calidad y autorización explícita.
+- Dejar vacías las métricas que no se midan e indicar la limitación.
