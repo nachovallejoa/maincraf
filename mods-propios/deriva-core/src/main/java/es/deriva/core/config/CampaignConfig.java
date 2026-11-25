@@ -2,7 +2,7 @@ package es.deriva.core.config;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
-import com.google.gson.JsonParseException;
+import com.google.gson.JsonObject;
 import net.fabricmc.loader.api.FabricLoader;
 
 import java.io.IOException;
@@ -12,15 +12,17 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 
 /**
- * Configuración externa en config/deriva_core.json.
- * Se crean defaults si el archivo aún no existe.
+ * Configuración externa del sistema de campaña.
+ *
+ * Los valores iniciales corresponden a parámetros aprobados para pruebas,
+ * no a un balance final.
  */
 public final class CampaignConfig {
     private static final Gson GSON = new GsonBuilder().setPrettyPrinting().create();
     private static final Path CONFIG_PATH =
-            FabricLoader.getInstance().getConfigDir().resolve("deriva_core.json");
+            FabricLoader.getInstance().getConfigDir().resolve("deriva-campaign.json");
 
-    private static volatile CampaignConfig instance;
+    private static CampaignConfig instance = defaults();
 
     private boolean classSelectionEnabled = true;
     private int maxLevel = 30;
@@ -30,26 +32,71 @@ public final class CampaignConfig {
     private int skillPointsPerLevel = 1;
     private int skillNodeCost = 1;
 
-    public static CampaignConfig get() {
-        CampaignConfig result = instance;
-        return result == null ? load() : result;
+    private CampaignConfig() {
     }
 
-    public static synchronized CampaignConfig load() {
+    private static CampaignConfig defaults() {
+        return new CampaignConfig();
+    }
+
+    public static CampaignConfig get() {
+        return instance;
+    }
+
+    public static void load() {
+        CampaignConfig loaded = defaults();
+
         if (Files.exists(CONFIG_PATH)) {
             try (Reader reader = Files.newBufferedReader(CONFIG_PATH)) {
-                CampaignConfig loaded = GSON.fromJson(reader, CampaignConfig.class);
-                instance = sanitize(loaded == null ? new CampaignConfig() : loaded);
-                return instance;
-            } catch (IOException | JsonParseException exception) {
-                System.err.println("[deriva_core] No se pudo leer deriva_core.json; se usan valores predeterminados: "
+                JsonObject json = GSON.fromJson(reader, JsonObject.class);
+                if (json != null) {
+                    loaded.classSelectionEnabled = readBoolean(
+                            json, "classSelectionEnabled", loaded.classSelectionEnabled);
+                    loaded.maxLevel = readInt(json, "maxLevel", loaded.maxLevel);
+                    loaded.xpBase = readInt(json, "xpBase", loaded.xpBase);
+                    loaded.xpStep = readInt(json, "xpStep", loaded.xpStep);
+                    loaded.attributePointsEveryLevels = readInt(
+                            json, "attributePointsEveryLevels",
+                            loaded.attributePointsEveryLevels);
+                    loaded.skillPointsPerLevel = readInt(
+                            json, "skillPointsPerLevel", loaded.skillPointsPerLevel);
+                    loaded.skillNodeCost = readInt(
+                            json, "skillNodeCost", loaded.skillNodeCost);
+                }
+            } catch (IOException | RuntimeException exception) {
+                System.err.println("[deriva_core] No se pudo leer la configuración; se usarán defaults: "
                         + exception.getMessage());
             }
         }
 
-        instance = new CampaignConfig();
-        saveDefaults(instance);
-        return instance;
+        loaded.sanitize();
+        instance = loaded;
+        instance.save();
+    }
+
+    public void save() {
+        try {
+            Path parent = CONFIG_PATH.getParent();
+            if (parent != null) {
+                Files.createDirectories(parent);
+            }
+
+            JsonObject json = new JsonObject();
+            json.addProperty("classSelectionEnabled", classSelectionEnabled);
+            json.addProperty("maxLevel", maxLevel);
+            json.addProperty("xpBase", xpBase);
+            json.addProperty("xpStep", xpStep);
+            json.addProperty("attributePointsEveryLevels", attributePointsEveryLevels);
+            json.addProperty("skillPointsPerLevel", skillPointsPerLevel);
+            json.addProperty("skillNodeCost", skillNodeCost);
+
+            try (Writer writer = Files.newBufferedWriter(CONFIG_PATH)) {
+                GSON.toJson(json, writer);
+            }
+        } catch (IOException exception) {
+            System.err.println("[deriva_core] No se pudo guardar la configuración: "
+                    + exception.getMessage());
+        }
     }
 
     public boolean isClassSelectionEnabled() {
@@ -80,32 +127,29 @@ public final class CampaignConfig {
         return skillNodeCost;
     }
 
-    /**
-     * Recibe el nivel actual; el nivel 1 requiere xpBase para alcanzar nivel 2.
-     */
-    public int xpRequiredForLevel(int currentLevel) {
-        long required = (long) xpBase + (long) xpStep * Math.max(0, currentLevel - 1);
-        return (int) Math.min(Integer.MAX_VALUE, required);
+    public int xpRequiredForLevel(int level) {
+        int safeLevel = Math.max(1, Math.min(level, maxLevel));
+        return xpBase + xpStep * (safeLevel - 1);
     }
 
-    private static CampaignConfig sanitize(CampaignConfig config) {
-        config.maxLevel = Math.max(1, config.maxLevel);
-        config.xpBase = Math.max(1, config.xpBase);
-        config.xpStep = Math.max(0, config.xpStep);
-        config.attributePointsEveryLevels = Math.max(0, config.attributePointsEveryLevels);
-        config.skillPointsPerLevel = Math.max(0, config.skillPointsPerLevel);
-        config.skillNodeCost = Math.max(1, config.skillNodeCost);
-        return config;
+    private void sanitize() {
+        maxLevel = Math.max(1, maxLevel);
+        xpBase = Math.max(1, xpBase);
+        xpStep = Math.max(0, xpStep);
+        attributePointsEveryLevels = Math.max(1, attributePointsEveryLevels);
+        skillPointsPerLevel = Math.max(0, skillPointsPerLevel);
+        skillNodeCost = Math.max(1, skillNodeCost);
     }
 
-    private static void saveDefaults(CampaignConfig config) {
-        try {
-            Files.createDirectories(CONFIG_PATH.getParent());
-            try (Writer writer = Files.newBufferedWriter(CONFIG_PATH)) {
-                GSON.toJson(config, writer);
-            }
-        } catch (IOException exception) {
-            System.err.println("[deriva_core] No se pudo crear deriva_core.json: " + exception.getMessage());
-        }
+    private static int readInt(JsonObject json, String key, int fallback) {
+        return json.has(key) && json.get(key).isJsonPrimitive()
+                ? json.get(key).getAsInt()
+                : fallback;
+    }
+
+    private static boolean readBoolean(JsonObject json, String key, boolean fallback) {
+        return json.has(key) && json.get(key).isJsonPrimitive()
+                ? json.get(key).getAsBoolean()
+                : fallback;
     }
 }
