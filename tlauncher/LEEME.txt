@@ -1,4 +1,6 @@
-Descarga el archivo que termina en -tlauncher.zip desde Releases y guardalo en tu PC.
-Antes de instalar, clic derecho en el ZIP y elige "Extraer todo".
-No ejecutes INSTALAR.bat desde dentro del ZIP ni descargues el BAT suelto del repositorio.
-Haz doble clic en INSTALAR.bat dentro de la carpeta extraida.
+Extrae el ZIP completo: clic derecho y elige Extraer todo.
+Pulsa Win+R, escribe %APPDATA%\.minecraft\versions y pulsa Enter.
+Copia la carpeta extraida dentro de versions.
+Abre TLauncher, elige esta version y configura la memoria recomendada.
+Si ves una opcion de carpetas separadas por version, mantenla activada.
+Para desinstalar, cierra el juego y borra la carpeta de esta version.
