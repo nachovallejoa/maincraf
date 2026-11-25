@@ -2,32 +2,34 @@
 
 ## Modo autónomo
 
-El usuario aprobó todo y delegó todas las decisiones al equipo. No quiere cuestionarios ni conocer el contenido del modpack; el trabajo se realiza de forma autónoma y se comunican los resultados de integración.
+El usuario aprobó todo y delegó todas las decisiones al equipo. No quiere cuestionarios ni conocer el contenido del modpack.
 
-Hardware actualizado: 12 GB instalados, unos 10 GB disponibles; Windows usa unos 500 MB. Launcher del usuario: TLauncher en Windows.
+Hardware actualizado: 12 GB instalados, unos 10 GB disponibles; Windows usa unos 500 MB.
 
-## Estado del paquete Mar de Nubes
+Launcher del usuario: TLauncher en Windows.
 
-- Perfil objetivo Minecraft `1.20.1`; Loader declarado `0.20.1` según Fabric Meta.
-- El manifiesto contiene el subconjunto documental de mods con datos de versiones verificables. No se afirma que esté listo para instalar mientras dependencias obligatorias sigan sin resolverse.
-- JAR, compatibilidad completa, configuraciones y rendimiento conjunto: **[SIN VERIFICAR]**.
+## Paquete del modpack
+
+- Perfil objetivo Minecraft `1.20.1`; Fabric Loader declarado `0.20.1` según Fabric Meta.
+- El manifiesto lista releases para Fabric/Minecraft `1.20.1`; no afirma que estén probadas juntas.
 - No se suben JAR de mods de terceros.
-- La configuración específica de mods no se incorpora sin validación contra los JAR exactos.
-- `-Xmx6G` es una recomendación operativa aportada, no una medición validada.
+- Las configuraciones del juego/mods no se presentan como validadas si no se probaron con los JAR exactos.
+- La recomendación JVM aportada es `-Xms2G -Xmx6G`; es orientación y no medición del hardware.
 
-## Mods propios
+## Mods propios y límites de estado
 
-El núcleo de campaña usa Fabric y persistencia `PersistentState`. Las firmas Yarn mencionadas para `1.20.1+build.10` se consultaron, pero la compilación no se ejecutó. La configuración `guardarCampana` no está conectada al guardado persistente. El comportamiento del gestor ante datos de esquema futuro está **[SIN VERIFICAR]**. Balance, contenido frente a una especificación aprobada y dependencias finales permanecen sin validar.
+- Se conserva el código de los módulos propios que llegó con esta entrada.
+- Compilación, integración de JAR y funcionamiento en el launcher quedan pendientes hasta que se ejecuten las pruebas.
+- `nucleo-campana` tiene declarado un entrypoint cuya implementación no se recibió.
+- `decisiones-campana` está declarado, sin archivos de implementación recibidos.
+- Las marcas `[SIN VERIFICAR]` y notas de información incompleta se conservan como pendientes; no se inventa contenido para cubrir huecos.
 
 ## Integración y pruebas
 
-TLauncher para Windows es el objetivo prioritario de instalación. Los constructores obtienen versiones y hashes desde las APIs durante el build; los archivos de terceros se descargan en el equipo del usuario, nunca se versionan ni distribuyen como JAR en el repositorio.
+TLauncher para Windows es el objetivo de instalación. La compilación debe comprobarse con GitHub Actions y el usuario debe jugar el paquete para completar las pruebas de instalación y juego.
 
-La compilación Gradle y el empaquetado deben comprobarse en GitHub Actions. La prueba de juego queda pendiente de que el usuario instale y ejecute el paquete.
+## Registro de datos pendientes
 
-## Pendientes por datos no disponibles
+La entrada incluye una nota `INCOMPLETE` contradictoria con los hallazgos del paquete, que sí especifican ImmediatelyFast compatible y la incorporación de Fabric API. Se conserva aquí la incertidumbre como nota de origen, no como reemplazo del manifiesto final: esa nota indica que las consultas no confirmarían ImmediatelyFast compatible y que inclusión de Fabric API queda sin establecer, mientras que la sección de hallazgos posterior afirma versiones compatibles e inclusión explícita de Fabric API.
 
-- El contenido original de `pack/mods.json` no estaba disponible en la revisión; el manifiesto actual es una reconstrucción documental.
-- No se recibió una lista completa de JAR instalados ni conteo final/incompleto a conservar; se mantiene la nota pendiente tal como fue entregada en el resumen del paquete.
-- No hay pruebas de ejecución de la compilación ni del juego en la máquina destino.
-- No se recibió código fuente ni configuración de mods propios en la entrada actual; archivos y módulos propios: **[SIN VERIFICAR]**.
+Pendientes expresamente indicados: arranque conjunto, instalación en TLauncher/Windows, compilación e integración de mods propios, hashes/JAR descargados, rendimiento medido, persistencia y migraciones. El hardware indicado arriba se comunicó después como actualizado; el rendimiento no se ha medido.
