@@ -1,8 +1,11 @@
 {
-  "schema": 1,
-  "campaign": {
-    "prologue_started": false,
-    "lighthouse_evacuation_recorded": false
-  },
-  "note": "Los valores persistentes del mundo son la fuente de verdad; este archivo documenta sus valores iniciales."
+  "schemaVersion": 1,
+  "campaign": "La Marea de los Mil Soles",
+  "prologue": {
+    "id": "prologue",
+    "title_es_es": "El faro y la evacuación",
+    "title_en_us": "The Lighthouse and the Evacuation",
+    "description_es_es": "El prólogo registra el inicio de la evacuación del faro.",
+    "description_en_us": "The prologue records the start of the evacuation and the lighthouse evacuation."
+  }
 }
