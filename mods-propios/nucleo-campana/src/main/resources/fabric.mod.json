@@ -2,8 +2,8 @@
   "schemaVersion": 1,
   "id": "mardenuves_nucleo",
   "version": "${version}",
-  "name": "Mar de Nubes: Núcleo de campaña",
-  "description": "Valores persistentes iniciales de la campaña.",
+  "name": "Mar de Nubes: Núcleo de Campaña",
+  "description": "Registro persistente del prólogo aprobado de La Marea de los Mil Soles.",
   "environment": "*",
   "entrypoints": {
     "main": [
