@@ -14,77 +14,59 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
-        uses: actions/checkout@v6
+        uses: actions/checkout@v7
 
-      - name: Leer version de Minecraft
-        id: pack
-        shell: bash
-        run: |
-          python3 - <<'PY' >> "$GITHUB_OUTPUT"
-          import json
-          from pathlib import Path
-
-          path = Path("pack/mods.json")
-          if not path.is_file():
-              raise SystemExit(f"ERROR: falta el manifiesto {path}")
-          data = json.loads(path.read_text(encoding="utf-8"))
-          version = data.get("minecraft_version") or data.get("game_version")
-          if not isinstance(version, str) or not version.strip():
-              raise SystemExit("ERROR: falta minecraft_version (o game_version) no vacia en pack/mods.json")
-          version = version.strip()
-          parts = version.split(".")
-          try:
-              major, minor, patch = (int(parts[0]), int(parts[1]), int(parts[2].split("-")[0]))
-          except (ValueError, IndexError):
-              raise SystemExit(f"ERROR: version Minecraft no reconocida: {version}")
-          java = "21" if (major, minor, patch) >= (1, 20, 5) else "17"
-          print(f"java={java}")
-          PY
-
-      - name: Setup Java
-        uses: actions/setup-java@v6
+      # The supplied pack targets Minecraft 1.20.1, so Java 17 is used.
+      # If the manifest changes, update this step to Java 21 for MC >= 1.20.5.
+      - name: Set up Java
+        uses: actions/setup-java@v5
         with:
           distribution: temurin
-          java-version: ${{ steps.pack.outputs.java }}
+          java-version: '17'
 
-      # Loom de los mods propios no se entrego en la entrada para inspeccion.
-      # [SIN VERIFICAR] Se usa Gradle 8.10.2 como fallback conservador solicitado.
-      - name: Setup Gradle
+      - name: Set up Gradle
         uses: gradle/actions/setup-gradle@v6
         with:
-          gradle-version: '8.10.2'
+          # Mods own build files specify Fabric Loom 1.6.12.
+          # Loom 1.6 needs Gradle 8.7 or newer; use the latest verified 8.x.
+          gradle-version: '8.14.8'
           cache-provider: basic
 
-      - name: Compilar mods propios si hay settings.gradle
+      - name: Build own mods when the multi-project build exists
         shell: bash
         run: |
-          if [ -f "mods-propios/settings.gradle" ] || [ -f "mods-propios/settings.gradle.kts" ]; then
-            cd mods-propios
+          if [ -f mods-propios/settings.gradle ]; then
             gradle build --stacktrace
           else
-            echo "No hay mods-propios/settings.gradle; se omite la compilacion."
+            echo "mods-propios/settings.gradle not found; skipping own-mod compilation."
           fi
+        working-directory: .
 
-      - name: Construir paquetes
+      - name: Build distribution packages
         run: |
           python3 scripts/build_tlauncher.py
           python3 scripts/build_mrpack.py
 
-      - name: Subir artefactos
+      - name: Upload TLauncher ZIP
         uses: actions/upload-artifact@v7
         with:
-          name: modpack-dist
-          path: |
-            dist/*-tlauncher.zip
-            dist/*.mrpack
+          name: tlauncher-package
+          path: dist/*-tlauncher.zip
           if-no-files-found: error
 
-      - name: Publicar Release
-        if: github.event_name == 'push' || github.event_name == 'workflow_dispatch'
+      - name: Upload Modrinth package
+        uses: actions/upload-artifact@v7
+        with:
+          name: mrpack-package
+          path: dist/*.mrpack
+          if-no-files-found: error
+
+      - name: Publish GitHub Release
         uses: softprops/action-gh-release@v3
         with:
-          tag_name: modpack-${{ github.run_number }}
-          name: Mar de Nubes build ${{ github.run_number }}
+          tag_name: build-${{ github.run_number }}
+          name: Modpack build ${{ github.run_number }}
+          target_commitish: ${{ github.sha }}
           files: |
             dist/*-tlauncher.zip
             dist/*.mrpack
