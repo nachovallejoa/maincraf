@@ -2,9 +2,10 @@
 
 ## Etapa 7 — Modpack
 
-- Se actualizó el manifiesto con Minecraft 1.20.1, Fabric Loader 0.20.1 y `mods: []`, respetando la decisión de no instalar candidatos sin validar compatibilidad conjunta ni incluir JAR de terceros.
-- Se incorporaron opciones de vídeo documentadas, con la limitación de prueba `[SIN VERIFICAR]` conservada.
-- Se copiaron los cuatro módulos propios entregados (deriva-core, deriva-progression, nucleo-campana y decisiones-campana), las herramientas de construcción `.mrpack`/TLauncher, instalador Windows y documentación.
-- Se actualizaron contexto autónomo, decisiones técnicas, manifiesto documental de candidatos y hoja de ruta.
-- **Pendiente:** build de Gradle y paquetes en GitHub Actions; después, instalación y prueba de juego por el usuario. No se declara compilación ni ejecución exitosa.
-- La revisión no devolvió la lista completa de JAR ni el conteo completo (`INCOMPLETE`); esa limitación documental se conserva.
+- Se incorporó el manifiesto documental de Mar de Nubes `1.0.0` para Minecraft 1.20.1 y Fabric Loader 0.20.1 con los cuatro mods aportados y sus IDs Modrinth.
+- Se añadió la configuración Lithium vacía que se entregó y la documentación conserva las marcas **[SIN VERIFICAR]** según la evidencia recibida.
+- Se integraron scripts de construcción `.mrpack`/TLauncher, instalador Windows y guía de instalación descritos en la entrada.
+- Se actualizaron contexto autónomo, decisiones técnicas, manifiesto documental de mods y hoja de ruta.
+- **Pendiente:** resultado de compilación/empaquetado de GitHub Actions y prueba de instalación/juego del usuario. No se declara compilación ni ejecución exitosa.
+- La fuente de revisión no devolvió una lista completa de JAR instalados ni un conteo completo (`INCOMPLETE` en el resumen); esa limitación queda pendiente.
+- La entrada de mods propios declara que no se recibió contenido real de fuentes/configuración: no se agregaron archivos propios.
