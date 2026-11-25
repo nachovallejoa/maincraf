@@ -1,21 +1,23 @@
 # Decisiones técnicas y del director
 
-- **Rama aislada `etapa-7-modpack`:** continuar la etapa de empaquetado en su rama existente, sin modificar `main` ni ramas anteriores.
-- **Manifiesto con los cuatro mods comprobados según la entrada:** conservar Sodium, Lithium, FerriteCore e ImmediatelyFast con IDs de versión Modrinth y los datos entregados. El conjunto no implica una prueba integral de arranque.
-- **Minecraft 1.20.1 y Fabric Loader 0.20.1:** conservar los valores objetivo entregados; no inferir que el Loader esté instalado ni que la instancia tenga compatibilidad completa.
-- **No incluir JAR de terceros:** los constructores consultan metadatos y hashes de Modrinth y los descargadores obtienen archivos en el equipo del usuario; los binarios de terceros no se versionan en Git.
-- **No añadir configuraciones no verificadas:** solo se contempla el archivo vacío de Lithium, descrito en la entrada como válido para sus valores predeterminados. No se inventan opciones de Sodium, FerriteCore o ImmediatelyFast.
-- **TLauncher en Windows como destino prioritario:** documentar e incluir el instalador local con manifiesto de archivos/hashes, respaldo y descarga de mods de terceros en el equipo. La instalación y ejecución real en TLauncher permanecen **[SIN VERIFICAR]**.
-- **Memoria y JVM:** recomendar `-Xmx6G` según la entrada, sin fijar `-Xms` ni flags GC; la adecuación real al hardware es **[SIN VERIFICAR]**.
-- **Modificaciones propias:** no añadir módulos, fuentes ni JAR propios porque la entrada indica que no recibió archivos fuente/configuración. APIs, compilación, balance y funcionamiento quedan pendientes por falta de datos.
-- **No inventar datos faltantes:** compatibilidad de conjunto, dependencias adicionales y ejecución quedan pendientes si las fuentes no los demuestran.
-- **Automatización:** colocar el workflow al final de la secuencia de integración, después de los archivos que necesita el build.
+## Decisiones técnicas
+
+- **Rama aislada `etapa-7-modpack`:** guardar la etapa del modpack en su propia rama, sin modificar `main` ni ramas anteriores.
+- **Minecraft `1.20.1` y Fabric Loader `0.20.1`:** conservar el objetivo aprobado y la versión estable más reciente consignada desde Fabric Meta.
+- **Inventario base:** Sodium, Lithium, FerriteCore e ImmediatelyFast tienen IDs Modrinth confirmados según los hallazgos entregados; Fabric API `0.92.5+1.20.1` se incorpora porque es la API fijada por la base de desarrollo aprobada.
+- **Sin prueba conjunta implícita:** las consultas de versiones individuales no certifican arranque conjunto ni compatibilidad de la instancia completa.
+- **No incluir JAR de terceros:** mantener solo manifiesto/metadata para que el usuario descargue binarios desde sus fuentes; no versionar ni redistribuir dichos JAR.
+- **No precargar ajustes no verificados:** mantener options.txt únicamente como referencia, no introducir configuraciones especulativas para Sodium, FerriteCore o ImmediatelyFast; conservar Lithium sin overrides, con el encabezado consignado.
+- **TLauncher en Windows:** es el objetivo de instalación prioritaria; la instalación y ejecución real quedan pendientes de prueba.
+- **Memoria/JVM:** conservar la recomendación `-Xms2G -Xmx6G` sin argumentos extra de GC; la configuración de memoria no es una medición de rendimiento.
+- **Código propio entregado:** copiar los archivos suministrados, sin completar módulos ausentes ni inventar implementaciones. `nucleo-campana` referencia una clase no recibida y `decisiones-campana` no tiene fuentes recibidas.
+- **Pendientes:** arranque conjunto, dependencias adicionales, compilación, instalación TLauncher, persistencia, migraciones y rendimiento se mantienen sin afirmar hasta disponer de pruebas.
+- **Automatización:** el workflow de compilación y empaquetado se deja para el paso posterior que debe crear los archivos de `.github/workflows/`.
 
 ## Decisiones narrativas del director
 
 - Nombre del paquete: **Mar de Nubes**, versión `1.0.0`.
-- Alcance: paquete de rendimiento base y ligero; no se añaden RPG ni contenido de terceros opcional porque no fueron evaluados y la decisión del director prioriza ligereza.
-- Deriva Core y Deriva Progression se mantienen fuera porque sus versiones/artefactos descargables no se pudieron verificar.
-- ModernFix 5.25.2+mc1.20.1 se excluye por no estar acreditada una variante Fabric compatible; Dynamic FPS 3.9.0 y el contenido RPG enumerado se excluyen por decisión documental.
-- Núcleo Campaña y Decisiones Campaña no se seleccionan por el solapamiento señalado; Venas Core no se selecciona porque el árbol documentado no muestra fuente Java.
-- El usuario aprobó el trabajo y delegó las decisiones; no se solicitan cuestionarios ni se revela contenido que el usuario no quiere conocer.
+- Alcance: pack ligero de rendimiento base; no agregar contenido RPG opcional descartado/no aprobado.
+- ModernFix se excluyó al no acreditarse variante Fabric compatible; Dynamic FPS y los mods RPG enumerados se excluyeron por decisión documental.
+- Indium e Iris no se agregaron, dado que no son dependencias obligatorias declaradas por el inventario.
+- El usuario aprobó el trabajo y delegó decisiones; no se le hacen cuestionarios ni se le expone el contenido del modpack.
