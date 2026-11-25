@@ -1,14 +1,9 @@
 {
-  "deriva_progression.status": "Campaign — %1$s · Level %2$s · XP %3$s/%4$s · Attribute points: %5$s · Skill points: %6$s",
-  "deriva_progression.class.none": "No class",
-  "deriva_progression.class.selection_disabled": "Class selection is disabled in the configuration.",
-  "deriva_progression.class.selected": "Class selected: %s",
-  "deriva_progression.class.guardacorriente.name": "Currentguard",
-  "deriva_progression.class.guardacorriente.description": "Defense and control of space.",
-  "deriva_progression.class.vigia_del_prisma.name": "Prism Watcher",
-  "deriva_progression.class.vigia_del_prisma.description": "Observation and agility.",
-  "deriva_progression.class.rompeanclas.name": "Anchorbreaker",
-  "deriva_progression.class.rompeanclas.description": "Pressure against guardians and mechanisms.",
-  "command.deriva.estado": "Check your campaign status.",
-  "command.deriva.clase": "Choose Currentguard, Prism Watcher, or Anchorbreaker."
+  "class.deriva_progression.guardacorriente": "Guardacorriente",
+  "class.deriva_progression.vigia_del_prisma": "Prism Watcher",
+  "class.deriva_progression.rompeanclas": "Anchorbreaker",
+  "faction.deriva_progression.liga_del_lastre": "League of Ballast",
+  "faction.deriva_progression.cartografos_del_prisma": "Prism Cartographers",
+  "faction.deriva_progression.hermandad_del_vaiven": "Brotherhood of the Tide",
+  "faction.deriva_progression.flota_sumergida": "Sunken Fleet"
 }
