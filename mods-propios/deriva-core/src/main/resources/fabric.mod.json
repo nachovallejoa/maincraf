@@ -2,8 +2,8 @@
   "schemaVersion": 1,
   "id": "deriva_core",
   "version": "${version}",
-  "name": "Mar de Nubes: Núcleo de Deriva",
-  "description": "API y estado persistente de campaña para Mar de Nubes.",
+  "name": "Deriva Core",
+  "description": "API y estado persistente de campaña de Mar de Nubes.",
   "environment": "*",
   "entrypoints": {
     "main": [
