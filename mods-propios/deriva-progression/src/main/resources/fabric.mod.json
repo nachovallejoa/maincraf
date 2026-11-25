@@ -2,8 +2,8 @@
   "schemaVersion": 1,
   "id": "deriva_progression",
   "version": "${version}",
-  "name": "Mar de Nubes: Progresión",
-  "description": "Servicios básicos de clase y progresión de campaña.",
+  "name": "Deriva Progression",
+  "description": "Progresión de campaña: clases, experiencia y nodos de habilidad.",
   "environment": "*",
   "entrypoints": {
     "main": [
