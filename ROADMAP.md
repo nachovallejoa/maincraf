@@ -1,6 +1,5 @@
 # Hoja de ruta
 
-- **Integración — en revisión:** manifiesto, constructores, documentación e instalador TLauncher incorporados. Los módulos propios no se recibieron con sus fuentes/configuración; integración y ejecución de esos módulos **[SIN VERIFICAR]**.
-- **Entrega — en revisión:** documentación y archivos de construcción preparados. No afirmar que se generó o publicó un paquete hasta contar con resultado de GitHub Actions.
-- **Pruebas — pendiente:** queda pendiente la compilación en GitHub Actions y que el usuario instale y juegue el paquete en TLauncher/Windows.
-- **Validación — pendiente:** compatibilidad conjunta, JAR exactos, rendimiento real del hardware y configuraciones específicas solo se confirman tras pruebas.
+- **Integración — en revisión:** manifiesto y documentación del pack, fuentes de mods propios y estructura del proyecto están en la rama de etapa. No se han incorporado JAR de terceros. La incorporación y ejecución de módulos propios en la instancia siguen sin verificar; `nucleo-campana` tiene un entrypoint cuya implementación no se recibió y no se entregó implementación para `decisiones-campana`.
+- **Entrega — en revisión:** el paquete documental y archivos entregados están preparados para el siguiente paso de integración. No se afirma que un instalador/paquete final esté generado antes de contar con el resultado de la compilación en GitHub Actions.
+- **Pruebas — pendiente:** esperar la compilación en GitHub y que el usuario instale y juegue el paquete en TLauncher/Windows. Registrar arranque conjunto, funcionamiento, persistencia/migraciones y rendimiento medido cuando existan resultados. Hardware comunicado: 12 GB instalados, aproximadamente 10 GB disponibles; no hay medición de rendimiento.
