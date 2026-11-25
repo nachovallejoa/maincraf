@@ -5,13 +5,6 @@ import es.deriva.core.config.CampaignConfig;
 
 import java.util.UUID;
 
-/**
- * API pública del servicio de progresión.
- *
- * Esta capa no define fuentes de XP por actividad: esa decisión sigue siendo
- * externa y los módulos llamadores deben conceder XP solo tras eventos
- * narrativos o de juego aprobados.
- */
 public final class CampaignProgression {
     private CampaignProgression() {
     }
@@ -30,12 +23,17 @@ public final class CampaignProgression {
     }
 
     public static boolean selectClass(CampaignState state, UUID playerId, String classId) {
-        CampaignConfig config = CampaignConfig.get();
-        return state.setClass(playerId, classId, config.isClassSelectionEnabled());
+        if (!CampaignConfig.get().isClassSelectionEnabled()) {
+            return false;
+        }
+        return state.setClass(playerId, classId, false);
     }
 
     public static boolean learnSkillNode(CampaignState state, UUID playerId, String nodeId) {
-        CampaignConfig config = CampaignConfig.get();
-        return state.learnSkillNode(playerId, nodeId, config.getSkillNodeCost());
+        return state.learnSkillNode(
+                playerId,
+                nodeId,
+                CampaignConfig.get().getSkillNodeCost()
+        );
     }
 }
