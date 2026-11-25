@@ -10,14 +10,14 @@ Hardware actualizado: 12 GB instalados, unos 10 GB disponibles; Windows usa unos
 
 - Perfil objetivo Minecraft `1.20.1`; Loader declarado `0.20.1` según Fabric Meta.
 - El manifiesto contiene el subconjunto documental de mods con datos de versiones verificables. No se afirma que esté listo para instalar mientras dependencias obligatorias sigan sin resolverse.
-- JAR, compatibilidad completa, configuraciones y rendimiento conjunto: [SIN VERIFICAR].
+- JAR, compatibilidad completa, configuraciones y rendimiento conjunto: **[SIN VERIFICAR]**.
 - No se suben JAR de mods de terceros.
 - La configuración específica de mods no se incorpora sin validación contra los JAR exactos.
-- `-Xmx4G` es una recomendación operativa aportada, no una medición validada.
+- `-Xmx6G` es una recomendación operativa aportada, no una medición validada.
 
 ## Mods propios
 
-El núcleo de campaña usa Fabric y persistencia `PersistentState`. Las firmas Yarn mencionadas para 1.20.1+build.10 se consultaron, pero la compilación no se ejecutó. La configuración `guardarCampana` no está conectada al guardado persistente. El comportamiento del gestor ante datos de esquema futuro está [SIN VERIFICAR]. Balance, contenido frente a una especificación aprobada y dependencias finales permanecen sin validar.
+El núcleo de campaña usa Fabric y persistencia `PersistentState`. Las firmas Yarn mencionadas para `1.20.1+build.10` se consultaron, pero la compilación no se ejecutó. La configuración `guardarCampana` no está conectada al guardado persistente. El comportamiento del gestor ante datos de esquema futuro está **[SIN VERIFICAR]**. Balance, contenido frente a una especificación aprobada y dependencias finales permanecen sin validar.
 
 ## Integración y pruebas
 
@@ -28,5 +28,6 @@ La compilación Gradle y el empaquetado deben comprobarse en GitHub Actions. La 
 ## Pendientes por datos no disponibles
 
 - El contenido original de `pack/mods.json` no estaba disponible en la revisión; el manifiesto actual es una reconstrucción documental.
-- No se recibió una lista completa de JAR instalados ni conteo final/incomplete a conservar; se mantiene la nota pendiente tal como fue entregada en el resumen del paquete.
+- No se recibió una lista completa de JAR instalados ni conteo final/incompleto a conservar; se mantiene la nota pendiente tal como fue entregada en el resumen del paquete.
 - No hay pruebas de ejecución de la compilación ni del juego en la máquina destino.
+- No se recibió código fuente ni configuración de mods propios en la entrada actual; archivos y módulos propios: **[SIN VERIFICAR]**.
