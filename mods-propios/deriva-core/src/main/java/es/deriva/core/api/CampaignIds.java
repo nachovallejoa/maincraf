@@ -2,9 +2,6 @@ package es.deriva.core.api;
 
 import java.util.Set;
 
-/**
- * IDs estables usados por los módulos de campaña.
- */
 public final class CampaignIds {
     public static final String CLASS_GUARDACORRIENTE = "guardacorriente";
     public static final String CLASS_VIGIA_DEL_PRISMA = "vigia_del_prisma";
