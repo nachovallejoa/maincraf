@@ -4,6 +4,7 @@ import net.minecraft.nbt.NbtCompound;
 import net.minecraft.nbt.NbtElement;
 import net.minecraft.nbt.NbtList;
 import net.minecraft.server.MinecraftServer;
+import net.minecraft.server.world.ServerWorld;
 import net.minecraft.world.PersistentState;
 
 import java.util.HashMap;
@@ -12,44 +13,37 @@ import java.util.Map;
 import java.util.Set;
 import java.util.UUID;
 
-/**
- * Estado de campaña compartido por los módulos.
- *
- * El archivo NBT guarda un número de esquema. Las lecturas de esquemas
- * anteriores se migran de forma tolerante y se vuelven a guardar en el
- * esquema actual.
- */
 public final class CampaignState extends PersistentState {
-    public static final String STORAGE_ID = "deriva_core_campaign";
-    public static final int SCHEMA_VERSION = 1;
-
-    private static final String KEY_SCHEMA = "schema";
-    private static final String KEY_PLAYERS = "players";
+    private static final String STORAGE_ID = "deriva_campaign";
+    private static final int CURRENT_SCHEMA = 1;
 
     private final Map<UUID, PlayerData> players = new HashMap<>();
 
     public static CampaignState get(MinecraftServer server) {
-        return server.getOverworld()
-                .getPersistentStateManager()
-                .getOrCreate(CampaignState::fromNbt, CampaignState::new, STORAGE_ID);
+        ServerWorld overworld = server.getOverworld();
+        return overworld.getPersistentStateManager().getOrCreate(
+                CampaignState::fromNbt,
+                CampaignState::new,
+                STORAGE_ID
+        );
     }
 
-    public synchronized PlayerSnapshot getPlayerSnapshot(UUID playerId) {
-        PlayerData data = players.get(playerId);
-        if (data == null) {
-            return PlayerData.createDefault().snapshot();
-        }
-        return data.snapshot();
+    public PlayerSnapshot getPlayerSnapshot(UUID playerId) {
+        return dataFor(playerId).snapshot();
     }
 
-    public synchronized boolean setClass(UUID playerId, String classId, boolean selectionEnabled) {
-        if (!selectionEnabled || !CampaignIds.isClassId(classId)) {
+    public boolean setClass(UUID playerId, String classId, boolean allowReplacement) {
+        if (classId != null && !CampaignIds.isClassId(classId)) {
             return false;
         }
 
-        PlayerData data = players.computeIfAbsent(playerId, ignored -> new PlayerData());
-        if (classId.equals(data.classId)) {
+        PlayerData data = dataFor(playerId);
+        if (data.classId != null && !allowReplacement) {
             return false;
+        }
+
+        if (classId == null && data.classId == null) {
+            return true;
         }
 
         data.classId = classId;
@@ -58,11 +52,11 @@ public final class CampaignState extends PersistentState {
     }
 
     /**
-     * Añade XP de campaña y procesa todos los cambios de nivel.
-     *
-     * @return número de niveles obtenidos
+     * Añade XP y actualiza nivel y puntos según los parámetros externos.
+     * El cálculo acumulativo usa la curva aprobada como base de prueba:
+     * XP requerida para el siguiente nivel = base + paso * (nivel - 1).
      */
-    public synchronized int awardExperience(
+    public int awardExperience(
             UUID playerId,
             int amount,
             int maxLevel,
@@ -71,89 +65,82 @@ public final class CampaignState extends PersistentState {
             int attributePointsEveryLevels,
             int skillPointsPerLevel
     ) {
-        if (amount <= 0) {
+        if (amount <= 0 || maxLevel < 1 || xpBase < 1) {
             return 0;
         }
 
-        int safeMaxLevel = Math.max(1, maxLevel);
-        int safeXpBase = Math.max(1, xpBase);
-        int safeXpStep = Math.max(0, xpStep);
-        int safeAttributeInterval = Math.max(0, attributePointsEveryLevels);
-        int safeSkillPoints = Math.max(0, skillPointsPerLevel);
+        PlayerData data = dataFor(playerId);
+        int oldLevel = data.level;
+        long added = Math.min((long) amount, Integer.MAX_VALUE - (long) data.experience);
+        data.experience += (int) added;
 
-        PlayerData data = players.computeIfAbsent(playerId, ignored -> new PlayerData());
-        if (data.level >= safeMaxLevel) {
-            return 0;
-        }
-
-        long combinedXp = (long) data.experienceInLevel + amount;
-        data.experienceInLevel = (int) Math.min(Integer.MAX_VALUE, combinedXp);
-
-        int levelsGained = 0;
-        while (data.level < safeMaxLevel) {
-            int required = requiredXp(data.level, safeXpBase, safeXpStep);
-            if (data.experienceInLevel < required) {
+        while (data.level < maxLevel) {
+            long required = Math.max(
+                    1L,
+                    (long) xpBase + (long) Math.max(0, xpStep) * (data.level - 1L)
+            );
+            if (data.experience < required) {
                 break;
             }
 
-            data.experienceInLevel -= required;
+            data.experience -= (int) required;
             data.level++;
-            levelsGained++;
+            data.skillPoints += Math.max(0, skillPointsPerLevel);
 
-            if (safeAttributeInterval > 0 && data.level % safeAttributeInterval == 0) {
+            if (attributePointsEveryLevels > 0
+                    && data.level % attributePointsEveryLevels == 0) {
                 data.attributePoints++;
             }
-            data.skillPoints += safeSkillPoints;
         }
 
-        if (data.level >= safeMaxLevel) {
-            data.experienceInLevel = 0;
+        if (data.level >= maxLevel) {
+            data.experience = 0;
         }
 
         markDirty();
-        return levelsGained;
+        return data.level - oldLevel;
     }
 
-    public synchronized boolean allocateAttribute(UUID playerId, String attributeId) {
+    public boolean allocateAttribute(UUID playerId, String attributeId) {
         if (attributeId == null || attributeId.isBlank()) {
             return false;
         }
 
-        PlayerData data = players.computeIfAbsent(playerId, ignored -> new PlayerData());
+        PlayerData data = dataFor(playerId);
         if (data.attributePoints <= 0) {
             return false;
         }
 
-        data.attributePoints--;
         data.attributes.merge(attributeId, 1, Integer::sum);
+        data.attributePoints--;
         markDirty();
         return true;
     }
 
-    public synchronized boolean adjustFactionReputation(UUID playerId, String factionId, int delta) {
-        if (!CampaignIds.isFactionId(factionId) || delta == 0) {
+    public boolean adjustFactionReputation(UUID playerId, String factionId, int amount) {
+        if (!CampaignIds.isFactionId(factionId) || amount == 0) {
             return false;
         }
 
-        PlayerData data = players.computeIfAbsent(playerId, ignored -> new PlayerData());
-        int oldValue = data.factionReputation.getOrDefault(factionId, 0);
-        int newValue = Math.max(-2, Math.min(2, oldValue + delta));
-        if (oldValue == newValue) {
+        PlayerData data = dataFor(playerId);
+        int current = data.reputation.getOrDefault(factionId, 0);
+        int updated = (int) Math.max(-2L, Math.min(2L, (long) current + amount));
+        if (updated == current) {
             return false;
         }
 
-        data.factionReputation.put(factionId, newValue);
+        data.reputation.put(factionId, updated);
         markDirty();
         return true;
     }
 
-    public synchronized boolean completeOnce(UUID playerId, String completionId) {
+    public boolean completeOnce(UUID playerId, String completionId) {
         if (completionId == null || completionId.isBlank()) {
             return false;
         }
 
-        PlayerData data = players.computeIfAbsent(playerId, ignored -> new PlayerData());
-        if (!data.completedIds.add(completionId)) {
+        PlayerData data = dataFor(playerId);
+        if (!data.completions.add(completionId)) {
             return false;
         }
 
@@ -161,197 +148,202 @@ public final class CampaignState extends PersistentState {
         return true;
     }
 
-    public synchronized boolean learnSkillNode(UUID playerId, String nodeId, int cost) {
-        if (nodeId == null || nodeId.isBlank() || cost <= 0) {
+    public boolean learnSkillNode(UUID playerId, String nodeId, int nodeCost) {
+        if (nodeId == null || nodeId.isBlank() || nodeCost < 1) {
             return false;
         }
 
-        PlayerData data = players.computeIfAbsent(playerId, ignored -> new PlayerData());
-        if (data.learnedSkillNodeIds.contains(nodeId) || data.skillPoints < cost) {
+        PlayerData data = dataFor(playerId);
+        if (data.learnedNodes.contains(nodeId) || data.skillPoints < nodeCost) {
             return false;
         }
 
-        data.skillPoints -= cost;
-        data.learnedSkillNodeIds.add(nodeId);
+        data.learnedNodes.add(nodeId);
+        data.skillPoints -= nodeCost;
         markDirty();
         return true;
     }
 
-    public synchronized int getSkillPoints(UUID playerId) {
-        PlayerData data = players.get(playerId);
-        return data == null ? 0 : data.skillPoints;
+    public int getSkillPoints(UUID playerId) {
+        return dataFor(playerId).skillPoints;
     }
 
     @Override
-    public synchronized NbtCompound writeNbt(NbtCompound nbt) {
-        nbt.putInt(KEY_SCHEMA, SCHEMA_VERSION);
-
+    public NbtCompound writeNbt(NbtCompound nbt) {
+        nbt.putInt("schemaVersion", CURRENT_SCHEMA);
         NbtList playerList = new NbtList();
+
         for (Map.Entry<UUID, PlayerData> entry : players.entrySet()) {
             NbtCompound playerNbt = new NbtCompound();
-            playerNbt.putString("uuid", entry.getKey().toString());
-            entry.getValue().writeNbt(playerNbt);
+            playerNbt.putUuid("uuid", entry.getKey());
+            writePlayer(playerNbt, entry.getValue());
             playerList.add(playerNbt);
         }
-        nbt.put(KEY_PLAYERS, playerList);
+
+        nbt.put("players", playerList);
         return nbt;
     }
 
-    public static CampaignState fromNbt(NbtCompound nbt) {
+    private static CampaignState fromNbt(NbtCompound nbt) {
         CampaignState state = new CampaignState();
-        int storedSchema = nbt.contains(KEY_SCHEMA, NbtElement.NUMBER_TYPE)
-                ? nbt.getInt(KEY_SCHEMA)
+
+        int schema = nbt.contains("schemaVersion", NbtElement.INT_TYPE)
+                ? nbt.getInt("schemaVersion")
                 : 0;
 
-        NbtList playerList = nbt.getList(KEY_PLAYERS, NbtElement.COMPOUND_TYPE);
-        for (int i = 0; i < playerList.size(); i++) {
-            NbtCompound playerNbt = playerList.getCompound(i);
-            try {
-                UUID uuid = UUID.fromString(playerNbt.getString("uuid"));
-                state.players.put(uuid, PlayerData.fromNbt(playerNbt, storedSchema));
-            } catch (IllegalArgumentException ignored) {
-                // Entrada corrupta/antigua: se omite sin descartar el resto.
-            }
+        // No se reinterpretan datos de un esquema futuro desconocido.
+        if (schema > CURRENT_SCHEMA) {
+            return state;
         }
 
-        // Siempre se escribe con la versión vigente en el siguiente guardado.
-        if (storedSchema != SCHEMA_VERSION) {
-            state.markDirty();
+        // Migración del esquema 0: conserva los registros previos con sus claves
+        // conocidas y añade los nuevos campos ausentes con defaults seguros.
+        NbtList playerList = nbt.getList("players", NbtElement.COMPOUND_TYPE);
+        for (int i = 0; i < playerList.size(); i++) {
+            NbtCompound playerNbt = playerList.getCompound(i);
+            if (!playerNbt.containsUuid("uuid")) {
+                continue;
+            }
+
+            UUID uuid = playerNbt.getUuid("uuid");
+            PlayerData data = readPlayer(playerNbt, schema);
+            state.players.put(uuid, data);
         }
+
         return state;
     }
 
-    private static int requiredXp(int currentLevel, int base, int step) {
-        long required = (long) base + (long) step * Math.max(0, currentLevel - 1);
-        return (int) Math.min(Integer.MAX_VALUE, required);
+    private static void writePlayer(NbtCompound nbt, PlayerData data) {
+        if (data.classId != null) {
+            nbt.putString("classId", data.classId);
+        }
+        nbt.putInt("level", data.level);
+        nbt.putInt("experience", data.experience);
+        nbt.putInt("attributePoints", data.attributePoints);
+        nbt.putInt("skillPoints", data.skillPoints);
+
+        NbtCompound attributes = new NbtCompound();
+        data.attributes.forEach(attributes::putInt);
+        nbt.put("attributes", attributes);
+
+        NbtCompound reputation = new NbtCompound();
+        data.reputation.forEach(reputation::putInt);
+        nbt.put("reputation", reputation);
+
+        nbt.put("completions", writeStringSet(data.completions));
+        nbt.put("learnedNodes", writeStringSet(data.learnedNodes));
+    }
+
+    private static PlayerData readPlayer(NbtCompound nbt, int schema) {
+        PlayerData data = new PlayerData();
+
+        if (nbt.contains("classId", NbtElement.STRING_TYPE)) {
+            String classId = nbt.getString("classId");
+            data.classId = CampaignIds.isClassId(classId) ? classId : null;
+        }
+
+        data.level = Math.max(1, nbt.contains("level", NbtElement.INT_TYPE)
+                ? nbt.getInt("level") : 1);
+        data.experience = Math.max(0, nbt.contains("experience", NbtElement.INT_TYPE)
+                ? nbt.getInt("experience") : 0);
+        data.attributePoints = Math.max(0,
+                nbt.contains("attributePoints", NbtElement.INT_TYPE)
+                        ? nbt.getInt("attributePoints") : 0);
+        data.skillPoints = Math.max(0,
+                nbt.contains("skillPoints", NbtElement.INT_TYPE)
+                        ? nbt.getInt("skillPoints") : 0);
+
+        if (nbt.contains("attributes", NbtElement.COMPOUND_TYPE)) {
+            NbtCompound attributes = nbt.getCompound("attributes");
+            for (String key : attributes.getKeys()) {
+                data.attributes.put(key, Math.max(0, attributes.getInt(key)));
+            }
+        }
+
+        if (nbt.contains("reputation", NbtElement.COMPOUND_TYPE)) {
+            NbtCompound reputation = nbt.getCompound("reputation");
+            for (String key : reputation.getKeys()) {
+                if (CampaignIds.isFactionId(key)) {
+                    data.reputation.put(key, Math.max(-2, Math.min(2, reputation.getInt(key))));
+                }
+            }
+        }
+
+        readStringSet(nbt, "completions", data.completions);
+        readStringSet(nbt, "learnedNodes", data.learnedNodes);
+        return data;
+    }
+
+    private static NbtList writeStringSet(Set<String> values) {
+        NbtList list = new NbtList();
+        for (String value : values) {
+            NbtCompound entry = new NbtCompound();
+            entry.putString("value", value);
+            list.add(entry);
+        }
+        return list;
+    }
+
+    private static void readStringSet(NbtCompound nbt, String key, Set<String> destination) {
+        if (!nbt.contains(key, NbtElement.LIST_TYPE)) {
+            return;
+        }
+
+        NbtList list = nbt.getList(key, NbtElement.COMPOUND_TYPE);
+        for (int i = 0; i < list.size(); i++) {
+            NbtCompound entry = list.getCompound(i);
+            if (entry.contains("value", NbtElement.STRING_TYPE)) {
+                destination.add(entry.getString("value"));
+            }
+        }
+    }
+
+    private PlayerData dataFor(UUID playerId) {
+        return players.computeIfAbsent(playerId, ignored -> new PlayerData());
     }
 
     public record PlayerSnapshot(
             String classId,
             int level,
-            int experienceInLevel,
+            int experience,
             int attributePoints,
             int skillPoints,
             Map<String, Integer> attributes,
-            Map<String, Integer> factionReputation,
-            Set<String> completedIds,
-            Set<String> learnedSkillNodeIds
+            Map<String, Integer> reputation,
+            Set<String> completions,
+            Set<String> learnedNodes
     ) {
         public PlayerSnapshot {
             attributes = Map.copyOf(attributes);
-            factionReputation = Map.copyOf(factionReputation);
-            completedIds = Set.copyOf(completedIds);
-            learnedSkillNodeIds = Set.copyOf(learnedSkillNodeIds);
+            reputation = Map.copyOf(reputation);
+            completions = Set.copyOf(completions);
+            learnedNodes = Set.copyOf(learnedNodes);
         }
     }
 
     private static final class PlayerData {
-        private String classId = "";
+        private String classId;
         private int level = 1;
-        private int experienceInLevel;
+        private int experience;
         private int attributePoints;
         private int skillPoints;
         private final Map<String, Integer> attributes = new HashMap<>();
-        private final Map<String, Integer> factionReputation = new HashMap<>();
-        private final Set<String> completedIds = new HashSet<>();
-        private final Set<String> learnedSkillNodeIds = new HashSet<>();
-
-        private static PlayerData createDefault() {
-            return new PlayerData();
-        }
+        private final Map<String, Integer> reputation = new HashMap<>();
+        private final Set<String> completions = new HashSet<>();
+        private final Set<String> learnedNodes = new HashSet<>();
 
         private PlayerSnapshot snapshot() {
             return new PlayerSnapshot(
                     classId,
                     level,
-                    experienceInLevel,
+                    experience,
                     attributePoints,
                     skillPoints,
                     attributes,
-                    factionReputation,
-                    completedIds,
-                    learnedSkillNodeIds
+                    reputation,
+                    completions,
+                    learnedNodes
             );
-        }
-
-        private void writeNbt(NbtCompound nbt) {
-            nbt.putString("class", classId);
-            nbt.putInt("level", level);
-            nbt.putInt("xp", experienceInLevel);
-            nbt.putInt("attribute_points", attributePoints);
-            nbt.putInt("skill_points", skillPoints);
-
-            NbtCompound attributeNbt = new NbtCompound();
-            attributes.forEach(attributeNbt::putInt);
-            nbt.put("attributes", attributeNbt);
-
-            NbtCompound reputationNbt = new NbtCompound();
-            factionReputation.forEach(reputationNbt::putInt);
-            nbt.put("reputation", reputationNbt);
-
-            nbt.put("completed", stringList(completedIds));
-            nbt.put("learned_nodes", stringList(learnedSkillNodeIds));
-        }
-
-        private static PlayerData fromNbt(NbtCompound nbt, int storedSchema) {
-            PlayerData data = new PlayerData();
-
-            String storedClass = nbt.getString("class");
-            if (CampaignIds.isClassId(storedClass)) {
-                data.classId = storedClass;
-            }
-
-            data.level = Math.max(1, nbt.contains("level", NbtElement.NUMBER_TYPE)
-                    ? nbt.getInt("level")
-                    : 1);
-            data.experienceInLevel = Math.max(0, nbt.getInt("xp"));
-            data.attributePoints = Math.max(0, nbt.getInt("attribute_points"));
-            data.skillPoints = Math.max(0, nbt.getInt("skill_points"));
-
-            NbtCompound attributeNbt = nbt.getCompound("attributes");
-            for (String key : attributeNbt.getKeys()) {
-                int value = attributeNbt.getInt(key);
-                if (!key.isBlank() && value > 0) {
-                    data.attributes.put(key, value);
-                }
-            }
-
-            NbtCompound reputationNbt = nbt.getCompound("reputation");
-            for (String key : reputationNbt.getKeys()) {
-                if (CampaignIds.isFactionId(key)) {
-                    data.factionReputation.put(key, Math.max(-2, Math.min(2, reputationNbt.getInt(key))));
-                }
-            }
-
-            readStringList(nbt, "completed", data.completedIds);
-            readStringList(nbt, "learned_nodes", data.learnedSkillNodeIds);
-
-            // Migración de esquema 0: los campos ya existentes se preservan;
-            // los campos inexistentes reciben los valores base seguros.
-            if (storedSchema <= 0) {
-                data.level = Math.max(1, data.level);
-            }
-            return data;
-        }
-
-        private static NbtList stringList(Set<String> values) {
-            NbtList list = new NbtList();
-            for (String value : values) {
-                if (value != null && !value.isBlank()) {
-                    list.add(net.minecraft.nbt.NbtString.of(value));
-                }
-            }
-            return list;
-        }
-
-        private static void readStringList(NbtCompound source, String key, Set<String> destination) {
-            NbtList list = source.getList(key, NbtElement.STRING_TYPE);
-            for (int i = 0; i < list.size(); i++) {
-                String value = list.getString(i);
-                if (!value.isBlank()) {
-                    destination.add(value);
-                }
-            }
         }
     }
 }
