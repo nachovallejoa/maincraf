@@ -31,6 +31,13 @@
       "version_number": "1.2.4+1.20.1",
       "file_name": "ImmediatelyFast-1.2.4+1.20.1.jar",
       "env": "client"
+    },
+    {
+      "slug": "fabric-api",
+      "version_id": "PB9Kjpo3",
+      "version_number": "0.92.5+1.20.1",
+      "file_name": "fabric-api-0.92.5+1.20.1.jar",
+      "env": "both"
     }
   ]
 }
