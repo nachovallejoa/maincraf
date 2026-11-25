@@ -13,62 +13,56 @@ jobs:
   build:
     runs-on: ubuntu-latest
     steps:
-      - name: Obtener el repositorio
-        uses: actions/checkout@v7
+      - name: Checkout
+        uses: actions/checkout@v6
 
-      - name: Leer version de Minecraft y preparar Java
-        id: package-data
-        shell: python
+      - name: Leer version de Minecraft
+        id: pack
+        shell: bash
         run: |
+          python3 - <<'PY' >> "$GITHUB_OUTPUT"
           import json
           from pathlib import Path
 
           path = Path("pack/mods.json")
           if not path.is_file():
-              raise SystemExit(f"ERROR: no existe {path}")
+              raise SystemExit(f"ERROR: falta el manifiesto {path}")
+          data = json.loads(path.read_text(encoding="utf-8"))
+          version = data.get("minecraft_version") or data.get("game_version")
+          if not isinstance(version, str) or not version.strip():
+              raise SystemExit("ERROR: falta minecraft_version (o game_version) no vacia en pack/mods.json")
+          version = version.strip()
+          parts = version.split(".")
           try:
-              data = json.loads(path.read_text(encoding="utf-8"))
-          except Exception as exc:
-              raise SystemExit(f"ERROR: manifiesto no valido en {path}: {exc}")
-          if not isinstance(data, dict):
-              raise SystemExit(f"ERROR: {path} debe contener un objeto JSON")
-          mc = data.get("minecraft_version") or data.get("game_version")
-          if not isinstance(mc, str) or not mc.strip():
-              raise SystemExit("ERROR: falta minecraft_version (o game_version) en pack/mods.json")
-          mc = mc.strip()
-          parts = mc.split(".")
-          try:
-              major, minor, patch = (int(parts[0]), int(parts[1]), int(parts[2]) if len(parts) > 2 else 0)
+              major, minor, patch = (int(parts[0]), int(parts[1]), int(parts[2].split("-")[0]))
           except (ValueError, IndexError):
-              raise SystemExit(f"ERROR: version Minecraft no reconocida: {mc!r}")
+              raise SystemExit(f"ERROR: version Minecraft no reconocida: {version}")
           java = "21" if (major, minor, patch) >= (1, 20, 5) else "17"
-          with open(Path(__import__("os").environ["GITHUB_OUTPUT"]), "a", encoding="utf-8") as output:
-              output.write(f"minecraft={mc}\n")
-              output.write(f"java={java}\n")
+          print(f"java={java}")
+          PY
 
-      - name: Configurar Java
+      - name: Setup Java
         uses: actions/setup-java@v6
         with:
           distribution: temurin
-          java-version: ${{ steps.package-data.outputs.java }}
+          java-version: ${{ steps.pack.outputs.java }}
 
-      - name: Configurar Gradle para Fabric Loom 1.6.12
+      # Loom de los mods propios no se entrego en la entrada para inspeccion.
+      # [SIN VERIFICAR] Se usa Gradle 8.10.2 como fallback conservador solicitado.
+      - name: Setup Gradle
         uses: gradle/actions/setup-gradle@v6
         with:
-          # [SIN VERIFICAR] El ejemplo Fabric oficial rama 1.20 usa Gradle 9.8.2
-          # con Loom moderno. No es evidencia de requisito minimo para Loom 1.6.12.
-          # Se fija esa version del ejemplo solicitado por el contexto.
-          gradle-version: '9.8.2'
+          gradle-version: '8.10.2'
           cache-provider: basic
 
-      - name: Compilar mods propios si existe settings.gradle
+      - name: Compilar mods propios si hay settings.gradle
         shell: bash
         run: |
-          if [ -f "mods-propios/settings.gradle" ]; then
+          if [ -f "mods-propios/settings.gradle" ] || [ -f "mods-propios/settings.gradle.kts" ]; then
             cd mods-propios
             gradle build --stacktrace
           else
-            echo "No existe mods-propios/settings.gradle; se omite la compilacion de mods propios."
+            echo "No hay mods-propios/settings.gradle; se omite la compilacion."
           fi
 
       - name: Construir paquetes
@@ -76,30 +70,23 @@ jobs:
           python3 scripts/build_tlauncher.py
           python3 scripts/build_mrpack.py
 
-      - name: Publicar artefactos de Actions
+      - name: Subir artefactos
         uses: actions/upload-artifact@v7
         with:
-          name: modpack-installers
+          name: modpack-dist
           path: |
             dist/*-tlauncher.zip
             dist/*.mrpack
           if-no-files-found: error
-          compression-level: 0
 
-      - name: Publicar Release con ambos paquetes
+      - name: Publicar Release
         if: github.event_name == 'push' || github.event_name == 'workflow_dispatch'
-        env:
-          GH_TOKEN: ${{ github.token }}
-        shell: bash
-        run: |
-          set -euo pipefail
-          mapfile -t tlauncher_files < <(find dist -maxdepth 1 -type f -name '*-tlauncher.zip' -print | sort)
-          mapfile -t mrpack_files < <(find dist -maxdepth 1 -type f -name '*.mrpack' -print | sort)
-          if [ "${#tlauncher_files[@]}" -ne 1 ] || [ "${#mrpack_files[@]}" -ne 1 ]; then
-            echo "ERROR: se esperaba exactamente un ZIP de TLauncher y un .mrpack en dist/."
-            exit 1
-          fi
-          tag="modpack-${GITHUB_RUN_NUMBER}"
-          gh release create "$tag" "${tlauncher_files[0]}" "${mrpack_files[0]}" \
-            --title "Modpack build ${GITHUB_RUN_NUMBER}" \
-            --notes "Paquetes generados automaticamente por GitHub Actions."
+        uses: softprops/action-gh-release@v3
+        with:
+          tag_name: modpack-${{ github.run_number }}
+          name: Mar de Nubes build ${{ github.run_number }}
+          files: |
+            dist/*-tlauncher.zip
+            dist/*.mrpack
+          fail_on_unmatched_files: true
+          generate_release_notes: true
