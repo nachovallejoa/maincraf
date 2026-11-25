@@ -1,12 +1,15 @@
 pluginManagement {
     repositories {
-        maven { url = 'https://maven.fabricmc.net/' }
+        maven {
+            name = 'Fabric'
+            url = 'https://maven.fabricmc.net/'
+        }
         gradlePluginPortal()
         mavenCentral()
     }
 }
 
-rootProject.name = 'mar-de-nubes-mods'
+rootProject.name = 'mar-de-nubes-mods-propios'
 
 include 'deriva-core'
 include 'deriva-progression'
